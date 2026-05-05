@@ -39,7 +39,7 @@ function CheckValid() {
 }
 
 username.addEventListener("input", (ev) => {
-    const chars = ev.target.value
+    let chars = SanitizeInput(ev.target.value)
     console.log(chars)
     if (!username_special_char_reg.test(chars)) {
         username_error.innerText = "Only letters, numbers, . _ - allowed"

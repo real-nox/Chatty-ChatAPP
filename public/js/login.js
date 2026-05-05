@@ -17,6 +17,11 @@ if (eye) {
     })
 }
 
+document.getElementById("email_username").addEventListener("input", (ev) => {
+    document.getElementById("email_username").value = SanitizeInput(ev.target.value)
+    console.log(SanitizeInput(ev.target.value))
+})
+
 if (passwordCheck) {
     const username_special_char_reg = /^[a-z1-Z0-9._-]+$/
     const special_char_reg = /[!@#$%^&*()\-_=+\[\]{};':",.<>/?\\|]/
@@ -30,7 +35,8 @@ if (passwordCheck) {
     }
 
     password.addEventListener("input", (ev) => {
-        const chars = ev.target.value
+        let chars = ev.target.value
+
         const points = {
             capital_l: false,
             lower_l: false,
@@ -109,7 +115,8 @@ if (passwordCheck) {
     })
 
     passwordCheck.addEventListener("input", (ev) => {
-        if (ev.target.value != password.value) {
+        let chars = ev.target.value
+        if (chars != password.value) {
             document.getElementById("CheckingPassword").innerText = "PASSWORD ARE NOT MATCHED"
             valid.pwdcheck = false
         } else {
