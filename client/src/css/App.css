@@ -6,6 +6,7 @@
 :root {
     --text-hover-color: #3238e0;
     --bg-color: rgb(24, 24, 24);
+    --text-color-p: rgb(75, 75, 75);
 }
 
 .Topbar {
@@ -14,7 +15,7 @@
     justify-content: space-around;
     align-items: center;
     width: 100%;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.26);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.116);
 }
 
 .Leftbar,
@@ -38,10 +39,15 @@
 .Rightbar a,
 .Centerbar a {
     text-decoration: none;
-    color: rgb(54, 54, 54);
     border-radius: 10px;
     padding: 10px 15px;
     font-size: 1.1em;
+}
+
+.Leftbar a,
+.Centerbar a,
+.Rightbar a.login {
+    color: var(--text-color-p);
 }
 
 .Leftbar a {
@@ -60,21 +66,66 @@
     color: var(--text-hover-color);
 }
 
-.Rightbar .register {
-    background-color: #5d62ff;
-    color: white;
-    transition: all 0.5s ease;
-}
-
-.Rightbar .register:hover {
-    background-color: #191fd8;
-}
-
 .Rightbar a.login:hover,
 .Center a:hover {
     color: black;
 }
 
+.btn-blue {
+    text-decoration: none;
+    background-color: #5d62ff;
+    color: white;
+    transition: all 0.5s ease;
+}
+
+.btn-blue:hover {
+    background-color: #191fd8;
+}
+
+/* Center */
+
+.TopHome {
+    padding: 7rem 0;
+    text-align: center;
+    background-image: linear-gradient(to bottom, rgba(239, 246, 255, 0.767), rgba(217, 234, 255, 0.562), rgba(254, 240, 255, 0.933));
+}
+
+.TopHome .Elements {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    align-items: center;
+}
+
+.TopHome .Elements h1 {
+    font-size: 4em;
+    color: transparent;
+    background-image: linear-gradient(120deg, #a4a4ff, rgb(40, 6, 235));
+    background-clip: text;
+    -webkit-background-clip: text;
+}
+
+.TopHome .Elements p {
+    font-size: 1.2em;
+    color: var(--text-color-p);
+    padding: 0 30%;
+    line-height: 1.5em;
+}
+
+.TopHome .Elements .started {
+    align-items: center;
+    justify-content: center;
+    width: 10rem;
+    border-radius: 10px;
+    padding: 10px 15px;
+    font-size: 1.1em;
+    border-color: transparent;
+}
+
+.TopFeatures {
+    padding-top: 10rem;
+    text-align: center;
+}
 /* Footer */
 
 footer {
