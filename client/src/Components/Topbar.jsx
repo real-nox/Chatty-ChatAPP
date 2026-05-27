@@ -18,7 +18,7 @@ export default function Topbar() {
         <Link to="/login" className="login">
           Login
         </Link>
-        <Link to="/register" className="register">
+        <Link to="/register" className="btn-blue register">
           Sign up
         </Link>
       </div>
