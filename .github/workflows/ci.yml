@@ -28,15 +28,15 @@ jobs:
     - name: Build docker image
       run: docker build -t chatty .
 
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
+  # deploy:
+  #   needs: build
+  #   runs-on: ubuntu-latest
+  #   if: github.ref == 'refs/heads/main'
 
-    steps:
-      - name: Deploy to render
-        run: |
-          curl -X POST \
-            -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
-            -H "Content-Type: application/json" \
-            https://api.render.com/v1/services/${{ secrets.RENDER_SERVICE_ID }}/deploys
+  #   steps:
+  #     - name: Deploy to render
+  #       run: |
+  #         curl -X POST \
+  #           -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
+  #           -H "Content-Type: application/json" \
+  #           https://api.render.com/v1/services/${{ secrets.RENDER_SERVICE_ID }}/deploys

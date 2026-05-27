@@ -10,6 +10,9 @@ export default function HomeAbout() {
           </p>
         </div>
       </div>
+      <div className="MeetTeam">
+        <h1>Meet Our Team</h1>
+      </div>
     </>
   );
 }

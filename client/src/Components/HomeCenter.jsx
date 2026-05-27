@@ -11,6 +11,7 @@ export default function HomeCenter() {
           <Link to="/register" className="started btn-blue">Get started</Link>
         </div>
       </div>
+      
     </>
   );
 }
