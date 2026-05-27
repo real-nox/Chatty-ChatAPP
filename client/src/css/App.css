@@ -173,6 +173,23 @@
     box-shadow: 0px 0px 10px #777adb63;
 }
 
+.NotFoundContainer .TopHome .Elements h1 {
+    font-size: 9em;
+}
+
+.NotFoundContainer .TopHome .Elements h2 {
+    font-size: 3em;
+}
+
+.NotFoundContainer .TopHome .Elements img {
+    height: 20rem;
+}
+
+.started.btn-blue.home {
+    display: flex;
+    justify-content: space-around;
+}
+
 /* Footer */
 
 footer {
@@ -222,7 +239,27 @@ footer .Top {
 
 .topPart a, .topPart h3 {
     color: white;
-    font-size: 1.2em;
+    font-size: 1.1em;
+}
+
+.centerPart {
+    display: flex;
+    flex-direction: column;
+}
+
+.topPart a, .topPart p,
+.centerPart a {
+    font-size: 1em;
+    text-decoration: none;
+}
+
+.centerPart a {
+    color: var(--text-color-footer);
+    transition: color 0.5s ease;
+}
+
+.centerPart a:hover {
+    color: white;
 }
 
 .Top .PartTopFooter .topPart img {
