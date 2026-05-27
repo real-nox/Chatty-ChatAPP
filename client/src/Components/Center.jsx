@@ -1,6 +1,7 @@
-import HomeAbout from "./HomeAbout"
-import HomeCenter from "./HomeCenter"
-import HomeFeatures from "./HomeFeatures"
+import HomeAbout from "../Pages/HomeAbout"
+import HomeCenter from "../Pages/HomeCenter"
+import HomeFeatures from "../Pages/HomeFeatures"
+
 
 export default function Center({ type }) {
 
