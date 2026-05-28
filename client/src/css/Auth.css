@@ -1,0 +1,162 @@
+.AuthContainer {
+    height: 100vh;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    width: 100%;
+}
+
+.RightContainer.Login,
+.LeftContainer.Register {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.RightContainer.Login div,
+.LeftContainer.Register div {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    color: white;
+    width: 60%;
+}
+
+
+.RightContainer.Login div p,
+.LeftContainer.Register div p {
+    color : rgb(238, 238, 238);
+}
+
+.RightContainer.Login {
+    background-image: linear-gradient(90deg, #2575fc 0%, #6a11cb 100%);
+    background-size: 150% 100%;
+    transition: background-position 0.5s;
+}
+
+.RightContainer.Login:hover {
+    background-position: right center;
+}
+
+.LeftContainer.Register {
+    background-image: linear-gradient(90deg, #6a11cb 0%, #2575fc 100%);
+    background-size: 150% 100%;
+    transition: background-position 0.5s;
+}
+
+.LeftContainer.Register:hover {
+    background-position: right center;
+}
+
+/*Register*/
+.LeftContainer.Login,
+.RightContainer.Register {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.InfoContainer {
+    height: 100%;
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.InfoContainer form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.InfoContainer form a {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    color: black;
+    text-decoration: none;
+    font-size: 1.4rem;
+    font-weight: bold;
+
+    padding: 1.5rem 0;
+}
+
+.InfoContainer form a img {
+    width: 3rem;
+}
+
+.InfoContainer form .Welcome {
+    gap: 0.6rem;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 1.5rem;
+}
+
+.InfoContainer form label {
+    font-size: 1em;
+    font-weight: lighter;
+    padding-bottom: 0.2rem;
+}
+
+.InfoContainer form input {
+    height: 2rem;
+    padding-left: 1rem;
+    border-radius: 5px;
+    border-color: rgba(128, 128, 128, 0.075);
+    margin-bottom: 0.2rem;
+}
+
+.Check {
+    display: flex;
+    gap: 1rem;
+    padding: 0.5rem 0;
+    align-items: center;
+    justify-content: start;
+    width: 100%;
+}
+
+.Check .Left,
+.Check .Right {
+    width: 50%;
+}
+
+.Check .Left {
+    display: flex;
+    gap: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+}
+
+.Check .Left #agree {
+    margin-bottom: 0;
+}
+
+.Check .Right {
+    display: flex;
+    justify-content: end;
+}
+
+.Check .Right a {
+    color: #454bff;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+.InfoContainer .started.btn-blue {
+    align-items: center;
+    border-radius: 10px;
+    padding: 10px 15px;
+    font-size: 1.1em;
+    border-color: transparent;
+    margin-bottom: 1rem;
+    cursor: pointer;
+}
+
+.InfoContainer .link {
+    color: #454bff;
+    text-decoration: none;
+    font-weight: bold;
+}

@@ -10,6 +10,10 @@
     --text-color-footer: rgb(192, 192, 192);
 }
 
+.Page {
+    height: 100vh;
+}
+
 .Topbar {
     height: 5rem;
     display: flex;
