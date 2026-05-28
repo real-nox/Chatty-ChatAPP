@@ -4,7 +4,6 @@ export const register_c = async (req, res, next) => {
     try {
         const { username, display_name, email, pwd, passwordCheck } = req?.body
 
-        console.log(username, display_name, email, pwd, passwordCheck)
         if (!username || !display_name || !email || !pwd || !passwordCheck)
             return res.json({ success: false, error: "Complete the form" })
 
