@@ -1,20 +1,22 @@
 import * as auth_service from "../services/auth.service.js"
 
 export const register_c = async (req, res, next) => {
-    const { username, display_name, email, pwd, passwordCheck } = req?.body
-
-    if (!username || !display_name || !email || !pwd || !passwordCheck)
-        return res.render("pages/register", { error: "Complete the form" })
-
-    if (pwd !== passwordCheck)
-        return res.render("pages/register", { error: "Passwords are not matching!" })
-
     try {
+        const { username, display_name, email, pwd, passwordCheck } = req?.body
+
+        console.log(username, display_name, email, pwd, passwordCheck)
+        if (!username || !display_name || !email || !pwd || !passwordCheck)
+            return res.json({ success: false, error: "Complete the form" })
+
+        if (pwd !== passwordCheck)
+            return res.json({ success: false, error: "Passwords are not matching!" })
+
         const { success, error } = await auth_service.register_s({ display_name, username, email, pwd })
 
-        if (!success) return res.render("pages/register", { error })
+        if (!success) 
+            return res.json({success: false, error: error })
 
-        return res.redirect("/auth/login")
+        return res.json({success: true, error: null })
     } catch (err) {
         next(err)
     }
@@ -92,7 +94,7 @@ export const user_set_theme_c = async (req, res, next) => {
     try {
         let user_id = req?.body?.user_id
         let theme = req?.body?.theme
-        
+
         let result = await auth_service.setUserTheme_s(user_id, theme)
 
         console.log(result)

@@ -17,10 +17,16 @@ import { auth_m } from "./middlewares/auth.middleware.js"
 import { initSocket } from "./chat/socket.js"
 import { sessionM } from "./middlewares/session.middleware.js"
 
+import cors from "cors"
 const app = express()
 
 const httpServer = createServer(app)
 const io = new Server(httpServer)
+
+app.use(cors({
+    origin: "http://localhost:5173",
+    credentials: true
+}))
 
 app.use(express.static(join(__dirname, "public")))
 

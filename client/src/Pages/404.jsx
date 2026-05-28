@@ -6,7 +6,7 @@ export default function NotFound() {
     <div className="NotFoundContainer">
       <div className="TopHome">
         <div className="Elements">
-          <img src="../../../img/icon404.png" alt="broken" />
+          <img src="../../../img/icon404.png" alt="broken Chatty" />
           <h2>Page Not Found</h2>
           <p>
             Oops! The page you're looking for seems broken or removed. <br />Sorry about that! Please visit our homepage to get where you need to go.

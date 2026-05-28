@@ -101,11 +101,18 @@
 }
 
 .InfoContainer form input {
-    height: 2rem;
+    height: 2.2rem;
     padding-left: 1rem;
+    font-size: 1rem;
+    color: #363636;
     border-radius: 5px;
-    border-color: rgba(128, 128, 128, 0.075);
-    margin-bottom: 0.2rem;
+    border: 1px solid rgba(128, 128, 128, 0.205);
+    margin-bottom: 0.1rem;
+}
+
+.InfoContainer form input:focus {
+    outline: none;
+    border-color: #454bff;
 }
 
 .Check {
@@ -159,4 +166,35 @@
     color: #454bff;
     text-decoration: none;
     font-weight: bold;
+}
+
+.labels {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.errorP {
+    color: red;
+    font-size: 0.85rem;
+}
+
+.errorP.server {
+    text-align: center;
+}
+
+.errorP.Weak {
+    color: rgb(161, 161, 161);
+}
+
+.errorP.Medium {
+    color: rgb(38, 135, 112);
+}
+
+.errorP.Good {
+    color: rgb(23, 109, 170);
+}
+
+.errorP.Strong {
+    color: rgb(14, 7, 227);
 }
