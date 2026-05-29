@@ -12,28 +12,33 @@ export const register_c = async (req, res, next) => {
 
         const { success, error } = await auth_service.register_s({ display_name, username, email, pwd })
 
-        if (!success) 
-            return res.json({success: false, error: error })
+        if (!success)
+            return res.json({ success: false, error: error })
 
-        return res.json({success: true, error: null })
+        return res.json({ success: true, error: null })
     } catch (err) {
         next(err)
     }
 }
 
 export const login_c = async (req, res, next) => {
-    const { user_email, pwd } = req.body
+    const { email, pwd, remember_me } = req.body
 
-    if (!user_email || !pwd)
-        return res.render("pages/login", { error: "Complete the form" })
+    if (!email || !pwd)
+        return res.json({ success: false, error: "Complete the form" })
 
     try {
-        const { success, error, user = null } = await auth_service.login_s({ user_email, pwd })
+        const { success, error, user = null } = await auth_service.login_s({ email, pwd })
 
-        if (!success) return res.render("pages/login", { error })
+        if (!success)
+            return res.json({ success: false, error: error })
 
         req.session.userId = user.id
-        return res.redirect("/")
+
+        if (remember_me)
+            req.session.cookie.maxAge = 1000 * 60 * 60 * 24 * 30
+        
+        return res.json({ success: true, error: null })
     } catch (err) {
         next(err)
     }

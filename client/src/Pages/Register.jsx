@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "../css/Auth.css";
 import { Link, useNavigate } from "react-router-dom";
-import { SanitizeInput } from "../Utils/Utils";
+import { getUser, SanitizeInput } from "../Utils/Utils";
 
 export default function Register() {
   const [displayn, setDisplayn] = useState("");
@@ -22,6 +22,16 @@ export default function Register() {
   const navigate = useNavigate();
 
   document.title = "Sign in | Chatty - Chat App";
+
+  useEffect(() => {
+    const checkUser = async () => {
+      const isUser = await getUser();
+
+      if (isUser) return navigate("/home");
+    };
+
+    checkUser();
+  }, []);
 
   const username_special_char_reg = /^[a-zA-Z0-9._-]+$/;
   const special_char_reg = /[!@#$%^&*()\-_=+\[\]{};':",.<>/?\\|]/;
@@ -280,7 +290,9 @@ export default function Register() {
                   id="agree"
                   onClick={() => (accept ? setAccept(false) : setAccept(true))}
                 />
-                <p>I agree to the Terms of Service and Privacy Policy</p>
+                <label htmlFor="agree">
+                  I agree to the Terms of Service and Privacy Policy
+                </label>
               </div>
 
               <button
@@ -299,7 +311,7 @@ export default function Register() {
             </form>
 
             <p>
-              Already have an account?
+              Already have an account?{" "}
               <Link className="link" to="/login">
                 Log in
               </Link>

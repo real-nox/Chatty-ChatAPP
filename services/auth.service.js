@@ -27,17 +27,17 @@ export const register_s = async (newUserInfo) => {
 }
 
 export const login_s = async (userInfo) => {
-    let { user_email, pwd } = userInfo
+    let { email, pwd } = userInfo
 
-    const FoundUser = await auth_repository.getUser(user_email)
+    const FoundUser = await auth_repository.getUserByEmail(email)
 
     if (!FoundUser)
-        return { success: false, error: "Username/Email does not exist! Create a new account." }
+        return { success: false, error: "Email does not exist! Create a new account." }
 
     const IsPassWord = bcrypt.compareSync(pwd, FoundUser.password)
 
     if (!IsPassWord)
-        return { success: false, error: "Username/Email or Password is incorrect." }
+        return { success: false, error: "Email or Password is incorrect." }
 
     return { success: true, error: "", user: FoundUser }
 }

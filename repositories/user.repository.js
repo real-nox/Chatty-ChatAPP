@@ -24,18 +24,6 @@ export const getEmails = async (email) => {
     }
 }
 
-export const getUser = async (user_email) => {
-    try {
-        const result = await pool.query("select * from users where email = $1 or username = $1", [user_email])
-
-        if (result?.rowCount > 0)
-            return result.rows[0]
-        return false
-    } catch (error) {
-        console.log(error)
-    }
-}
-
 export const getUserById = async (userId) => {
     try {
         const result = await pool.query("select * from users where id = $1", [userId])

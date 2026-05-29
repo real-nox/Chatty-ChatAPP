@@ -5,6 +5,17 @@ import { auth_m, ifLogged } from "../middlewares/auth.middleware.js"
 const authR = Router()
 
 authR.get("/", (req, res) => {
+    if (req?.session?.userId)
+        res.json(true)
+})
+
+authR.post("/register", auth_controller.register_c)
+
+authR.post("/login", auth_controller.login_c)
+
+
+//To be removed
+authR.get("/", (req, res) => {
     return res.redirect("/")
 })
 
@@ -12,13 +23,9 @@ authR.get("/register", ifLogged, (req, res) => {
     res.render("pages/register")
 })
 
-authR.post("/register", auth_controller.register_c)
-
 authR.get("/login", ifLogged, (req, res) => {
     res.render("pages/login")
 })
-
-authR.post("/login", auth_controller.login_c)
 
 authR.get("/logout", auth_controller.logout_c)
 
