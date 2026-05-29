@@ -1,0 +1,66 @@
+:root[data-theme="Light"] {
+    --bg-color: rgb(255, 255, 255);
+    --sidebar-border-color: rgba(206, 206, 206, 0.527);
+    --text-color: black;
+}
+
+:root[data-theme="Dark"] {
+    --bg-color: rgb(49, 49, 49);
+    --sidebar-border-color: gray;
+    --text-color: rgb(255, 255, 255);
+}
+
+.HomeContainer {
+    width: 100%;
+    height: 100%;
+    background-color: var(--bg-color);
+}
+
+.SideBar {
+    border-right: 1px solid var(--sidebar-border-color);
+    height: 100%;
+    width: 20%;
+    padding: 1rem 0;
+}
+
+.SideBar .Title {
+    padding: 1rem 2rem;
+    text-align: center;
+}
+
+.SideBar .SearchBar {
+    padding: 2rem 2rem;
+    border-top: 1px solid var(--sidebar-border-color);
+    border-bottom: 1px solid var(--sidebar-border-color);
+
+    display: flex;
+    align-items: center;
+}
+
+.SearchBar .Bar {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+}
+
+.SearchBar .Bar svg {
+    position: fixed;
+    padding-left: 1rem;
+    color: var(--sidebar-border-color);
+}
+
+.SearchBar .Bar input {
+    color: var(--text-color);
+    border: 1px solid transparent;
+    padding: 0.7rem 3rem;
+    width: 100%;
+    font-size: 1rem;
+    border-radius: 10px;
+    background-color: var(--sidebar-border-color);
+}
+
+.SearchBar .Bar input:focus {
+    outline: none;
+    border: 2px solid blue;
+}
