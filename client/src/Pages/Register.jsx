@@ -21,9 +21,9 @@ export default function Register() {
 
   const navigate = useNavigate();
 
-  document.title = "Sign in | Chatty - Chat App";
-
   useEffect(() => {
+    document.title = "Sign in | Chatty - Chat App";
+    
     const checkUser = async () => {
       const isUser = await getUser();
 

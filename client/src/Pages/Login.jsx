@@ -13,6 +13,8 @@ export default function Login() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    document.title = "Login | Chatty - Chat App";
+    
     const checkUser = async () => {
       const isUser = await getUser();
 
@@ -49,7 +51,6 @@ export default function Login() {
     }
   };
 
-  document.title = "Login | Chatty - Chat App";
   return (
     <>
       <div className="AuthContainer">

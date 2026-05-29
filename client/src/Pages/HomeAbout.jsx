@@ -1,4 +1,10 @@
+import { useEffect } from "react";
+
 export default function HomeAbout() {
+  useEffect(() => {
+    document.title = "About | Chatty - Chat App";
+  }, []);
+
   return (
     <>
       <div className="TopHome">

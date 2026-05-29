@@ -1,7 +1,13 @@
 import { Link } from "react-router-dom";
 import { Home } from "lucide-react"
+import { useEffect } from "react";
 
 export default function NotFound() {
+
+  useEffect(() => {
+    document.title = "404 | Chatty - Chat App";
+  }, [])
+  
   return (
     <div className="NotFoundContainer">
       <div className="TopHome">

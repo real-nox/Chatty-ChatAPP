@@ -1,6 +1,11 @@
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
 
 export default function HomeCenter() {
+  useEffect(() => {
+    document.title = "Chatty - Chat App";
+  }, []);
+
   return (
     <>
       <div className="TopHome">
