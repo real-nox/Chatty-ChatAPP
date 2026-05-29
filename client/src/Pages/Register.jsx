@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "../css/Auth.css";
 import { Link, useNavigate } from "react-router-dom";
-import { getUser, SanitizeInput } from "../Utils/Utils";
+import { getUser, SanitizeInput } from "../utils/Utils";
 
 export default function Register() {
   const [displayn, setDisplayn] = useState("");

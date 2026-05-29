@@ -1,8 +1,7 @@
-import NotFound from "../Pages/404"
-import HomeAbout from "../Pages/HomeAbout"
-import HomeCenter from "../Pages/HomeCenter"
-import HomeFeatures from "../Pages/HomeFeatures"
-
+import NotFound from "../pages/404"
+import HomeAbout from "../pages/HomeAbout"
+import HomeCenter from "../pages/HomeCenter"
+import HomeFeatures from "../pages/HomeFeatures"
 
 export default function Center({ type }) {
 
