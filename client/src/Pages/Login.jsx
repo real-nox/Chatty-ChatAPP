@@ -14,7 +14,7 @@ export default function Login() {
 
   useEffect(() => {
     document.title = "Login | Chatty - Chat App";
-    
+
     const checkUser = async () => {
       const isUser = await getUser();
 
@@ -82,7 +82,7 @@ export default function Login() {
                 type="password"
                 name="pwd"
                 id="pwd"
-                placeholder="Create a password"
+                placeholder="Enter your password"
                 onInput={(ev) => setPassword(SanitizeInput(ev.target.value))}
               />
 

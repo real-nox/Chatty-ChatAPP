@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 
 export default function HomeFeatures() {
-    useEffect(() => {
-      document.title = "Features | Chatty - Chat App";
-    }, [])
+  useEffect(() => {
+    document.title = "Features | Chatty - Chat App";
+  }, []);
 
   return (
     <>
