@@ -44,7 +44,6 @@ app.use("/auth", authR)
 app.use("/friends", friendsR)
 
 app.get("/", auth_m, async (req, res) => {
-    console.log(req.session)
     res.render("home", { user: req.user })
 })
 

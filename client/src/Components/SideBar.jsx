@@ -12,6 +12,11 @@ export default function SideBar() {
           <input type="text" placeholder="Search conversations..." />
         </div>
       </div>
+      <div className="FriendsList">
+        <div className="FriendTemplate">
+          
+        </div>
+      </div>
     </div>
   );
 }
