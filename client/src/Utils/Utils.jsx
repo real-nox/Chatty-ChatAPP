@@ -13,7 +13,7 @@ export const getUser = async () => {
 
     const response = await result.json();
 
-    if (response) return true;
+    if (response) return response;
     else return false;
   } catch (err) {
     console.error(err);

@@ -31,8 +31,8 @@ export default function Topbar() {
       <div className="Rightbar">
         {IsLogged ? (
           <Link to="/home" className="btn-blue register">
-              Home
-            </Link>
+            Home
+          </Link>
         ) : (
           <>
             <Link to="/login" className="login">

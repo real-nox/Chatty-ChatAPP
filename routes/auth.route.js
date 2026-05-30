@@ -6,7 +6,7 @@ const authR = Router()
 
 authR.get("/", (req, res) => {
     if (req?.session?.userId)
-        res.json(true)
+        res.json(req?.session?.userId)
     else
         res.json(false)
 })

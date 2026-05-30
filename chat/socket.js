@@ -57,6 +57,7 @@ export function initSocket(io) {
             socket.conversation_id = conversation_id
 
             const messages = await getMessages(conversation_id)
+            console.log(messages)
             socket.emit("loadMessages", { messages })
         })
 
