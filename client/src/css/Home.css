@@ -1,31 +1,37 @@
 :root[data-theme="Light"] {
     --bg-color: rgb(255, 255, 255);
     --sidebar-border-color: rgba(206, 206, 206, 0.527);
+    --svg-bg-color: rgb(197, 197, 197);
     --text-color: black;
+    --hover-template: #e7e7e7;
+    --badge-bg-color: rgba(182, 189, 255, 0.933);
 }
 
 :root[data-theme="Dark"] {
     --bg-color: rgb(49, 49, 49);
-    --sidebar-border-color: gray;
+    --sidebar-border-color: rgb(211, 211, 211);
+    --svg-bg-color: rgb(197, 197, 197);
     --text-color: rgb(255, 255, 255);
+    --hover-template: #3a3a3a;
+    --badge-bg-color: #45ee;
 }
 
 .HomeContainer {
     width: 100%;
     height: 100%;
     background-color: var(--bg-color);
+    display: flex;
 }
 
 .SideBar {
     border-right: 1px solid var(--sidebar-border-color);
     height: 100%;
     width: 20%;
-    padding: 1rem 0;
+    padding-top: 1rem 0;
 }
 
 .SideBar .SearchBar {
-    padding: 2rem 2rem;
-    border-top: 1px solid var(--sidebar-border-color);
+    padding: 2rem 1rem;
     border-bottom: 1px solid var(--sidebar-border-color);
 
     display: flex;
@@ -49,7 +55,7 @@
 .SearchBar .Bar svg {
     position: fixed;
     padding-left: 1rem;
-    color: var(--sidebar-border-color);
+    color: var(---svg-bg-color);
 }
 
 .SearchBar .Bar input {
@@ -65,4 +71,125 @@
 .SearchBar .Bar input:focus {
     outline: none;
     border: 2px solid blue;
+}
+
+/*Friends*/
+
+.SideBar .FriendsList {
+    width: 100%;
+    height: calc(100vh - 22vh);
+    border-bottom: 1px solid var(--sidebar-border-color);
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+.FriendsList .FriendTemplate {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 5rem;
+    border: 0;
+    flex-shrink: 0;
+    background-color: var(--bg-color);
+
+    transition: background-color 0.7s ease;
+    cursor: pointer;
+}
+
+.FriendsList .FriendTemplate:hover {
+    background-color: var(--hover-template);
+}
+
+.FriendsList .FriendTemplate.active {
+    background-color: rgb(255, 0, 0);
+}
+
+.FriendTemplate .Icon,
+.FriendTemplate .Center,
+.FriendTemplate .Right {
+    color: var(--text-color);
+}
+
+.FriendTemplate .Icon {
+    width: 30%;
+}
+
+.FriendTemplate .Icon img {
+    width: 40%;
+}
+
+.FriendTemplate .Center {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 0.5rem;
+}
+
+.FriendTemplate .Center h4 {
+    font-size: 1.3em;
+}
+
+.FriendTemplate .Center p {
+    font-size: 1.2em;
+    color: var(--sidebar-border-color);
+}
+
+.FriendTemplate .Right {
+    display: flex;
+    flex-direction: column;
+    width: 20%;
+    gap: 0.9rem;
+    align-items: center;
+}
+
+.Badge {
+    background-color: var(--badge-bg-color);
+    height: 1.35rem;
+    width: 1.35rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 2rem;
+    font-size: 0.8em;
+}
+/*Chat Side*/
+
+.RightSection {
+    width: 80%;
+}
+
+.RightSection.Empty {
+    display: none;
+}
+
+.RightSection .TopBarUser {
+    border-bottom: 1px solid var(--sidebar-border-color);
+    height: 7.9vh;
+    background-color: var(--bg-color);
+    display: flex;
+    justify-content: space-between;
+    padding: 0 2rem;
+    align-items: center;
+}
+
+.TopBarUser .User {
+    color: var(--text-color);
+}
+
+.TopBarUser .Options {
+    display: flex;
+    justify-content: space-between;
+    width: 6.5rem;
+}
+
+.TopBarUser .Options svg {
+    color: var(--text-color);
+    cursor: pointer;
+}
+
+.RightSection .Chat {
+    height: calc(100vh - 8vh);
+    background-color: var(--bg-color);
 }

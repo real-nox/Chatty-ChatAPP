@@ -17,8 +17,8 @@ if (eye) {
     })
 }
 
-document.getElementById("email_username").addEventListener("input", (ev) => {
-    document.getElementById("email_username").value = SanitizeInput(ev.target.value)
+document.getElementById("email").addEventListener("input", (ev) => {
+    document.getElementById("email").value = SanitizeInput(ev.target.value)
     console.log(SanitizeInput(ev.target.value))
 })
 
