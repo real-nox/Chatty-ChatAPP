@@ -77,7 +77,7 @@ export const listF = async (user_id) => {
         const result = await pool.query(
             `
             select 
-            u.id, u.username,
+            u.id, u.username, u.display_name,
             m.content as last_message,
             m.created_at,
             m.seen,

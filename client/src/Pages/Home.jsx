@@ -5,6 +5,7 @@ import {
   EllipsisVertical,
   PhoneCallIcon,
   Search,
+  Send,
   VideoIcon,
 } from "lucide-react";
 import { formatedDate, getFriendsList, getUser } from "../utils/Utils";
@@ -15,17 +16,13 @@ export default function Home() {
   const [userId, setUserId] = useState("");
   const [currentChannel, setCurrentChannel] = useState("");
   const [friendList, setFriendList] = useState([]);
+  const [messageList, setMessageList] = useState([]);
 
   const [currentfriend, setCurrentFriend] = useState({
     id: null,
+    display_name: null,
     username: null,
     avatar: null,
-  });
-
-  const [message, setMessage] = useState({
-    content: null,
-    created_at: null,
-    seen: null,
   });
 
   const navigate = useNavigate();
@@ -60,26 +57,30 @@ export default function Home() {
     );
 
     return () => {
-      socket.off("connect")
-      socket.disconnect()
-    }
+      socket.off("connect");
+      socket.disconnect();
+    };
   }, []);
 
   useEffect(() => {
-    if (!currentfriend.id) return
+    if (!currentfriend.id) return;
 
     socket.on("loadMessages", async ({ messages }) => {
-
-      console.log(messages);
+      setMessageList(messages);
     });
 
     return () => socket.off("loadMessages");
   }, [currentfriend.id]);
 
-  const openConversation = ({ id, username }) => {
+  const openConversation = ({ id, username, display_name }) => {
     const channel = [userId, id].sort().join("_");
     setCurrentChannel(channel);
-    setCurrentFriend({ id: id, username, username });
+    setCurrentFriend({
+      id: id,
+      username,
+      username,
+      display_name: display_name,
+    });
     socket.emit("joinroom", channel);
   };
 
@@ -106,6 +107,7 @@ export default function Home() {
                       openConversation({
                         id: friend.id,
                         username: friend.username,
+                        display_name: friend.display_name,
                       })
                     }
                   >
@@ -120,7 +122,7 @@ export default function Home() {
                       />
                     </div>
                     <div className="Center">
-                      <h4>{friend.username}</h4>
+                      <h4>{friend.display_name}</h4>
                       <p>{friend.last_message}</p>
                     </div>
                     <div className="Right">
@@ -138,10 +140,12 @@ export default function Home() {
         </div>
       </div>
 
-      <div className={`RightSection ${!currentfriend ? "Empty" : ""}`}>
+      <div className={`RightSection ${!currentfriend.id ? "Empty" : ""}`}>
         <div className="TopBarUser">
           <div className="User">
-            <p>{currentfriend?.username}</p>
+            <p>
+              {currentfriend?.display_name} - {currentfriend?.username}
+            </p>
           </div>
           <div className="Options">
             <PhoneCallIcon />
@@ -149,7 +153,25 @@ export default function Home() {
             <EllipsisVertical />
           </div>
         </div>
-        <div className="Chat"></div>
+        <div className="Messages">
+          {messageList ? messageList.map((msg) => (
+            <p>{msg.content}</p>
+          )): 
+          (
+            <p>Start conversation!</p>
+          )}
+        </div>
+        <div className="Chat">
+          <div className="Chatbar">
+            <input
+              type="text"
+              name="chat"
+              id="chat"
+              placeholder="Type a message..."
+            />
+            <Send />
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -5,6 +5,7 @@
     --text-color: black;
     --hover-template: #e7e7e7;
     --badge-bg-color: rgba(182, 189, 255, 0.933);
+    --bg-color-input: rgb(224, 224, 224);
 }
 
 :root[data-theme="Dark"] {
@@ -14,6 +15,7 @@
     --text-color: rgb(255, 255, 255);
     --hover-template: #3a3a3a;
     --badge-bg-color: #45ee;
+    --bg-color-input: rgb(41, 41, 41);
 }
 
 .HomeContainer {
@@ -55,17 +57,18 @@
 .SearchBar .Bar svg {
     position: fixed;
     padding-left: 1rem;
-    color: var(---svg-bg-color);
+    color: var(--svg-bg-color);
 }
 
-.SearchBar .Bar input {
+.SearchBar .Bar input,
+.Chat input {
     color: var(--text-color);
     border: 1px solid transparent;
     padding: 0.7rem 3rem;
     width: 100%;
     font-size: 1rem;
     border-radius: 10px;
-    background-color: var(--sidebar-border-color);
+    background-color: var(--bg-color-input);
 }
 
 .SearchBar .Bar input:focus {
@@ -154,6 +157,7 @@
     border-radius: 2rem;
     font-size: 0.8em;
 }
+
 /*Chat Side*/
 
 .RightSection {
@@ -189,7 +193,39 @@
     cursor: pointer;
 }
 
-.RightSection .Chat {
-    height: calc(100vh - 8vh);
+.RightSection .Messages {
+    height: calc(100vh - 15.1vh);
     background-color: var(--bg-color);
+}
+
+.RightSection .Chat {
+    height: 7vh;
+    border-top: 1px solid var(--sidebar-border-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.Chat .Chatbar {
+    height: 50%;
+    width: 85%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+}
+
+.Chat .Chatbar svg {
+    background-color: var(--badge-bg-color);
+    padding: 0.3rem;
+    color: var(--text-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 2rem;
+    font-size: 0.8em;
+}
+
+.Chat input {
+    height: inherit;
 }
