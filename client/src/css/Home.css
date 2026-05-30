@@ -23,18 +23,20 @@
     padding: 1rem 0;
 }
 
-.SideBar .Title {
-    padding: 1rem 2rem;
-    text-align: center;
-}
-
 .SideBar .SearchBar {
     padding: 2rem 2rem;
     border-top: 1px solid var(--sidebar-border-color);
     border-bottom: 1px solid var(--sidebar-border-color);
 
     display: flex;
-    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    flex-direction: column;
+}
+
+.SearchBar .Title p {
+    color: var(--text-color);
+    font-size: 1.3em;
 }
 
 .SearchBar .Bar {
