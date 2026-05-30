@@ -7,6 +7,8 @@ const authR = Router()
 authR.get("/", (req, res) => {
     if (req?.session?.userId)
         res.json(true)
+    else
+        res.json(false)
 })
 
 authR.post("/register", auth_controller.register_c)

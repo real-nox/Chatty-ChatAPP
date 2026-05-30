@@ -7,7 +7,8 @@ import {
   Search,
   VideoIcon,
 } from "lucide-react";
-import { formatedDate, getFriendsList } from "../utils/Utils";
+import { formatedDate, getFriendsList, getUser } from "../utils/Utils";
+import { useNavigate } from "react-router-dom";
 
 export default function Home() {
   const [friendList, setFriendList] = useState([]);
@@ -17,9 +18,19 @@ export default function Home() {
     seen: null,
   });
 
+  const navigate = useNavigate()
+
   useEffect(() => {
     document.title = "Home | Chatty - Chat App";
     document.documentElement.setAttribute("data-theme", "Dark");
+
+    const checkUser = async () => {
+      const isUser = await getUser();
+
+      if (!isUser) return navigate("/");
+    };
+
+    checkUser();
 
     const getList = async () => {
       const data = await getFriendsList();
@@ -50,7 +61,14 @@ export default function Home() {
                 return (
                   <button key={friend.id} className="FriendTemplate">
                     <div className="Icon">
-                      <img src={friend?.avatar ? `${friend?.avatar}` : "../../img/avatar.png"} alt="Avatar" />
+                      <img
+                        src={
+                          friend?.avatar
+                            ? `${friend?.avatar}`
+                            : "../../img/avatar.png"
+                        }
+                        alt="Avatar"
+                      />
                     </div>
                     <div className="Center">
                       <h4>{friend.username}</h4>
@@ -59,10 +77,10 @@ export default function Home() {
                     <div className="Right">
                       <p>{formatedDate(friend.created_at)}</p>
                       {friend?.unseen_count > 0 ? (
-                        <div className="Badge">
-                          {friend.unseen_count}
-                        </div>
-                      ) : ""}
+                        <div className="Badge">{friend.unseen_count}</div>
+                      ) : (
+                        ""
+                      )}
                     </div>
                   </button>
                 );
