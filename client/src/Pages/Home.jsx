@@ -15,6 +15,7 @@ import {
   formatedDateMsg,
   getFriendsList,
   getUser,
+  SanitizeInput,
 } from "../utils/Utils";
 import { useNavigate } from "react-router-dom";
 import socket from "../utils/Socket";
@@ -24,6 +25,8 @@ export default function Home() {
   const [currentChannel, setCurrentChannel] = useState("");
   const [friendList, setFriendList] = useState([]);
   const [messageList, setMessageList] = useState([]);
+
+  const [input, setInput] = useState("");
 
   const [currentfriend, setCurrentFriend] = useState({
     id: null,
@@ -80,11 +83,41 @@ export default function Home() {
   useEffect(() => {
     if (!currentfriend.id) return;
 
-    socket.on("loadMessages", async ({ messages }) => {
+    socket.on("loadMessages", ({ messages }) => {
       setMessageList(messages);
     });
 
-    return () => socket.off("loadMessages");
+    socket.on("newMessage", ({ content, username, id, userId }) => {
+      setMessageList((prev) => [
+        ...prev,
+        {
+          id: id,
+          sender_id: userId,
+          content: content,
+          seen: 0,
+          created_at: new Date(),
+        },
+      ]);
+    });
+
+    socket.on("messageSent", ({ content, username, id, userId }) => {
+      setMessageList((prev) => [
+        ...prev,
+        {
+          id: id,
+          sender_id: userId,
+          content: content,
+          seen: 0,
+          created_at: new Date(),
+        },
+      ]);
+    });
+
+    return () => {
+      socket.off("loadMessages");
+      socket.off("newMessage");
+      socket.off("messageSent");
+    };
   }, [currentfriend.id]);
 
   useEffect(() => {
@@ -110,6 +143,18 @@ export default function Home() {
     return () => socket.off("friendWriting");
   }, [currentfriend.id]);
 
+  useEffect(() => {
+    if (!currentfriend.id || !timeout.current) return;
+
+    socket.on("friendStopWriting", ({ username }) => {
+      clearTimeout(timeout.current);
+      clearInterval(interval.current);
+      setFriendisTyping({ ongoing: false, dots: 1 });
+    });
+
+    return () => socket.off("friendStopWriting");
+  }, [currentfriend.id]);
+
   const openConversation = ({ id, username, display_name }) => {
     const channel = [userId, id].sort().join("_");
     setCurrentChannel(channel);
@@ -128,12 +173,16 @@ export default function Home() {
     socket.emit("writing", { roomName: currentChannel });
   };
 
-  const submitMessage = async (mg) => {
-    try {
-      const result = await fetch(`${import.meta.env.VITE_PATH_SERVER}/`);
-    } catch (err) {
-      console.error(err);
-    }
+  const submitMessage = () => {
+    if (!currentfriend.id || !input.trim()) return;
+
+    socket.emit("messageSend", {
+      roomName: currentChannel,
+      content: input,
+      userId: userId,
+    });
+
+    setInput("");
   };
 
   return (
@@ -237,13 +286,22 @@ export default function Home() {
         <div className="Chat">
           <div className="Chatbar">
             <input
+              value={input}
+              onInput={Typing}
+              onChange={(ev) => {
+                console.log(ev.target.value);
+                setInput(SanitizeInput(ev.target.value));
+              }}
+              onKeyDown={(ev) => ev.key === "Enter" && submitMessage()}
               type="text"
               name="chat"
               id="chat"
               placeholder="Type a message..."
-              onInput={() => Typing()}
             />
-            <Send />
+            <Send
+              onClick={() => submitMessage()}
+              style={{ cursor: "pointer" }}
+            />
           </div>
         </div>
       </div>

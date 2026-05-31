@@ -71,8 +71,9 @@ export function initSocket(io) {
             }
             
             let { id = null } = await saveMessage(socket.conversation_id, user_id, content)
-            socket.to(roomName).emit("messageRecieve", { content, username, id })
-            socket.emit("loadMSG", { content, username, id })
+
+            socket.to(roomName).emit("newMessage", { content, username, id, user_id })
+            socket.emit("messageSent", { content, username, id, user_id  })
         })
 
         socket.on("readMessage", async ({ roomName, message_id }) => {
