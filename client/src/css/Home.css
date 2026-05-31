@@ -6,6 +6,15 @@
     --hover-template: #e7e7e7;
     --badge-bg-color: rgba(182, 189, 255, 0.933);
     --bg-color-input: rgb(224, 224, 224);
+
+    --bubble-bg-color-u: rgb(172, 172, 172);
+    --own-bubble-bg-color-u: rgb(41, 41, 41);
+
+    --bubble-bg-color-s: rgb(172, 172, 172);
+    --own-bubble-bg-color-s: rgb(63, 63, 63);
+
+    --check-color: blue;
+    --uncheck-color: rgb(208, 208, 255);
 }
 
 :root[data-theme="Dark"] {
@@ -16,6 +25,15 @@
     --hover-template: #3a3a3a;
     --badge-bg-color: #45ee;
     --bg-color-input: rgb(41, 41, 41);
+
+    --bubble-bg-color-u: rgb(172, 172, 172);
+    --own-bubble-bg-color-u: rgb(97, 97, 97);
+
+    --bubble-bg-color-s: rgb(136, 136, 136);
+    --own-bubble-bg-color-s: rgb(63, 63, 63);
+
+    --check-color: blue;
+    --uncheck-color: rgb(208, 208, 255);
 }
 
 .HomeContainer {
@@ -194,7 +212,7 @@
 }
 
 .RightSection .Messages {
-    height: calc(100vh - 15.1vh);
+    height: calc(100vh - 20.1vh);
     background-color: var(--bg-color);
 }
 
@@ -228,4 +246,61 @@
 
 .Chat input {
     height: inherit;
+}
+
+/* Messages */
+
+.Messages {
+    display: flex;
+    flex-direction: column;
+    padding: 1.2rem;
+    gap: 0.5rem;
+    overflow-y: auto;
+}
+
+.ChatBubble {
+    background-color: var(--bubble-bg-color-u);
+    width: 15%;
+    border-radius: 5px;
+    padding: 0.5rem;
+}
+
+.ChatBubble.own {
+    background-color: var(--own-bubble-bg-color-u);
+    align-self: flex-end;
+}
+
+.ChatBubble .Message {
+    color: var(--text-color);
+}
+
+.ChatBubble.seen {
+    background-color: var(--bubble-bg-color-s);
+}
+
+.ChatBubble.own.seen {
+    background-color: var(--own-bubble-bg-color-s);
+}
+
+.ChatBubble .Date {
+    font-size: 0.7em;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+}
+
+.ChatBubble .Date svg {
+    height: 1.2rem;
+}
+
+.Date p {
+    color: var(--text-color);
+}
+
+.ChatBubble.seen .Date svg {
+    color: var(--check-color);
+}
+
+.ChatBubble .Date svg {
+    color: var(--uncheck-color);
 }

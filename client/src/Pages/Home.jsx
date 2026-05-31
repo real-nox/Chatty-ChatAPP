@@ -2,13 +2,20 @@ import { useEffect, useState } from "react";
 import "../css/Home.css";
 
 import {
+  Check,
+  CheckCheck,
   EllipsisVertical,
   PhoneCallIcon,
   Search,
   Send,
   VideoIcon,
 } from "lucide-react";
-import { formatedDate, getFriendsList, getUser } from "../utils/Utils";
+import {
+  formatedDate,
+  formatedDateMsg,
+  getFriendsList,
+  getUser,
+} from "../utils/Utils";
 import { useNavigate } from "react-router-dom";
 import socket from "../utils/Socket";
 
@@ -154,10 +161,24 @@ export default function Home() {
           </div>
         </div>
         <div className="Messages">
-          {messageList ? messageList.map((msg) => (
-            <p>{msg.content}</p>
-          )): 
-          (
+          {messageList ? (
+            messageList.map((msg) => (
+              <div
+                className={`ChatBubble ${msg.sender_id == userId ? "own" : ""} ${msg.seen ? "seen" : ""}`}
+                key={msg.id}
+              >
+                <div className="Message">
+                  <p>{msg.content}</p>
+                </div>
+                <div className="Date">
+                  <p>
+                    {formatedDateMsg(msg.created_at)}{" "}
+                  </p>
+                  {msg.seen ? <CheckCheck /> : <Check />}
+                </div>
+              </div>
+            ))
+          ) : (
             <p>Start conversation!</p>
           )}
         </div>

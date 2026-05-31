@@ -56,3 +56,21 @@ export const formatedDate = (timestamp) => {
 
     return date.toLocaleDateString([], { day: "2-digit", month: "short" });
 };
+
+export const formatedDateMsg = (timestamp) => {
+  const date = new Date(timestamp)
+  const now = new Date()
+
+  const isToday = date.toDateString() === now.toDateString()
+
+  const yesterday = new Date(now)
+  yesterday.setDate(now.getDate() - 1)
+
+  const isYesterday = date.toDateString() === yesterday.toDateString()
+
+  if (isToday) return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+
+    if (isYesterday) return date.toLocaleTimeString([], { day:"2-digit", hour: "2-digit", minute: "2-digit" })
+
+    return date.toLocaleDateString([], { day: "2-digit", month: "short" });
+};
