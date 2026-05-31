@@ -37,15 +37,15 @@ A real-time chat application built with Node.js, Socket.io and PostgreSQL. Add f
 
 ## Features
 
-- 🔐 **Authentication** — Register and login with secure bcrypt-hashed passwords and session-based auth stored in PostgreSQL
-- 👥 **Friend System** — Send, accept, and decline friend requests in real time
-- 💬 **Real-time Messaging** — Instant messaging powered by Socket.io with no page reloads
-- ✅ **Seen / Unseen Status** — Messages update to "Seen" in real time when your friend reads them
-- ✍️ **Writing Indicator** — Animated dots show when your friend is typing
-- 🟢 **Online Presence** — Green/red dot shows which friends are currently online
-- 😊 **Emoji Picker** — Send emojis directly in messages
-- 🌙 **Light / Dark Theme** — Toggle between themes, preference saved in localStorage and database
-- 🔒 **XSS Protection** — All user input is sanitized before rendering
+- 🔐 **Authentication** : Register and login with secure bcrypt-hashed passwords and session-based auth stored in PostgreSQL
+- 👥 **Friend System** : Send, accept, and decline friend requests in real time
+- 💬 **Real-time Messaging** : Instant messaging powered by Socket.io with no page reloads
+- ✅ **Seen / Unseen Status** : Messages update to "Seen" in real time when your friend reads them
+- ✍️ **Writing Indicator** : Animated dots show when your friend is typing
+- 🟢 **Online Presence** : Green/red dot shows which friends are currently online
+- 😊 **Emoji Picker** : Send emojis directly in messages
+- 🌙 **Light / Dark Theme** : Toggle between themes, preference saved in localStorage and database
+- 🔒 **XSS Protection** : All user input is sanitized before rendering
 
 ---
 
@@ -55,7 +55,7 @@ A real-time chat application built with Node.js, Socket.io and PostgreSQL. Add f
 |---|---|
 | Runtime | Node.js |
 | Framework | Express.js |
-| Templating | EJS |
+| Templating | EJS (Getting replaced with react.js) |
 | Real-time | Socket.io |
 | Database | PostgreSQL |
 | ORM | node-postgres (pg) |
