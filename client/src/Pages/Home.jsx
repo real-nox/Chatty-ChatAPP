@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "../css/Home.css";
 
 import {
@@ -31,6 +31,14 @@ export default function Home() {
     username: null,
     avatar: null,
   });
+
+  const [friendisTyping, setFriendisTyping] = useState({
+    ongoing: false,
+    dots: 1,
+  });
+
+  const timeout = useRef(null);
+  const interval = useRef(null);
 
   const navigate = useNavigate();
 
@@ -79,6 +87,29 @@ export default function Home() {
     return () => socket.off("loadMessages");
   }, [currentfriend.id]);
 
+  useEffect(() => {
+    if (!currentfriend.id) return;
+
+    socket.on("friendWriting", ({ username }) => {
+      setFriendisTyping((prev) => ({ ...prev, ongoing: true }));
+
+      clearTimeout(timeout.current);
+      clearInterval(interval.current);
+
+      let dots = 3;
+      interval.current = setInterval(() => {
+        setFriendisTyping((prev) => ({ ...prev, dots: (prev.dots % 3) + 1 }));
+      }, 500);
+
+      timeout.current = setTimeout(() => {
+        clearInterval(interval.current);
+        setFriendisTyping({ ongoing: false, dots: 1 });
+      }, 10000);
+    });
+
+    return () => socket.off("friendWriting");
+  }, [currentfriend.id]);
+
   const openConversation = ({ id, username, display_name }) => {
     const channel = [userId, id].sort().join("_");
     setCurrentChannel(channel);
@@ -88,7 +119,21 @@ export default function Home() {
       username,
       display_name: display_name,
     });
+
+    console.log(userId, id);
     socket.emit("joinroom", channel);
+  };
+
+  const Typing = () => {
+    socket.emit("writing", { roomName: currentChannel });
+  };
+
+  const submitMessage = async (mg) => {
+    try {
+      const result = await fetch(`${import.meta.env.VITE_PATH_SERVER}/`);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
@@ -171,15 +216,22 @@ export default function Home() {
                   <p>{msg.content}</p>
                 </div>
                 <div className="Date">
-                  <p>
-                    {formatedDateMsg(msg.created_at)}{" "}
-                  </p>
+                  <p>{formatedDateMsg(msg.created_at)} </p>
                   {msg.seen ? <CheckCheck /> : <Check />}
                 </div>
               </div>
             ))
           ) : (
             <p>Start conversation!</p>
+          )}
+        </div>
+        <div className="Bar">
+          {friendisTyping.ongoing && (
+            <p>
+              {currentfriend.display_name}{" "}
+              {`Writing
+              ${".".repeat(friendisTyping.dots)}`}
+            </p>
           )}
         </div>
         <div className="Chat">
@@ -189,6 +241,7 @@ export default function Home() {
               name="chat"
               id="chat"
               placeholder="Type a message..."
+              onInput={() => Typing()}
             />
             <Send />
           </div>

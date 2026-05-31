@@ -99,7 +99,6 @@
 .SideBar .FriendsList {
     width: 100%;
     height: calc(100vh - 22vh);
-    border-bottom: 1px solid var(--sidebar-border-color);
     display: flex;
     flex-direction: column;
     overflow-y: auto;
@@ -180,6 +179,9 @@
 
 .RightSection {
     width: 80%;
+    height: 100%;
+    display: grid;
+    grid-template-rows: auto 1fr auto auto;
 }
 
 .RightSection.Empty {
@@ -212,8 +214,13 @@
 }
 
 .RightSection .Messages {
-    height: calc(100vh - 20.1vh);
     background-color: var(--bg-color);
+    overflow-y: auto;
+}
+
+.RightSection .Bar {
+    color: var(--text-color);
+    padding: 1rem;
 }
 
 .RightSection .Chat {
