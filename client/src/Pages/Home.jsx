@@ -87,7 +87,7 @@ export default function Home() {
       setMessageList(messages);
     });
 
-    socket.on("newMessage", ({ content, username, id, userId }) => {
+    const handleMessageReceived = ({ content, username, id, userId }) => {
       setMessageList((prev) => [
         ...prev,
         {
@@ -98,9 +98,9 @@ export default function Home() {
           created_at: new Date(),
         },
       ]);
-    });
+    };
 
-    socket.on("messageSent", ({ content, username, id, userId }) => {
+    const handleMessageSent = ({ content, username, id, userId }) => {
       setMessageList((prev) => [
         ...prev,
         {
@@ -111,14 +111,21 @@ export default function Home() {
           created_at: new Date(),
         },
       ]);
-    });
+
+      socket.emit("stopWriting", { roomName: currentChannel });
+    };
+
+    socket.on("hello", () => console.log("hello"))
+
+    socket.on("newMessage", handleMessageReceived)
+    socket.on("messageSent", handleMessageSent);
 
     return () => {
       socket.off("loadMessages");
-      socket.off("newMessage");
-      socket.off("messageSent");
+      socket.off("newMessage", handleMessageReceived);
+      socket.off("messageSent", handleMessageSent);
     };
-  }, [currentfriend.id]);
+  }, [currentChannel]);
 
   useEffect(() => {
     if (!currentfriend.id) return;
@@ -141,12 +148,13 @@ export default function Home() {
     });
 
     return () => socket.off("friendWriting");
-  }, [currentfriend.id]);
+  }, [currentChannel]);
 
   useEffect(() => {
-    if (!currentfriend.id || !timeout.current) return;
+    if (!currentfriend.id) return;
 
     socket.on("friendStopWriting", ({ username }) => {
+      console.log("here");
       clearTimeout(timeout.current);
       clearInterval(interval.current);
       setFriendisTyping({ ongoing: false, dots: 1 });

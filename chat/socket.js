@@ -60,7 +60,7 @@ export function initSocket(io) {
             socket.emit("loadMessages", { messages })
         })
 
-        socket.on("messageSend", async ({ roomName, content }) => {
+        socket.on("messageSend", async ({ roomName, content, userId }) => {
             if (!socket.conversation_id || socket.conversation_id == undefined) {
                 const [user1_id, user2_id] = roomName.split("_")
                 const conversation_id = (await getConversation(user1_id, user2_id)).id
@@ -69,11 +69,11 @@ export function initSocket(io) {
 
                 socket.conversation_id = conversation_id
             }
-            
-            let { id = null } = await saveMessage(socket.conversation_id, user_id, content)
 
-            socket.to(roomName).emit("newMessage", { content, username, id, user_id })
-            socket.emit("messageSent", { content, username, id, user_id  })
+            let { id = null } = await saveMessage(socket.conversation_id, userId, content)
+
+            socket.to(roomName).emit("newMessage", { content, username, id, userId })
+            socket.emit("messageSent", { content, username, id, userId })
         })
 
         socket.on("readMessage", async ({ roomName, message_id }) => {
@@ -87,6 +87,7 @@ export function initSocket(io) {
         })
 
         socket.on("stopWriting", ({ roomName }) => {
+            console.log("sent", roomName)
             socket.to(roomName).emit("friendStopWriting", { username })
         })
     })
