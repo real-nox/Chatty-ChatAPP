@@ -115,9 +115,7 @@ export default function Home() {
       socket.emit("stopWriting", { roomName: currentChannel });
     };
 
-    socket.on("hello", () => console.log("hello"))
-
-    socket.on("newMessage", handleMessageReceived)
+    socket.on("newMessage", handleMessageReceived);
     socket.on("messageSent", handleMessageSent);
 
     return () => {
@@ -130,7 +128,7 @@ export default function Home() {
   useEffect(() => {
     if (!currentfriend.id) return;
 
-    socket.on("friendWriting", ({ username }) => {
+    const handleFriendWriting = ({ username }) => {
       setFriendisTyping((prev) => ({ ...prev, ongoing: true }));
 
       clearTimeout(timeout.current);
@@ -145,23 +143,22 @@ export default function Home() {
         clearInterval(interval.current);
         setFriendisTyping({ ongoing: false, dots: 1 });
       }, 10000);
-    });
+    };
 
-    return () => socket.off("friendWriting");
-  }, [currentChannel]);
-
-  useEffect(() => {
-    if (!currentfriend.id) return;
-
-    socket.on("friendStopWriting", ({ username }) => {
-      console.log("here");
+    const handleFriendStopWriting = ({ username }) => {
       clearTimeout(timeout.current);
       clearInterval(interval.current);
       setFriendisTyping({ ongoing: false, dots: 1 });
-    });
+    }
 
-    return () => socket.off("friendStopWriting");
-  }, [currentfriend.id]);
+    socket.on("friendWriting", handleFriendWriting);
+    socket.on("friendStopWriting", handleFriendStopWriting);
+
+    return () => {
+      socket.off("friendStopWriting", handleFriendStopWriting);
+      socket.off("friendWriting", handleFriendWriting);
+    };
+  }, [currentChannel]);
 
   const openConversation = ({ id, username, display_name }) => {
     const channel = [userId, id].sort().join("_");
@@ -173,7 +170,6 @@ export default function Home() {
       display_name: display_name,
     });
 
-    console.log(userId, id);
     socket.emit("joinroom", channel);
   };
 
