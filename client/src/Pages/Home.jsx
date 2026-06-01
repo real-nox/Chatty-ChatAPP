@@ -40,6 +40,8 @@ export default function Home() {
     dots: 1,
   });
 
+  const [loading, setLoading] = useState(false);
+
   const timeout = useRef(null);
   const interval = useRef(null);
 
@@ -84,6 +86,9 @@ export default function Home() {
     if (!currentfriend.id) return;
 
     socket.on("loadMessages", ({ messages }) => {
+      console.log(messages)
+      if (messages)
+        setLoading(false)
       setMessageList(messages);
     });
 
@@ -149,7 +154,7 @@ export default function Home() {
       clearTimeout(timeout.current);
       clearInterval(interval.current);
       setFriendisTyping({ ongoing: false, dots: 1 });
-    }
+    };
 
     socket.on("friendWriting", handleFriendWriting);
     socket.on("friendStopWriting", handleFriendStopWriting);
@@ -171,6 +176,7 @@ export default function Home() {
     });
 
     socket.emit("joinroom", channel);
+    setLoading(true)
   };
 
   const Typing = () => {
@@ -259,14 +265,21 @@ export default function Home() {
           </div>
         </div>
         <div className="Messages">
-          {messageList ? (
+          {loading ? (
+            <>
+              <div className="ChatBubble skel"></div>
+              <div className="ChatBubble own skel"></div>
+              <div className="ChatBubble skel"></div>
+              <div className="ChatBubble own skel"></div>
+            </>
+          ) : messageList ? (
             messageList.map((msg) => (
               <div
                 className={`ChatBubble ${msg.sender_id == userId ? "own" : ""} ${msg.seen ? "seen" : ""}`}
                 key={msg.id}
               >
                 <div className="Message">
-                  <p>{msg.content}</p>
+                  {msg.content}
                 </div>
                 <div className="Date">
                   <p>{formatedDateMsg(msg.created_at)} </p>

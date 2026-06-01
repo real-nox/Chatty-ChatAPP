@@ -26,10 +26,10 @@
     --badge-bg-color: #45ee;
     --bg-color-input: rgb(41, 41, 41);
 
-    --bubble-bg-color-u: rgb(172, 172, 172);
+    --bubble-bg-color-u: rgb(146, 146, 146);
     --own-bubble-bg-color-u: rgb(97, 97, 97);
 
-    --bubble-bg-color-s: rgb(136, 136, 136);
+    --bubble-bg-color-s: rgb(92, 92, 92);
     --own-bubble-bg-color-s: rgb(63, 63, 63);
 
     --check-color: blue;
@@ -154,6 +154,8 @@
 .FriendTemplate .Center p {
     font-size: 1.2em;
     color: var(--sidebar-border-color);
+    width: 100%;
+    overflow-x: hidden;
 }
 
 .FriendTemplate .Right {
@@ -216,6 +218,7 @@
 .RightSection .Messages {
     background-color: var(--bg-color);
     overflow-y: auto;
+    scroll-behavior: smooth;
 }
 
 .RightSection .Bar {
@@ -267,9 +270,13 @@
 
 .ChatBubble {
     background-color: var(--bubble-bg-color-u);
-    width: 15%;
+    min-width: 15%;
+    height: auto;
     border-radius: 5px;
     padding: 0.5rem;
+    align-self: flex-start;
+
+    max-width: 80%;
 }
 
 .ChatBubble.own {
@@ -279,6 +286,9 @@
 
 .ChatBubble .Message {
     color: var(--text-color);
+    word-break: break-word;
+    overflow-wrap: break-word;
+    white-space: pre+wrap;
 }
 
 .ChatBubble.seen {
@@ -310,4 +320,37 @@
 
 .ChatBubble .Date svg {
     color: var(--uncheck-color);
+}
+
+/*Loading*/
+
+.skel {
+    width: 40%;
+    background: #e8e8e8;
+    border-radius: 6px;
+    animation: loading 1.6s ease-in-out infinite;
+    height: 1%;
+}
+
+.skel:nth-child(2) {
+    animation-delay: .2s;
+    width: 25%;
+}
+
+.skel:nth-child(3) {
+    animation-delay: .4s;
+    width: 10%;
+}
+
+
+@keyframes loading {
+
+    0%,
+    100% {
+        opacity: .4;
+    }
+
+    50% {
+        opacity: 1;
+    }
 }
