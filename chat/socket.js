@@ -49,10 +49,14 @@ export function initSocket(io) {
             socket.join(roomName)
 
             const [user1_id, user2_id] = roomName.split("_")
-            const conversation_id = (await getConversation(user1_id, user2_id)).id
+            const conversation = (await getConversation(user1_id, user2_id))
 
-            if (!conversation_id)
-                return
+            let conversation_id = null
+            if (conversation) {
+                conversation_id = conversation.id
+            } else {
+                return console.log("error")
+            }
 
             socket.conversation_id = conversation_id
 

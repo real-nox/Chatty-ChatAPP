@@ -86,9 +86,8 @@ export default function Home() {
     if (!currentfriend.id) return;
 
     socket.on("loadMessages", ({ messages }) => {
-      console.log(messages)
-      if (messages)
-        setLoading(false)
+      console.log(messages);
+      if (messages) setLoading(false);
       setMessageList(messages);
     });
 
@@ -176,7 +175,7 @@ export default function Home() {
     });
 
     socket.emit("joinroom", channel);
-    setLoading(true)
+    setLoading(true);
   };
 
   const Typing = () => {
@@ -208,46 +207,47 @@ export default function Home() {
           </div>
         </div>
         <div className="FriendsList">
-          {friendList
-            ? friendList.map((friend) => {
-                return (
-                  <button
-                    key={friend.id}
-                    className="FriendTemplate"
-                    onClick={() =>
-                      openConversation({
-                        id: friend.id,
-                        username: friend.username,
-                        display_name: friend.display_name,
-                      })
-                    }
-                  >
-                    <div className="Icon">
-                      <img
-                        src={
-                          friend?.avatar
-                            ? `${friend?.avatar}`
-                            : "../../img/avatar.png"
-                        }
-                        alt="Avatar"
-                      />
-                    </div>
-                    <div className="Center">
-                      <h4>{friend.display_name}</h4>
+          {friendList &&
+            friendList.map((friend) => {
+              return (
+                <button
+                  key={friend.id}
+                  className="FriendTemplate"
+                  onClick={() =>
+                    openConversation({
+                      id: friend.id,
+                      username: friend.username,
+                      display_name: friend.display_name,
+                    })
+                  }
+                >
+                  <div className="Icon">
+                    <img
+                      src={
+                        friend?.avatar
+                          ? `${friend?.avatar}`
+                          : "../../img/avatar.png"
+                      }
+                      alt="Avatar"
+                    />
+                  </div>
+                  <div className="Center">
+                    <h4>{friend.display_name}</h4>
+                    { friendisTyping.ongoing ? 
+                        <p>{`${currentfriend.display_name} Writing ${".".repeat(friendisTyping.dots)}`}</p>
+                      : 
                       <p>{friend.last_message}</p>
-                    </div>
-                    <div className="Right">
-                      <p>{formatedDate(friend.created_at)}</p>
-                      {friend?.unseen_count > 0 ? (
-                        <div className="Badge">{friend.unseen_count}</div>
-                      ) : (
-                        ""
-                      )}
-                    </div>
-                  </button>
-                );
-              })
-            : ""}
+                        }
+                  </div>
+                  <div className="Right">
+                    <p>{formatedDate(friend.created_at)}</p>
+                    {friend?.unseen_count > 0 && (
+                      <div className="Badge">{friend.unseen_count}</div>
+                    )}
+                  </div>
+                </button>
+              );
+            })}
         </div>
       </div>
 
@@ -278,9 +278,7 @@ export default function Home() {
                 className={`ChatBubble ${msg.sender_id == userId ? "own" : ""} ${msg.seen ? "seen" : ""}`}
                 key={msg.id}
               >
-                <div className="Message">
-                  {msg.content}
-                </div>
+                <div className="Message">{msg.content}</div>
                 <div className="Date">
                   <p>{formatedDateMsg(msg.created_at)} </p>
                   {msg.seen ? <CheckCheck /> : <Check />}
