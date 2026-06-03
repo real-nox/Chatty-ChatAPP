@@ -91,6 +91,20 @@ export default function Home() {
       setMessageList(messages);
     });
 
+    const handleLastSeen = (content) => {
+      setFriendList((prev) => {
+        const updated = { ...prev }
+        if (updated[currentfriend.id]) {
+          updated[currentfriend.id] = {
+            ...updated[currentfriend.id],
+            last_message: content
+          }
+        }
+
+        return updated
+    })
+    }
+
     const handleMessageReceived = ({ content, username, id, userId }) => {
       setMessageList((prev) => [
         ...prev,
@@ -102,6 +116,7 @@ export default function Home() {
           created_at: new Date(),
         },
       ]);
+      handleLastSeen(content)
     };
 
     const handleMessageSent = ({ content, username, id, userId }) => {
@@ -116,6 +131,7 @@ export default function Home() {
         },
       ]);
 
+      handleLastSeen(content)
       socket.emit("stopWriting", { roomName: currentChannel });
     };
 
@@ -207,47 +223,61 @@ export default function Home() {
           </div>
         </div>
         <div className="FriendsList">
+          {console.log(friendList)}
           {friendList &&
-            friendList.map((friend) => {
-              return (
-                <button
-                  key={friend.id}
-                  className="FriendTemplate"
-                  onClick={() =>
-                    openConversation({
-                      id: friend.id,
-                      username: friend.username,
-                      display_name: friend.display_name,
-                    })
-                  }
-                >
-                  <div className="Icon">
-                    <img
-                      src={
-                        friend?.avatar
-                          ? `${friend?.avatar}`
-                          : "../../img/avatar.png"
-                      }
-                      alt="Avatar"
-                    />
-                  </div>
-                  <div className="Center">
-                    <h4>{friend.display_name}</h4>
-                    { friendisTyping.ongoing ? 
-                        <p>{`${currentfriend.display_name} Writing ${".".repeat(friendisTyping.dots)}`}</p>
-                      : 
-                      <p>{friend.last_message}</p>
+            Object.entries(friendList).map(
+              ([
+                id,
+                {
+                  created_at,
+                  display_name,
+                  last_message,
+                  seen,
+                  sender_id,
+                  unseen_count,
+                  username,
+                  avatar = null,
+                },
+              ]) => {
+                console.log(id, created_at);
+                return (
+                  <button
+                    key={id}
+                    className="FriendTemplate"
+                    onClick={() =>
+                      openConversation({
+                        id: id,
+                        username: username,
+                        display_name: display_name,
+                      })
+                    }
+                  >
+                    <div className="Icon">
+                      <img
+                        src={
+                          avatar ? `${friend?.avatar}` : "../../img/avatar.png"
                         }
-                  </div>
-                  <div className="Right">
-                    <p>{formatedDate(friend.created_at)}</p>
-                    {friend?.unseen_count > 0 && (
-                      <div className="Badge">{friend.unseen_count}</div>
-                    )}
-                  </div>
-                </button>
-              );
-            })}
+                        alt="Avatar"
+                      />
+                    </div>
+                    <div className="Center">
+                      <h4>{display_name}</h4>
+                      {friendisTyping.ongoing ? (
+                        <p>{`${currentfriend.display_name} Writing ${".".repeat(friendisTyping.dots)}`}</p>
+                      ) : (
+                        <p>{last_message}</p>
+                      )}
+                    </div>
+                    <div className="Right">
+                      <p>{formatedDate(created_at)}</p>
+                      {unseen_count > 0 && (
+                        <div className="Badge">{unseen_count}</div>
+                      )}
+                    </div>
+                  </button>
+                );
+              },
+            )}
         </div>
       </div>
 

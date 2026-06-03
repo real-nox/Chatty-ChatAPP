@@ -17,13 +17,13 @@ export function initSocket(io) {
 
         const OnlineInter = setInterval(() => {
             if (friends) {
-                friends.forEach(friend => {
-                    const friendSocket_id = onlineUsers[friend.id]
+                Object.entries(friends).map((id, {}) => {
+                    const friendSocket_id = onlineUsers[id]
                     if (friendSocket_id) {
                         socket.to(friendSocket_id).emit("friendOnline", { userId: user_id })
-                        socket.emit("friendOnline", { userId: friend.id })
+                        socket.emit("friendOnline", { userId: id })
                     } else {
-                        socket.emit("friendOffline", { userId: friend.id })
+                        socket.emit("friendOffline", { userId: id })
                     }
                 })
             }
@@ -32,8 +32,8 @@ export function initSocket(io) {
         socket.on("disconnect", () => {
 
             if (friends) {
-                friends.forEach(friend => {
-                    const friendSocket_id = onlineUsers[friend.id]
+                Object.entries(friends).map((id, {}) => {
+                    const friendSocket_id = onlineUsers[id]
                     if (friendSocket_id)
                         socket.to(friendSocket_id).emit("friendOffline", { userId: user_id })
                 })

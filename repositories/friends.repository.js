@@ -110,8 +110,15 @@ export const listF = async (user_id) => {
             order by m.created_at desc
 `, [user_id])
 
-        if (result?.rowCount > 0)
-            return result.rows
+        if (result?.rowCount > 0) {
+            let list = {};
+
+            for (const { created_at, display_name, id, last_message, seen, sender_id, unseen_count, username } of result?.rows) {
+                list[id] = { created_at: created_at, display_name: display_name, id: id, last_message: last_message, seen: seen, sender_id: sender_id, unseen_count: unseen_count, username: username }
+            }
+
+            return list
+        }
         return []
     } catch (err) {
         console.log(err)

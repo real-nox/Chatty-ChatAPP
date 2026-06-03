@@ -30,7 +30,7 @@
 .Rightbar {
     display: flex;
     justify-content: space-around;
-    width: 10rem;
+    width: 12rem;
 }
 
 .Leftbar {
