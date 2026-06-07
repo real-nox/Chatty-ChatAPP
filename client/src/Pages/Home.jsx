@@ -93,17 +93,17 @@ export default function Home() {
 
     const handleLastSeen = (content) => {
       setFriendList((prev) => {
-        const updated = { ...prev }
+        const updated = { ...prev };
         if (updated[currentfriend.id]) {
           updated[currentfriend.id] = {
             ...updated[currentfriend.id],
-            last_message: content
-          }
+            last_message: content,
+          };
         }
 
-        return updated
-    })
-    }
+        return updated;
+      });
+    };
 
     const handleMessageReceived = ({ content, username, id, userId }) => {
       setMessageList((prev) => [
@@ -116,7 +116,7 @@ export default function Home() {
           created_at: new Date(),
         },
       ]);
-      handleLastSeen(content)
+      handleLastSeen(content);
     };
 
     const handleMessageSent = ({ content, username, id, userId }) => {
@@ -131,7 +131,7 @@ export default function Home() {
         },
       ]);
 
-      handleLastSeen(content)
+      handleLastSeen(content);
       socket.emit("stopWriting", { roomName: currentChannel });
     };
 
@@ -343,12 +343,33 @@ export default function Home() {
               id="chat"
               placeholder="Type a message..."
             />
+            <emoji-picker
+              id="picker"
+              style={{ display: "none" }}
+            ></emoji-picker>
+            <button
+              type="button"
+              id="emojiToggle"
+              onClick={(ev) => {
+                let picker = document.getElementById("picker");
+                picker.style.display =
+                  picker.style.display == "none" ? "block" : "none";
+
+                console.log(picker.style.display)
+              }}
+            >
+              😊
+            </button>
             <Send
               onClick={() => submitMessage()}
               style={{ cursor: "pointer" }}
             />
           </div>
         </div>
+        <script
+          type="module"
+          src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js"
+        ></script>
       </div>
     </div>
   );

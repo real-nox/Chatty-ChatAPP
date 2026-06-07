@@ -354,3 +354,13 @@
         opacity: 1;
     }
 }
+
+emoji-picker {
+    display: none;
+    position: absolute;
+    bottom: 60px;
+    right: 25px;
+    width: 350px;
+    height: 350px;
+    z-index: 100;
+}
