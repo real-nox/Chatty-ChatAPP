@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import EmojiPicker from "emoji-picker-react"
 import "../css/Home.css";
 
 import {
@@ -343,15 +344,28 @@ export default function Home() {
               id="chat"
               placeholder="Type a message..."
             />
-            <emoji-picker
-              id="picker"
-              style={{ display: "none" }}
-            ></emoji-picker>
+            <EmojiPicker style={
+              {
+                display: "none", 
+                position: "absolute",
+                top: '45%',
+                right: '1.5%'
+              }
+  } theme={'dark'} onEmojiClick={(EmojiObject) => {
+                  let emoji = EmojiObject.emoji
+                  Typing()
+                  setInput((prev) => {
+                    return prev + emoji
+                  });
+                  }} />
             <button
               type="button"
               id="emojiToggle"
+              style={{backgroundColor: 'transparent', border: '0', fontSize: "1.2rem"
+              }}
               onClick={(ev) => {
-                let picker = document.getElementById("picker");
+                let picker = document.querySelector(".EmojiPickerReact")
+
                 picker.style.display =
                   picker.style.display == "none" ? "block" : "none";
 

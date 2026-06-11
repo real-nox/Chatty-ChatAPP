@@ -65,10 +65,10 @@ export const saveMessage = async (conv_id, sender_id, content) => {
 
 export const getMessages = async (conv_id) => {
     try {
-        const result = await pool.query("select m.id, m.sender_id, u.username, m.content, m.created_at, m.seen from messages m join users u on (m.sender_id = u.id) where m.conversation_id = $1 order by m.created_at asc limit 50 ", [conv_id])
+        const result = await pool.query("select m.id, m.sender_id, u.username, m.content, m.created_at, m.seen from messages m join users u on (m.sender_id = u.id) where m.conversation_id = $1 order by m.created_at desc limit 50 ", [conv_id])
 
         if (result.rowCount > 0) {
-           return result.rows
+           return result.rows.reverse()
         }
         return false
     } catch (err) {
