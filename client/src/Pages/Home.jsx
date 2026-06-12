@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import EmojiPicker from "emoji-picker-react"
+import EmojiPicker from "emoji-picker-react";
 import "../css/Home.css";
 
 import {
@@ -45,6 +45,9 @@ export default function Home() {
 
   const timeout = useRef(null);
   const interval = useRef(null);
+
+  const firstLoad = useRef(true);
+  const messagesEndRef = useRef(null);
 
   const navigate = useNavigate();
 
@@ -107,42 +110,83 @@ export default function Home() {
     };
 
     const handleMessageReceived = ({ content, username, id, userId }) => {
-      setMessageList((prev) => [
-        ...prev,
-        {
-          id: id,
-          sender_id: userId,
-          content: content,
-          seen: 0,
-          created_at: new Date(),
-        },
-      ]);
+      console.log("here", messageList);
+      setMessageList((prev) => {
+        console.log("old", prev);
+        return [
+          ...(prev ?? []),
+          {
+            id: id,
+            sender_id: userId,
+            content: content,
+            seen: 0,
+            created_at: new Date(),
+          },
+        ];
+      });
       handleLastSeen(content);
+
+      if (currentChannel)
+        socket.emit("readMessage", {
+          roomName: currentChannel,
+          message_id: id,
+        });
     };
 
     const handleMessageSent = ({ content, username, id, userId }) => {
-      setMessageList((prev) => [
-        ...prev,
-        {
-          id: id,
-          sender_id: userId,
-          content: content,
-          seen: 0,
-          created_at: new Date(),
-        },
-      ]);
+      setMessageList((prev) => {
+        console.log("old", prev);
+        return [
+          ...prev,
+          {
+            id: id,
+            sender_id: userId,
+            content: content,
+            seen: 0,
+            created_at: new Date(),
+          },
+        ];
+      });
 
       handleLastSeen(content);
       socket.emit("stopWriting", { roomName: currentChannel });
     };
 
+    const handleSeenMsg = async ({ message_id }) => {
+      setMessageList((prev) => {
+        return prev.map((mg) =>
+          mg.id == message_id ? { ...mg, seen: 1 } : mg,
+        );
+      });
+    };
+
+    const handleAllSeen = async ({}) => {
+      setFriendList((prev) => {
+        const updated = { ...prev };
+        if (updated[currentfriend.id]) {
+          updated[currentfriend.id] = {
+            ...updated[currentfriend.id],
+            unseen_count: 0,
+          };
+        }
+
+        return updated;
+      });
+    };
+
     socket.on("newMessage", handleMessageReceived);
     socket.on("messageSent", handleMessageSent);
+
+    socket.on("MarkMessageSeen", handleSeenMsg);
+    socket.on("allMessagesRead", handleAllSeen);
 
     return () => {
       socket.off("loadMessages");
       socket.off("newMessage", handleMessageReceived);
       socket.off("messageSent", handleMessageSent);
+
+      socket.off("MarkMessageSeen", handleSeenMsg);
+      socket.off("allMessagesRead", handleAllSeen);
     };
   }, [currentChannel]);
 
@@ -192,6 +236,8 @@ export default function Home() {
     });
 
     socket.emit("joinroom", channel);
+    console.log(channel, currentfriend.id);
+    socket.emit("MarkAllMsgAsSeen", { roomName: channel, friendId: id });
     setLoading(true);
   };
 
@@ -210,6 +256,19 @@ export default function Home() {
 
     setInput("");
   };
+
+  useEffect(() => {
+    firstLoad.current = true;
+  }, [currentChannel]);
+
+  useEffect(() => {
+    if (!messageList?.length) return;
+
+    if (firstLoad.current) {
+      messagesEndRef.current?.scrollIntoView({ behavior: "instant" });
+      firstLoad.current = false;
+    }
+  }, [messageList]);
 
   return (
     <div className="HomeContainer">
@@ -255,9 +314,7 @@ export default function Home() {
                   >
                     <div className="Icon">
                       <img
-                        src={
-                          avatar ? `${friend?.avatar}` : "../../img/avatar.png"
-                        }
+                        src={avatar ? `${avatar}` : "../../img/avatar.png"}
                         alt="Avatar"
                       />
                     </div>
@@ -304,22 +361,26 @@ export default function Home() {
               <div className="ChatBubble own skel"></div>
             </>
           ) : messageList ? (
-            messageList.map((msg) => (
-              <div
-                className={`ChatBubble ${msg.sender_id == userId ? "own" : ""} ${msg.seen ? "seen" : ""}`}
-                key={msg.id}
-              >
-                <div className="Message">{msg.content}</div>
-                <div className="Date">
-                  <p>{formatedDateMsg(msg.created_at)} </p>
-                  {msg.seen ? <CheckCheck /> : <Check />}
+            <>
+              {messageList.map((msg) => (
+                <div
+                  className={`ChatBubble ${msg.sender_id == userId ? "own" : ""} ${msg.seen ? "seen" : ""}`}
+                  key={msg.id}
+                >
+                  <div className="Message">{msg.content}</div>
+                  <div className="Date">
+                    <p>{formatedDateMsg(msg.created_at)} </p>
+                    {msg.seen ? <CheckCheck /> : <Check />}
+                  </div>
                 </div>
-              </div>
-            ))
+              ))}
+              <div ref={messagesEndRef} />
+            </>
           ) : (
             <p>Start conversation!</p>
           )}
         </div>
+
         <div className="Bar">
           {friendisTyping.ongoing && (
             <p>
@@ -335,7 +396,6 @@ export default function Home() {
               value={input}
               onInput={Typing}
               onChange={(ev) => {
-                console.log(ev.target.value);
                 setInput(SanitizeInput(ev.target.value));
               }}
               onKeyDown={(ev) => ev.key === "Enter" && submitMessage()}
@@ -344,32 +404,35 @@ export default function Home() {
               id="chat"
               placeholder="Type a message..."
             />
-            <EmojiPicker style={
-              {
-                display: "none", 
+            <EmojiPicker
+              style={{
+                display: "none",
                 position: "absolute",
-                top: '45%',
-                right: '1.5%'
-              }
-  } theme={'dark'} onEmojiClick={(EmojiObject) => {
-                  let emoji = EmojiObject.emoji
-                  Typing()
-                  setInput((prev) => {
-                    return prev + emoji
-                  });
-                  }} />
+                top: "45%",
+                right: "1.5%",
+              }}
+              theme={"dark"}
+              onEmojiClick={(EmojiObject) => {
+                let emoji = EmojiObject.emoji;
+                Typing();
+                setInput((prev) => {
+                  return prev + emoji;
+                });
+              }}
+            />
             <button
               type="button"
               id="emojiToggle"
-              style={{backgroundColor: 'transparent', border: '0', fontSize: "1.2rem"
+              style={{
+                backgroundColor: "transparent",
+                border: "0",
+                fontSize: "1.2rem",
               }}
               onClick={(ev) => {
-                let picker = document.querySelector(".EmojiPickerReact")
+                let picker = document.querySelector(".EmojiPickerReact");
 
                 picker.style.display =
                   picker.style.display == "none" ? "block" : "none";
-
-                console.log(picker.style.display)
               }}
             >
               😊

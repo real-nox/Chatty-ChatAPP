@@ -1,4 +1,4 @@
-import { getConversation, getMessages, saveMessage, setSeenMsg } from "../repositories/chat.repository.js"
+import { getConversation, getMessages, MarkAllMsgAsSeen, saveMessage, setSeenMsg } from "../repositories/chat.repository.js"
 import { listF } from "../repositories/friends.repository.js"
 import { getUserById } from "../repositories/user.repository.js"
 
@@ -82,8 +82,15 @@ export function initSocket(io) {
 
         socket.on("readMessage", async ({ roomName, message_id }) => {
             await setSeenMsg(message_id);
-            socket.to(roomName).emit("messageSeen", { message_id })
+            socket.to(roomName).emit("MarkMessageSeen", { message_id })
             socket.emit("MarkMessageSeen", { message_id })
+        })
+
+        socket.on("MarkAllMsgAsSeen", async ({ roomName, friendId}) => {
+            const [user1_id, user2_id] = roomName.split("_")
+            const conversation = (await getConversation(user1_id, user2_id))
+            await MarkAllMsgAsSeen(conversation.id, friendId)
+            socket.emit("allMessagesRead", { roomName })
         })
 
         socket.on("writing", ({ roomName }) => {

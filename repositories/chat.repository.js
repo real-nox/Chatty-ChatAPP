@@ -68,7 +68,7 @@ export const getMessages = async (conv_id) => {
         const result = await pool.query("select m.id, m.sender_id, u.username, m.content, m.created_at, m.seen from messages m join users u on (m.sender_id = u.id) where m.conversation_id = $1 order by m.created_at desc limit 50 ", [conv_id])
 
         if (result.rowCount > 0) {
-           return result.rows.reverse()
+            return result.rows.reverse()
         }
         return false
     } catch (err) {
@@ -77,12 +77,27 @@ export const getMessages = async (conv_id) => {
 }
 
 export const setSeenMsg = async (message_id) => {
-        try {
+    try {
 
         const result = await pool.query("update messages set seen = 1 where id = $1", [message_id])
 
         if (result.rowCount > 0) {
-           return true
+            return true
+        }
+        return false
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+export const MarkAllMsgAsSeen = async (conversation_id, friendId) => {
+    try {
+        console.log(friendId, conversation_id)
+        const result = await pool.query("update messages set seen = 1 where sender_id = $1 and conversation_id = $2", [friendId, conversation_id])
+
+        console.log(result)
+        if (result.rowCount > 0) {
+            return true
         }
         return false
     } catch (err) {
