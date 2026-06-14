@@ -252,10 +252,40 @@ export default function Home() {
       });
     };
 
+    const handleOffline = (data) => {
+      handleFriendPresence({ userId: data.userId, presence: "offline"})
+    }
+
+    const handleOnline = (data) => {
+      handleFriendPresence({ userId: data.userId, presence: "online"})
+    }
+
+    const handleFriendPresence = ({ userId, presence }) => {
+      setFriendList((prev) => {
+        const updated = { ... prev };
+        if (updated[userId]) {
+          console.log(updated[userId])
+          updated[userId] = {
+            ...updated[userId],
+            presence: presence == "online" ? true : false 
+          }
+        }
+
+        return updated;
+      })
+    };
+
+    const handleOnlineFriend = ({ userId }) => {};
+
     socket.on("showMessage", messageShowList);
+
+    socket.on("friendOnline", handleOnline);
+    socket.on("friendOffline", handleOffline);
 
     return () => {
       socket.off("showMessage", messageShowList);
+      socket.off("friendOnline", handleOnline);
+      socket.off("friendOffline", handleOffline);
     };
   }, [friendList]);
 
@@ -343,6 +373,7 @@ export default function Home() {
                   unseen_count,
                   username,
                   avatar = null,
+                  presence = false,
                 },
               ]) => {
                 console.log(id, created_at);
@@ -363,6 +394,9 @@ export default function Home() {
                         src={avatar ? `${avatar}` : "../../img/avatar.png"}
                         alt="Avatar"
                       />
+                      <div className={`activity ${presence ? "online" : "offline"}`}>
+                        <div className="dot"></div>
+                      </div>
                     </div>
                     <div className="Center">
                       <h4>{display_name}</h4>

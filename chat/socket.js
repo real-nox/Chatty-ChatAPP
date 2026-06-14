@@ -17,9 +17,12 @@ export function initSocket(io) {
 
         const OnlineInter = setInterval(() => {
             if (friends) {
-                Object.entries(friends).map((id, { }) => {
+                Object.entries(friends).map((friendId, { }) => {
+                    const id = friendId[0]
                     const friendSocket_id = onlineUsers[id]
+                    console.log(onlineUsers, id)
                     if (friendSocket_id) {
+                        console.log("ONLINE ", id)
                         socket.to(friendSocket_id).emit("friendOnline", { userId: user_id })
                         socket.emit("friendOnline", { userId: id })
                     } else {
