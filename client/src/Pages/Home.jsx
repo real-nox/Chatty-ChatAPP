@@ -90,7 +90,6 @@ export default function Home() {
     if (!currentfriend.id) return;
 
     socket.on("loadMessages", ({ messages }) => {
-      console.log("\nLes Messages", messages);
       if (messages) setLoading(false);
       setMessageList(messages);
     });
@@ -235,12 +234,9 @@ export default function Home() {
 
     const messageShowList = ({ content, userId }) => {
       if (String(userId) === String(currentfriend.id)) return;
-      console.log("im here");
       setFriendList((prev) => {
         const updated = { ...prev };
-        console.log("current userid = ", userId);
         if (updated[userId]) {
-          console.log("current object = ", updated[userId]);
           updated[userId] = {
             ...updated[userId],
             last_message: content,
@@ -264,7 +260,6 @@ export default function Home() {
       setFriendList((prev) => {
         const updated = { ... prev };
         if (updated[userId]) {
-          console.log(updated[userId])
           updated[userId] = {
             ...updated[userId],
             presence: presence == "online" ? true : false 
@@ -359,7 +354,6 @@ export default function Home() {
           </div>
         </div>
         <div className="FriendsList">
-          {console.log(friendList)}
           {friendList &&
             Object.entries(friendList).map(
               ([
@@ -376,7 +370,6 @@ export default function Home() {
                   presence = false,
                 },
               ]) => {
-                console.log(id, created_at);
                 return (
                   <button
                     key={id}
