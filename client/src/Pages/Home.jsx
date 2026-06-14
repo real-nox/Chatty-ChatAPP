@@ -166,7 +166,10 @@ export default function Home() {
         );
       });
 
-      socket.emit("MessagesRead", { roomName: currentChannel, currentfriend: currentfriend })
+      socket.emit("MessagesRead", {
+        roomName: currentChannel,
+        currentfriend: currentfriend,
+      });
     };
 
     const handleAllSeenReader = async ({}) => {
@@ -206,7 +209,7 @@ export default function Home() {
     socket.on("MarkMessageSeen", handleSeenMsg);
     socket.on("allMessagesRead", handleAllSeen);
 
-    socket.on("UpdateMessages", handleAllSeenReader)
+    socket.on("UpdateMessages", handleAllSeenReader);
 
     socket.on("friendWriting", handleFriendWriting);
     socket.on("friendStopWriting", handleFriendStopWriting);
@@ -219,7 +222,7 @@ export default function Home() {
       socket.off("MarkMessageSeen", handleSeenMsg);
       socket.off("allMessagesRead", handleAllSeen);
 
-      socket.off("UpdateMessages", handleAllSeenReader)
+      socket.off("UpdateMessages", handleAllSeenReader);
 
       socket.off("friendStopWriting", handleFriendStopWriting);
       socket.off("friendWriting", handleFriendWriting);
@@ -272,9 +275,9 @@ export default function Home() {
 
     setFriendList((prev) => {
       const updated = { ...prev };
-      if (updated[currentfriend.id]) {
-        updated[currentfriend.id] = {
-          ...updated[currentfriend.id],
+      if (updated[id]) {
+        updated[id] = {
+          ...updated[id],
           unseen_count: 0,
         };
       }
