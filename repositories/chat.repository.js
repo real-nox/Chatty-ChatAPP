@@ -92,10 +92,8 @@ export const setSeenMsg = async (message_id) => {
 
 export const MarkAllMsgAsSeen = async (conversation_id, friendId) => {
     try {
-        console.log(friendId, conversation_id)
         const result = await pool.query("update messages set seen = 1 where sender_id = $1 and conversation_id = $2", [friendId, conversation_id])
 
-        console.log(result)
         if (result.rowCount > 0) {
             return true
         }

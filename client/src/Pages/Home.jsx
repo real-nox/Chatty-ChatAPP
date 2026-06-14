@@ -72,8 +72,7 @@ export default function Home() {
     getList();
   }, []);
 
-  //Socket events
-
+  //WebSocket connection
   useEffect(() => {
     socket.connect();
     socket.on("connect", (s) =>
@@ -86,11 +85,12 @@ export default function Home() {
     };
   }, []);
 
+  //In chat events
   useEffect(() => {
     if (!currentfriend.id) return;
 
     socket.on("loadMessages", ({ messages }) => {
-      console.log(messages);
+      console.log("\nLes Messages", messages);
       if (messages) setLoading(false);
       setMessageList(messages);
     });
@@ -102,6 +102,7 @@ export default function Home() {
           updated[currentfriend.id] = {
             ...updated[currentfriend.id],
             last_message: content,
+            unseen_count: 0
           };
         }
 
@@ -110,9 +111,7 @@ export default function Home() {
     };
 
     const handleMessageReceived = ({ content, username, id, userId }) => {
-      console.log("here", messageList);
       setMessageList((prev) => {
-        console.log("old", prev);
         return [
           ...(prev ?? []),
           {
@@ -124,7 +123,8 @@ export default function Home() {
           },
         ];
       });
-      handleLastSeen(content);
+
+      handleLastSeen(content, userId)
 
       if (currentChannel)
         socket.emit("readMessage", {
@@ -135,9 +135,8 @@ export default function Home() {
 
     const handleMessageSent = ({ content, username, id, userId }) => {
       setMessageList((prev) => {
-        console.log("old", prev);
         return [
-          ...prev,
+          ...(prev ?? []),
           {
             id: id,
             sender_id: userId,
@@ -172,26 +171,13 @@ export default function Home() {
 
         return updated;
       });
+
+      setMessageList((prev) => {
+        return (prev ?? []).map((mg) =>
+          mg.sender_id == userId ? { ...mg, seen: 1 } : mg,
+        );
+      });
     };
-
-    socket.on("newMessage", handleMessageReceived);
-    socket.on("messageSent", handleMessageSent);
-
-    socket.on("MarkMessageSeen", handleSeenMsg);
-    socket.on("allMessagesRead", handleAllSeen);
-
-    return () => {
-      socket.off("loadMessages");
-      socket.off("newMessage", handleMessageReceived);
-      socket.off("messageSent", handleMessageSent);
-
-      socket.off("MarkMessageSeen", handleSeenMsg);
-      socket.off("allMessagesRead", handleAllSeen);
-    };
-  }, [currentChannel]);
-
-  useEffect(() => {
-    if (!currentfriend.id) return;
 
     const handleFriendWriting = ({ username }) => {
       setFriendisTyping((prev) => ({ ...prev, ongoing: true }));
@@ -216,14 +202,57 @@ export default function Home() {
       setFriendisTyping({ ongoing: false, dots: 1 });
     };
 
+    socket.on("newMessage", handleMessageReceived);
+    socket.on("messageSent", handleMessageSent);
+
+    socket.on("MarkMessageSeen", handleSeenMsg);
+    socket.on("allMessagesRead", handleAllSeen);
+
     socket.on("friendWriting", handleFriendWriting);
     socket.on("friendStopWriting", handleFriendStopWriting);
 
     return () => {
+      socket.off("loadMessages");
+      socket.off("newMessage", handleMessageReceived);
+      socket.off("messageSent", handleMessageSent);
+
+      socket.off("MarkMessageSeen", handleSeenMsg);
+      socket.off("allMessagesRead", handleAllSeen);
+
       socket.off("friendStopWriting", handleFriendStopWriting);
       socket.off("friendWriting", handleFriendWriting);
     };
   }, [currentChannel]);
+
+  //Off chat events
+  useEffect(() => {
+    if (!friendList) return;
+
+    const messageShowList = ({ content, userId }) => {
+      if (String(userId) === String(currentfriend.id)) return
+      console.log("im here");
+      setFriendList((prev) => {
+        const updated = { ...prev };
+        console.log("current userid = ", userId);
+        if (updated[userId]) {
+          console.log("current object = ", updated[userId]);
+          updated[userId] = {
+            ...updated[userId],
+            last_message: content,
+            unseen_count: String(Number(updated[userId].unseen_count ?? 0) + 1),
+          };
+        }
+
+        return updated;
+      });
+    };
+
+    socket.on("showMessage", messageShowList);
+
+    return () => {
+      socket.off("showMessage", messageShowList);
+    };
+  }, [friendList]);
 
   const openConversation = ({ id, username, display_name }) => {
     const channel = [userId, id].sort().join("_");

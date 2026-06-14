@@ -17,7 +17,7 @@ export function initSocket(io) {
 
         const OnlineInter = setInterval(() => {
             if (friends) {
-                Object.entries(friends).map((id, {}) => {
+                Object.entries(friends).map((id, { }) => {
                     const friendSocket_id = onlineUsers[id]
                     if (friendSocket_id) {
                         socket.to(friendSocket_id).emit("friendOnline", { userId: user_id })
@@ -32,7 +32,7 @@ export function initSocket(io) {
         socket.on("disconnect", () => {
 
             if (friends) {
-                Object.entries(friends).map((id, {}) => {
+                Object.entries(friends).map((id, { }) => {
                     const friendSocket_id = onlineUsers[id]
                     if (friendSocket_id)
                         socket.to(friendSocket_id).emit("friendOffline", { userId: user_id })
@@ -78,6 +78,13 @@ export function initSocket(io) {
 
             socket.to(roomName).emit("newMessage", { content, username, id, userId })
             socket.emit("messageSent", { content, username, id, userId })
+
+            const [user1_id, user2_id] = roomName.split("_")
+            const recipientId = String(user1_id) === String(userId) ? user2_id : user1_id
+            const recipientSocketId = onlineUsers[recipientId]
+            if (recipientSocketId){
+                console.log(recipientSocketId, content, userId)
+                io.to(recipientSocketId).emit("showMessage", { content, userId })}
         })
 
         socket.on("readMessage", async ({ roomName, message_id }) => {
@@ -86,11 +93,12 @@ export function initSocket(io) {
             socket.emit("MarkMessageSeen", { message_id })
         })
 
-        socket.on("MarkAllMsgAsSeen", async ({ roomName, friendId}) => {
+        socket.on("MarkAllMsgAsSeen", async ({ roomName, friendId }) => {
             const [user1_id, user2_id] = roomName.split("_")
             const conversation = (await getConversation(user1_id, user2_id))
-            await MarkAllMsgAsSeen(conversation.id, friendId)
-            socket.emit("allMessagesRead", { roomName })
+            const result = await MarkAllMsgAsSeen(conversation.id, friendId)
+            if (result)
+                socket.emit("allMessagesRead", { roomName })
         })
 
         socket.on("writing", ({ roomName }) => {
