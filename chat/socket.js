@@ -97,8 +97,18 @@ export function initSocket(io) {
             const [user1_id, user2_id] = roomName.split("_")
             const conversation = (await getConversation(user1_id, user2_id))
             const result = await MarkAllMsgAsSeen(conversation.id, friendId)
-            if (result)
-                socket.emit("allMessagesRead", { roomName })
+            if (result){
+                const friendSocket_id = onlineUsers[friendId]
+                if (friendSocket_id)
+                    io.to(friendSocket_id).emit("allMessagesRead", { roomName })}
+        })
+
+        socket.on("MessagesRead", async ({ roomName, currentfriend }) => {
+            const [user1_id, user2_id] = roomName.split("_")
+            const conversation = (await getConversation(user1_id, user2_id))
+
+            if (conversation)
+                socket.to(roomName).emit("UpdateMessages", { roomName, currentfriend })
         })
 
         socket.on("writing", ({ roomName }) => {

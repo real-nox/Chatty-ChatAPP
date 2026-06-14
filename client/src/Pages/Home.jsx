@@ -102,7 +102,7 @@ export default function Home() {
           updated[currentfriend.id] = {
             ...updated[currentfriend.id],
             last_message: content,
-            unseen_count: 0
+            unseen_count: 0,
           };
         }
 
@@ -124,7 +124,7 @@ export default function Home() {
         ];
       });
 
-      handleLastSeen(content, userId)
+      handleLastSeen(content, userId);
 
       if (currentChannel)
         socket.emit("readMessage", {
@@ -160,21 +160,19 @@ export default function Home() {
     };
 
     const handleAllSeen = async ({}) => {
-      setFriendList((prev) => {
-        const updated = { ...prev };
-        if (updated[currentfriend.id]) {
-          updated[currentfriend.id] = {
-            ...updated[currentfriend.id],
-            unseen_count: 0,
-          };
-        }
-
-        return updated;
-      });
-
       setMessageList((prev) => {
         return (prev ?? []).map((mg) =>
           mg.sender_id == userId ? { ...mg, seen: 1 } : mg,
+        );
+      });
+
+      socket.emit("MessagesRead", { roomName: currentChannel, currentfriend: currentfriend })
+    };
+
+    const handleAllSeenReader = async ({}) => {
+      setMessageList((prev) => {
+        return (prev ?? []).map((mg) =>
+          mg.sender_id != userId ? { ...mg, seen: 1 } : mg,
         );
       });
     };
@@ -208,6 +206,8 @@ export default function Home() {
     socket.on("MarkMessageSeen", handleSeenMsg);
     socket.on("allMessagesRead", handleAllSeen);
 
+    socket.on("UpdateMessages", handleAllSeenReader)
+
     socket.on("friendWriting", handleFriendWriting);
     socket.on("friendStopWriting", handleFriendStopWriting);
 
@@ -219,6 +219,8 @@ export default function Home() {
       socket.off("MarkMessageSeen", handleSeenMsg);
       socket.off("allMessagesRead", handleAllSeen);
 
+      socket.off("UpdateMessages", handleAllSeenReader)
+
       socket.off("friendStopWriting", handleFriendStopWriting);
       socket.off("friendWriting", handleFriendWriting);
     };
@@ -229,7 +231,7 @@ export default function Home() {
     if (!friendList) return;
 
     const messageShowList = ({ content, userId }) => {
-      if (String(userId) === String(currentfriend.id)) return
+      if (String(userId) === String(currentfriend.id)) return;
       console.log("im here");
       setFriendList((prev) => {
         const updated = { ...prev };
@@ -267,6 +269,18 @@ export default function Home() {
     socket.emit("joinroom", channel);
     console.log(channel, currentfriend.id);
     socket.emit("MarkAllMsgAsSeen", { roomName: channel, friendId: id });
+
+    setFriendList((prev) => {
+      const updated = { ...prev };
+      if (updated[currentfriend.id]) {
+        updated[currentfriend.id] = {
+          ...updated[currentfriend.id],
+          unseen_count: 0,
+        };
+      }
+
+      return updated;
+    });
     setLoading(true);
   };
 
