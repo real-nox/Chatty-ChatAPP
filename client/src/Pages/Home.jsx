@@ -69,15 +69,17 @@ export default function Home() {
       const data = await getFriendsList();
       setFriendList(data);
       setFriendList((prev) => {
-      const updated = { ...prev }
-      console.log(updated);
-      
-      updated["8"] = {
-        "display_name": "ranoxiski",
-        "username": "tacos"
-      }
-      return updated
-    })
+        const updated = { ...prev };
+
+        //Test
+
+        updated["8"] = {
+          display_name: "ranoxiski",
+          username: "tacos",
+          created_at: "2026-06-13T11:50:58.505Z",
+        };
+        return updated;
+      });
     };
 
     getList();
@@ -103,7 +105,7 @@ export default function Home() {
     if (!currentfriend.id) return;
 
     socket.on("loadMessages", ({ messages }) => {
-      if (messages) setLoading(false);
+      setLoading(false);
       setMessageList(messages);
     });
 

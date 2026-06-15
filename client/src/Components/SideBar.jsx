@@ -2,21 +2,28 @@ import { Search } from "lucide-react";
 import { formatedDate, SanitizeInput } from "../utils/Utils";
 import { useEffect, useMemo, useState } from "react";
 
-export default function SideBar({ friendList, friendisTyping, currentfriend, openConversation }) {
+export default function SideBar({
+  friendList,
+  friendisTyping,
+  currentfriend,
+  openConversation,
+}) {
   const [searchInput, setSearchInput] = useState("");
 
   const search = useMemo(() => {
     const query = searchInput.trim().toLowerCase();
-    console.log(friendList);
-    return Object.entries(friendList).filter((friend) => {
-      console.log(friend);
-      const matched =
+    const filtered = Object.entries(friendList).filter((friend) => {
+      return (
         !searchInput ||
         friend[1]["username"].includes(searchInput) ||
-        friend[1]["display_name"].includes(searchInput);
-
-      return matched;
+        friend[1]["display_name"].includes(searchInput)
+      );
     });
+
+    return filtered.sort(
+      ([, a], [, b]) => {
+        return new Date(b.created_at) - new Date(a.created_at)},
+    );
   }, [searchInput, friendList]);
 
   return (
