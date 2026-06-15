@@ -21,7 +21,6 @@ export function initSocket(io) {
                     const id = friendId[0]
                     const friendSocket_id = onlineUsers[id]
                     if (friendSocket_id) {
-                        console.log("ONLINE ", id)
                         socket.to(friendSocket_id).emit("friendOnline", { userId: user_id })
                         socket.emit("friendOnline", { userId: id })
                     } else {
@@ -85,7 +84,6 @@ export function initSocket(io) {
             const recipientId = String(user1_id) === String(userId) ? user2_id : user1_id
             const recipientSocketId = onlineUsers[recipientId]
             if (recipientSocketId){
-                console.log(recipientSocketId, content, userId)
                 io.to(recipientSocketId).emit("showMessage", { content, userId })}
         })
 
