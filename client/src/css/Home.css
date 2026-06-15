@@ -52,6 +52,13 @@
     height: 100%;
     width: 20vw;
     padding-top: 1rem 0;
+    transition: transform 0.3s ease, margin-left 0.3s ease;
+    transform: translateX(0);
+}
+
+.SideBar.closed {
+    transform: translateX(-100%);
+    margin-left: -20vw;
 }
 
 .SideBar .SearchBar {
@@ -207,10 +214,15 @@
 /*Chat Side*/
 
 .RightSection {
-    width: 80%;
+    width: 80vw;
     height: 100%;
     display: grid;
     grid-template-rows: auto 1fr auto auto;
+    transition: width 0.3s ease;
+}
+
+.RightSection.expanded {
+    width: 100vw;
 }
 
 .RightSection.Empty {

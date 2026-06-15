@@ -1,13 +1,14 @@
 import { Check, CheckCheck, EllipsisVertical, PhoneCallIcon, Send, TextAlignJustify, VideoIcon } from "lucide-react";
 import { formatedDateMsg, SanitizeInput } from "../utils/Utils";
 import EmojiPicker from "emoji-picker-react";
+import { useState } from "react";
 
-export default function ChatChannel({ currentfriend, loading, messageList, messagesEndRef, friendisTyping, input, Typing, submitMessage, userId, setInput }) {
+export default function ChatChannel({ currentfriend, loading, messageList, messagesEndRef, friendisTyping, input, Typing, submitMessage, userId, setInput, toggleSidebar, isOpen }) {
   return (
-    <div className={`RightSection ${!currentfriend.id ? "Empty" : ""}`}>
+    <div className={`RightSection ${!currentfriend.id ? "Empty" : ""} ${!isOpen ? "expanded" : ""}`}>
       <div className="TopBarUser">
         <div className="User">
-            <TextAlignJustify />
+            <TextAlignJustify onClick={toggleSidebar} />
           <p>
             {currentfriend?.display_name} - {currentfriend?.username}
           </p>

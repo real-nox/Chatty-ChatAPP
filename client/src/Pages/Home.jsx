@@ -35,6 +35,7 @@ export default function Home() {
   });
 
   const [loading, setLoading] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
 
   const timeout = useRef(null);
   const interval = useRef(null);
@@ -345,6 +346,10 @@ export default function Home() {
     setInput("");
   };
 
+  const toggleSidebar = () => {
+    setIsOpen(!isOpen)
+  }
+
   useEffect(() => {
     firstLoad.current = true;
   }, [currentChannel]);
@@ -365,6 +370,7 @@ export default function Home() {
         friendisTyping={friendisTyping}
         friendList={friendList}
         openConversation={openConversation}
+        isOpen={isOpen}
       />
 
       <ChatChannel
@@ -378,6 +384,8 @@ export default function Home() {
         submitMessage={submitMessage}
         userId={userId}
         setInput={setInput}
+        toggleSidebar={toggleSidebar}
+        isOpen={isOpen}
       />
     </div>
   );

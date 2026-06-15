@@ -7,6 +7,7 @@ export default function SideBar({
   friendisTyping,
   currentfriend,
   openConversation,
+  isOpen
 }) {
   const [searchInput, setSearchInput] = useState("");
 
@@ -27,7 +28,7 @@ export default function SideBar({
   }, [searchInput, friendList]);
 
   return (
-    <div className="SideBar">
+    <div className={`SideBar ${!isOpen ? "closed" : ""}`}>
       <div className="SearchBar">
         <div className="Title">
           <p>Messages</p>
