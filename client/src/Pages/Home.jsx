@@ -20,6 +20,7 @@ import {
 } from "../utils/Utils";
 import { useNavigate } from "react-router-dom";
 import socket from "../utils/Socket";
+import SideBar from "../components/SideBar";
 
 export default function Home() {
   const [userId, setUserId] = useState("");
@@ -67,9 +68,21 @@ export default function Home() {
     const getList = async () => {
       const data = await getFriendsList();
       setFriendList(data);
+      setFriendList((prev) => {
+      const updated = { ...prev }
+      console.log(updated);
+      
+      updated["8"] = {
+        "display_name": "ranoxiski",
+        "username": "tacos"
+      }
+      return updated
+    })
     };
 
     getList();
+
+    console.log(friendList);
   }, []);
 
   //WebSocket connection
@@ -249,25 +262,25 @@ export default function Home() {
     };
 
     const handleOffline = (data) => {
-      handleFriendPresence({ userId: data.userId, presence: "offline"})
-    }
+      handleFriendPresence({ userId: data.userId, presence: "offline" });
+    };
 
     const handleOnline = (data) => {
-      handleFriendPresence({ userId: data.userId, presence: "online"})
-    }
+      handleFriendPresence({ userId: data.userId, presence: "online" });
+    };
 
     const handleFriendPresence = ({ userId, presence }) => {
       setFriendList((prev) => {
-        const updated = { ... prev };
+        const updated = { ...prev };
         if (updated[userId]) {
           updated[userId] = {
             ...updated[userId],
-            presence: presence == "online" ? true : false 
-          }
+            presence: presence == "online" ? true : false,
+          };
         }
 
         return updated;
-      })
+      });
     };
 
     const handleOnlineFriend = ({ userId }) => {};
@@ -343,74 +356,12 @@ export default function Home() {
 
   return (
     <div className="HomeContainer">
-      <div className="SideBar">
-        <div className="SearchBar">
-          <div className="Title">
-            <p>Messages</p>
-          </div>
-          <div className="Bar">
-            <Search />
-            <input type="text" placeholder="Search conversations..." />
-          </div>
-        </div>
-        <div className="FriendsList">
-          {friendList &&
-            Object.entries(friendList).map(
-              ([
-                id,
-                {
-                  created_at,
-                  display_name,
-                  last_message,
-                  seen,
-                  sender_id,
-                  unseen_count,
-                  username,
-                  avatar = null,
-                  presence = false,
-                },
-              ]) => {
-                return (
-                  <button
-                    key={id}
-                    className="FriendTemplate"
-                    onClick={() =>
-                      openConversation({
-                        id: id,
-                        username: username,
-                        display_name: display_name,
-                      })
-                    }
-                  >
-                    <div className="Icon">
-                      <img
-                        src={avatar ? `${avatar}` : "../../img/avatar.png"}
-                        alt="Avatar"
-                      />
-                      <div className={`activity ${presence ? "online" : "offline"}`}>
-                        <div className="dot"></div>
-                      </div>
-                    </div>
-                    <div className="Center">
-                      <h4>{display_name}</h4>
-                      {friendisTyping.ongoing ? (
-                        <p>{`${currentfriend.display_name} Writing ${".".repeat(friendisTyping.dots)}`}</p>
-                      ) : (
-                        <p>{last_message}</p>
-                      )}
-                    </div>
-                    <div className="Right">
-                      <p>{formatedDate(created_at)}</p>
-                      {unseen_count > 0 && (
-                        <div className="Badge">{unseen_count}</div>
-                      )}
-                    </div>
-                  </button>
-                );
-              },
-            )}
-        </div>
-      </div>
+      <SideBar
+        currentfriend={currentfriend}
+        friendisTyping={friendisTyping}
+        friendList={friendList}
+        openConversation={openConversation}
+      />
 
       <div className={`RightSection ${!currentfriend.id ? "Empty" : ""}`}>
         <div className="TopBarUser">
