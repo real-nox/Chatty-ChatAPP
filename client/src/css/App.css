@@ -299,3 +299,7 @@ footer .Bottom {
 .activity.online .dot {
     background-color: rgb(18, 95, 139);
 }
+
+.startConv {
+    height: 100%;
+}

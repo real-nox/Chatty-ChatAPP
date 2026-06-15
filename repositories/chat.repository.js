@@ -1,4 +1,5 @@
 import { pool } from "../db/index.db.js"
+import { getUserById } from "./user.repository.js"
 
 export const CreateConversation_Get_id = async () => {
     try {
@@ -28,6 +29,10 @@ export const SetConversation_Member = async (user_id, conv_id) => {
 
 export const getConversation = async (user1_id, user2_id) => {
     try {
+        let foundUser_id1 = await getUserById(user1_id)
+        let foundUser_id2 = await getUserById(user2_id)
+
+        if (!foundUser_id1 || !foundUser_id2) return false
         const result = await pool.query(
             `select c.id from conversations c join conversation_members cm1 on (c.id = cm1.conversation_id) join conversation_members cm2 on (c.id = cm2.conversation_id) where cm1.user_id = $1 and cm2.user_id = $2`,
             [user1_id, user2_id]

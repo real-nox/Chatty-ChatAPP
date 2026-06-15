@@ -68,18 +68,6 @@ export default function Home() {
     const getList = async () => {
       const data = await getFriendsList();
       setFriendList(data);
-      setFriendList((prev) => {
-        const updated = { ...prev };
-
-        //Test
-
-        updated["8"] = {
-          display_name: "ranoxiski",
-          username: "tacos",
-          created_at: "2026-06-13T11:50:58.505Z",
-        };
-        return updated;
-      });
     };
 
     getList();
@@ -126,6 +114,17 @@ export default function Home() {
 
     const handleMessageReceived = ({ content, username, id, userId }) => {
       setMessageList((prev) => {
+        if (!Array.isArray(prev))
+          return [
+            {
+              id: id,
+              sender_id: userId,
+              content: content,
+              seen: 0,
+              created_at: new Date(),
+            },
+          ];
+
         return [
           ...(prev ?? []),
           {
@@ -149,6 +148,17 @@ export default function Home() {
 
     const handleMessageSent = ({ content, username, id, userId }) => {
       setMessageList((prev) => {
+        if (!Array.isArray(prev))
+          return [
+            {
+              id: id,
+              sender_id: userId,
+              content: content,
+              seen: 0,
+              created_at: new Date(),
+            },
+          ];
+
         return [
           ...(prev ?? []),
           {
@@ -403,7 +413,7 @@ export default function Home() {
               <div ref={messagesEndRef} />
             </>
           ) : (
-            <p>Start conversation!</p>
+            <p className="startConv">Start conversation!</p>
           )}
         </div>
 

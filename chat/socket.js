@@ -111,13 +111,8 @@ export function initSocket(io) {
                 socket.to(roomName).emit("UpdateMessages", { roomName, currentfriend })
         })
 
-        socket.on("writing", ({ roomName }) => {
-            socket.to(roomName).emit("friendWriting", { username })
-        })
+        socket.on("writing", ({ roomName }) => socket.to(roomName).emit("friendWriting", { username }))
 
-        socket.on("stopWriting", ({ roomName }) => {
-            console.log("sent", roomName)
-            socket.to(roomName).emit("friendStopWriting", { username })
-        })
+        socket.on("stopWriting", ({ roomName }) => socket.to(roomName).emit("friendStopWriting", { username }))
     })
 }
