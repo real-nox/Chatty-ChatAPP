@@ -20,12 +20,11 @@ export default function SideBar({
       );
     });
 
-    filtered.sort(
-      ([, a], [, b]) => {
-        return new Date(b.created_at) - new Date(a.created_at)},
-    );
-    console.log(filtered)
-    return filtered
+    filtered.sort(([, a], [, b]) => {
+      return new Date(b.created_at) - new Date(a.created_at);
+    });
+    console.log(filtered);
+    return filtered;
   }, [searchInput, friendList]);
 
   return (
@@ -62,9 +61,9 @@ export default function SideBar({
           ]) => {
             return (
               <button
+                className={`FriendTemplate ${currentfriend.id == id ? "selectedBTN" : ""}`}
                 key={id}
                 id={id}
-                className="FriendTemplate"
                 onClick={() =>
                   openConversation({
                     id: id,
@@ -73,6 +72,7 @@ export default function SideBar({
                   })
                 }
               >
+                {console.log(currentfriend.id == id)}
                 <div className="Icon">
                   <img
                     src={avatar ? `${avatar}` : "../../img/avatar.png"}
