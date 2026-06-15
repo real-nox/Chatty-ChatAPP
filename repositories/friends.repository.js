@@ -75,45 +75,44 @@ export const declinetReqF = async (request_id, user_id) => {
 export const listF = async (user_id) => {
     try {
         const result = await pool.query(
-            `
-            select 
-            u.id, u.username, u.display_name,
-            m.content as last_message,
-            m.created_at,
-            m.seen,
-            m.sender_id,
-            (
-                select COUNT(*) from messages
-                where conversation_id = (
-                    select conversation_id from messages
-                    where (sender_id = f.sender_id and receiver_id = f.receiver_id)
-                        or (sender_id = f.receiver_id and receiver_id = f.sender_id)
+            `select 
+                u.id, u.username, u.display_name,
+                m.content as last_message,
+                m.created_at,
+                m.seen,
+                m.sender_id,
+                c.id as conversation_id,
+                coalesce(uc.unseen_count, 0) as unseen_count
+                from friends_requests f
+                join users u on u.id = case 
+                    when f.sender_id = $1 then f.receiver_id 
+                    else f.sender_id 
+                end
+                join conversation_members cm1 on cm1.user_id = $1
+                join conversation_members cm2 on cm2.conversation_id = cm1.conversation_id and cm2.user_id = u.id
+                join conversations c on c.id = cm1.conversation_id
+                left join lateral (
+                    select content, created_at, seen, sender_id from messages
+                    where conversation_id = c.id
+                    order by created_at desc, id desc
                     limit 1
-                )
-                and sender_id != $1
-                and seen = 0
-            ) as unseen_count
-            from friends_requests f
-            join users u on u.id = case 
-            when f.sender_id = $1 then f.receiver_id 
-            else f.sender_id 
-            end
-            left join messages m on m.id = (
-            select id from messages
-            where (sender_id = f.sender_id and receiver_id = f.receiver_id)
-                or (sender_id = f.receiver_id and receiver_id = f.sender_id)
-            order by created_at desc
-            limit 1
-            )
-            where (f.sender_id = $1 or f.receiver_id = $1)
-            and f.status = 'accepted'
-            order by m.created_at desc
-`, [user_id])
+                ) m on true
+                left join lateral (
+                    select count(*) as unseen_count
+                    from messages
+                    where conversation_id = c.id
+                        and sender_id != $1
+                        and seen = 0
+                ) uc on true
+                where (f.sender_id = $1 or f.receiver_id = $1)
+                and f.status = 'accepted'
+                order by m.created_at desc
+            `, [user_id])
 
         if (result?.rowCount > 0) {
             let list = {};
 
-            for (const { created_at, display_name, id, last_message, seen, sender_id, unseen_count, username } of result?.rows) {
+            for (const { created_at, display_name, id, conversation_id, last_message, seen, sender_id, unseen_count, username } of result?.rows) {
                 list[id] = { created_at: created_at, display_name: display_name, id: id, last_message: last_message, seen: seen, sender_id: sender_id, unseen_count: unseen_count, username: username }
             }
 
