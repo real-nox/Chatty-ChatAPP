@@ -1,16 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import EmojiPicker from "emoji-picker-react";
+import { useNavigate } from "react-router-dom";
 import "../css/Home.css";
 
-import {
-  Check,
-  CheckCheck,
-  EllipsisVertical,
-  PhoneCallIcon,
-  Search,
-  Send,
-  VideoIcon,
-} from "lucide-react";
 import {
   formatedDate,
   formatedDateMsg,
@@ -18,9 +9,10 @@ import {
   getUser,
   SanitizeInput,
 } from "../utils/Utils";
-import { useNavigate } from "react-router-dom";
+
 import socket from "../utils/Socket";
 import SideBar from "../components/SideBar";
+import ChatChannel from "../components/ChatChannel";
 
 export default function Home() {
   const [userId, setUserId] = useState("");
@@ -375,115 +367,18 @@ export default function Home() {
         openConversation={openConversation}
       />
 
-      <div className={`RightSection ${!currentfriend.id ? "Empty" : ""}`}>
-        <div className="TopBarUser">
-          <div className="User">
-            <p>
-              {currentfriend?.display_name} - {currentfriend?.username}
-            </p>
-          </div>
-          <div className="Options">
-            <PhoneCallIcon />
-            <VideoIcon />
-            <EllipsisVertical />
-          </div>
-        </div>
-        <div className="Messages">
-          {loading ? (
-            <>
-              <div className="ChatBubble skel"></div>
-              <div className="ChatBubble own skel"></div>
-              <div className="ChatBubble skel"></div>
-              <div className="ChatBubble own skel"></div>
-            </>
-          ) : messageList ? (
-            <>
-              {messageList.map((msg) => (
-                <div
-                  className={`ChatBubble ${msg.sender_id == userId ? "own" : ""} ${msg.seen ? "seen" : ""}`}
-                  key={msg.id}
-                >
-                  <div className="Message">{msg.content}</div>
-                  <div className="Date">
-                    <p>{formatedDateMsg(msg.created_at)} </p>
-                    {msg.seen ? <CheckCheck /> : <Check />}
-                  </div>
-                </div>
-              ))}
-              <div ref={messagesEndRef} />
-            </>
-          ) : (
-            <p className="startConv">Start conversation!</p>
-          )}
-        </div>
-
-        <div className="Bar">
-          {friendisTyping.ongoing && (
-            <p>
-              {currentfriend.display_name}{" "}
-              {`Writing
-              ${".".repeat(friendisTyping.dots)}`}
-            </p>
-          )}
-        </div>
-        <div className="Chat">
-          <div className="Chatbar">
-            <input
-              value={input}
-              onInput={Typing}
-              onChange={(ev) => {
-                setInput(SanitizeInput(ev.target.value));
-              }}
-              onKeyDown={(ev) => ev.key === "Enter" && submitMessage()}
-              type="text"
-              name="chat"
-              id="chat"
-              placeholder="Type a message..."
-            />
-            <EmojiPicker
-              style={{
-                display: "none",
-                position: "absolute",
-                top: "45%",
-                right: "1.5%",
-              }}
-              theme={"dark"}
-              onEmojiClick={(EmojiObject) => {
-                let emoji = EmojiObject.emoji;
-                Typing();
-                setInput((prev) => {
-                  return prev + emoji;
-                });
-              }}
-            />
-            <button
-              type="button"
-              id="emojiToggle"
-              style={{
-                backgroundColor: "transparent",
-                border: "0",
-                fontSize: "1.2rem",
-              }}
-              onClick={(ev) => {
-                let picker = document.querySelector(".EmojiPickerReact");
-
-                picker.style.display =
-                  picker.style.display == "none" ? "block" : "none";
-              }}
-            >
-              😊
-            </button>
-            <Send
-              onClick={() => submitMessage()}
-              style={{ cursor: "pointer" }}
-            />
-          </div>
-        </div>
-        <script
-          type="module"
-          src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js"
-        ></script>
-      </div>
+      <ChatChannel
+        Typing={Typing}
+        currentfriend={currentfriend}
+        friendisTyping={friendisTyping}
+        input={input}
+        loading={loading}
+        messageList={messageList}
+        messagesEndRef={messagesEndRef}
+        submitMessage={submitMessage}
+        userId={userId}
+        setInput={setInput}
+      />
     </div>
   );
 }

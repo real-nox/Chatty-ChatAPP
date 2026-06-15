@@ -1,4 +1,4 @@
-import { Search } from "lucide-react";
+import { Search, UserPlus } from "lucide-react";
 import { formatedDate, SanitizeInput } from "../utils/Utils";
 import { useEffect, useMemo, useState } from "react";
 
@@ -23,7 +23,6 @@ export default function SideBar({
     filtered.sort(([, a], [, b]) => {
       return new Date(b.created_at) - new Date(a.created_at);
     });
-    console.log(filtered);
     return filtered;
   }, [searchInput, friendList]);
 
@@ -32,6 +31,7 @@ export default function SideBar({
       <div className="SearchBar">
         <div className="Title">
           <p>Messages</p>
+          <UserPlus />
         </div>
         <div className="Bar">
           <Search />
@@ -72,7 +72,6 @@ export default function SideBar({
                   })
                 }
               >
-                {console.log(currentfriend.id == id)}
                 <div className="Icon">
                   <img
                     src={avatar ? `${avatar}` : "../../img/avatar.png"}

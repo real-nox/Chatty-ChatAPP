@@ -7,13 +7,13 @@
     --badge-bg-color: rgba(182, 189, 255, 0.933);
     --bg-color-input: rgb(224, 224, 224);
 
-    --bubble-bg-color-u: rgb(172, 172, 172);
-    --own-bubble-bg-color-u: rgb(41, 41, 41);
+    --bubble-bg-color-u: rgb(236, 236, 236);
+    --own-bubble-bg-color-u: rgb(157, 175, 255);
 
-    --bubble-bg-color-s: rgb(172, 172, 172);
-    --own-bubble-bg-color-s: rgb(63, 63, 63);
+    --bubble-bg-color-s: rgb(221, 221, 221);
+    --own-bubble-bg-color-s: rgb(107, 134, 255);
 
-    --selected-btn-bg-color: rgb(10, 10, 10);
+    --selected-btn-bg-color: rgb(245, 245, 245);
 
     --check-color: blue;
     --uncheck-color: rgb(208, 208, 255);
@@ -50,12 +50,12 @@
 .SideBar {
     border-right: 1px solid var(--sidebar-border-color);
     height: 100%;
-    width: 20%;
+    width: 20vw;
     padding-top: 1rem 0;
 }
 
 .SideBar .SearchBar {
-    padding: 2rem 1rem;
+    padding: 1.5rem 1rem;
     border-bottom: 1px solid var(--sidebar-border-color);
 
     display: flex;
@@ -64,9 +64,30 @@
     flex-direction: column;
 }
 
+.SearchBar .Title {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
 .SearchBar .Title p {
     color: var(--text-color);
     font-size: 1.3em;
+}
+
+.SearchBar .Title svg,
+.TopBarUser .User svg {
+    cursor: pointer;
+    background-color: transparent;
+    border-radius: 10px;
+    padding: 0.2rem;
+    transition: background-color 0.5s ease-in-out;
+    color: var(--svg-bg-color);
+}
+
+.SearchBar .Title svg:hover,
+.TopBarUser .User svg:hover {
+    background-color: var(--selected-btn-bg-color);
 }
 
 .SearchBar .Bar {
@@ -86,11 +107,12 @@
 .Chat input {
     color: var(--text-color);
     border: 1px solid transparent;
-    padding: 0.7rem 3rem;
+    padding: 0.9rem 3rem;
     width: 100%;
-    font-size: 1rem;
+    font-size: 0.9rem;
     border-radius: 10px;
     background-color: var(--bg-color-input);
+    overflow: hidden;
 }
 
 .SearchBar .Bar input:focus {
@@ -160,6 +182,7 @@
     color: var(--sidebar-border-color);
     width: 100%;
     overflow-x: hidden;
+    text-align: start;
 }
 
 .FriendTemplate .Right {
@@ -206,6 +229,10 @@
 
 .TopBarUser .User {
     color: var(--text-color);
+    display: flex;
+    width: 13vw;
+    justify-content: space-around;
+    align-items: center;
 }
 
 .TopBarUser .Options {
