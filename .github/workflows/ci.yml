@@ -8,25 +8,25 @@ on:
 
 jobs:
 
-  build:
+  #build:
 
-    runs-on: ubuntu-latest
+  #  runs-on: ubuntu-latest
 
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+  #  steps:
+  #  - name: Checkout code
+  #    uses: actions/checkout@v4
 
-    - name: Setup Node.js environment
-      uses: actions/setup-node@v6.0.0
-      with:
-        node-version: 18
-        cache: npm
+  #  - name: Setup Node.js environment
+  #    uses: actions/setup-node@v6.0.0
+  #    with:
+  #      node-version: 18
+  #      cache: npm
 
-    - name: Dependencies
-      run: npm install
+  #  - name: Dependencies
+  #    run: npm install
 
-    - name: Build docker image
-      run: docker build -t chatty .
+  #  - name: Build docker image
+  #    run: docker build -t chatty .
 
   # deploy:
   #   needs: build
