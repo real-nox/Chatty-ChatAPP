@@ -425,7 +425,7 @@ emoji-picker {
 
 .FriendsContainerWrapper {
     perspective: 600px;
-    position: relative;
+    position: fixed;
     width: 100%;
     height: 100%;
 }
@@ -457,6 +457,7 @@ emoji-picker {
     box-shadow: 0px 0px 15px rgba(41, 41, 41, 0.192);
     display: flex;
     flex-direction: column;
+    pointer-events: auto;
 }
 
 .HeaderCard {
@@ -508,6 +509,7 @@ emoji-picker {
     display: flex;
     flex-direction: column;
     align-items: center;
+    height: 74%;
 }
 
 .AddFriend .SearchBar {
@@ -515,9 +517,27 @@ emoji-picker {
     display: flex;
     justify-content: center;
     flex-direction: column;
+    padding-bottom: 1rem;
 }
 
 .AddFriend .SearchBar .Bar input {
     border-radius: 10px;
     background-color: var(--own-bubble-bg-color-s);
+}
+
+.Users {
+    height: 100%;
+}
+
+.UsersList {
+    overflow-y: scroll;
+    display: grid;
+    gap: 1rem;
+}
+
+.UsersList .FriendTemplate {
+    background-color: transparent;
+    border: none;
+    border-bottom: 2px solid var(--bg-color);
+    display: flex;
 }

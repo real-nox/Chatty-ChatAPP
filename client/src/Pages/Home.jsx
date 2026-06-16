@@ -394,8 +394,8 @@ export default function Home() {
         toggleSidebar={toggleSidebar}
         isOpen={isOpen}
       />
-      
-      <FriendsComponent isFriendCard={isFriendCard} />
+
+      {isFriendCard && <FriendsComponent isFriendCard={isFriendCard} toggleFriendsbar={toggleFriendsbar} />}
     </div>
   );
 }

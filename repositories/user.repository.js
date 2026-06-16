@@ -119,3 +119,15 @@ export const EditUser = async(user_id, username, display_name) => {
         console.error(err)
     }
 }
+
+export const getUsersByUsername = async(username) => {
+    try {
+        const result = await pool.query("select id, username, display_name from users where username ilike $1 limit 10", [`%${username}%`]);
+
+        if (result.rowCount > 0)
+            return result.rows;
+        return []
+    } catch(err) {
+        console.error(err)
+    }
+}

@@ -85,3 +85,15 @@ export const friend_info_c = async (req, res, next) => {
         console.log(err)
     }
 }
+
+export const lookForUsers = async (req, res, next) => {
+    const { search } = req?.query;
+
+    try {
+        const result = await friends_service.fetchUsersByUsername(search)
+
+        return res.json(result)
+    } catch (err) {
+        console.log(err)
+    }
+}

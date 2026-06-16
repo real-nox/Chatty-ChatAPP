@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { accept_request_c, decline_request_c, friend_info_c, get_request_c, list_friends_c, send_request_c } from "../controllers/friends.controller.js";
+import { accept_request_c, decline_request_c, friend_info_c, get_request_c, list_friends_c, lookForUsers, send_request_c } from "../controllers/friends.controller.js";
 import { auth_m } from "../middlewares/auth.middleware.js";
 
 const friendsR = Router()
@@ -21,5 +21,7 @@ friendsR.get("/requests/pending", get_request_c)
 friendsR.get("/list", list_friends_c)
 
 friendsR.get("/:friend", friend_info_c)
+
+friendsR.post("/fetch", lookForUsers)
 
 export default friendsR

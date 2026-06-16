@@ -12,10 +12,10 @@ export const sendFriendRequest = async (username, sender) => {
             return { success: false, error: "Could not find current user" }
 
         if (reciever.id == sender.id)
-            return { success: false, error: "Cannot add yourself"}
+            return { success: false, error: "Cannot add yourself" }
 
         const alreadyRequested = await friends_repository.getFriendRequest(reciever.id, sender.id)
-        
+
         if (alreadyRequested)
             return { success: false, error: `Request was already been sent to ${username}` }
         const result = await friends_repository.sendFriendRequest(reciever.id, sender.id)
@@ -53,8 +53,8 @@ export const acceptFriendRequest = async (request_id, user_id) => {
         const result = await friends_repository.acceptReqF(request_id, user_id)
 
         if (result)
-            return { success: true, error: ""}
-        return { success: false, error: "Could not accept request"}
+            return { success: true, error: "" }
+        return { success: false, error: "Could not accept request" }
     } catch (err) {
         console.log(err)
     }
@@ -71,8 +71,8 @@ export const declineFriendRequest = async (request_id, user_id) => {
         const result = await friends_repository.declinetReqF(request_id, user_id)
 
         if (result)
-            return { success: true, error: ""}
-        return { success: false, error: "Could not decline request"}
+            return { success: true, error: "" }
+        return { success: false, error: "Could not decline request" }
     } catch (err) {
         console.log(err)
     }
@@ -112,6 +112,21 @@ export const getFriendInfo = async (friend_id, user_id) => {
         if (!result || result.length === 0)
             return { success: false, error: "No friends found" }
         return { success: true, friend: result }
+
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+export const fetchUsersByUsername = async (username) => {
+    try {
+        if (!username)
+            return { success: false, error: "Empty search" }
+
+        const result = await user_repository.getUsersByUsername(username);
+
+        if (result == []) return { success: false, error: "No users found" }
+        return { success: true, users: result }
 
     } catch (err) {
         console.log(err)
