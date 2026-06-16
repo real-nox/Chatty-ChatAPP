@@ -17,6 +17,8 @@
 
     --check-color: blue;
     --uncheck-color: rgb(208, 208, 255);
+
+    --card-bg-color: rgb(228, 228, 228);
 }
 
 :root[data-theme="Dark"] {
@@ -38,6 +40,8 @@
 
     --check-color: blue;
     --uncheck-color: rgb(208, 208, 255);
+
+    --card-bg-color: rgb(41, 41, 41);
 }
 
 .HomeContainer {
@@ -415,4 +419,105 @@ emoji-picker {
 
 .FriendTemplate.selectedBTN {
     background-color: var(--selected-btn-bg-color);
+}
+
+/*Friends card*/
+
+.FriendsContainerWrapper {
+    perspective: 600px;
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.FriendsContainer {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    transform: translateZ(-200px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.1s ease, transform 0.3s ease;
+}
+
+.FriendsContainer.show {
+    opacity: 1;
+    transform: translateZ(0);
+    pointer-events: auto;
+}
+
+.FriendsContainer .FriendsCard {
+    width: 35rem;
+    height: 35rem;
+    background-color: var(--card-bg-color);
+    border-radius: 15px;
+    box-shadow: 0px 0px 15px rgba(41, 41, 41, 0.192);
+    display: flex;
+    flex-direction: column;
+}
+
+.HeaderCard {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.FriendsCard .containerHeader {
+    display: flex;
+    justify-content: space-between;
+    margin: 1.5rem 2.5rem;
+}
+
+.FriendsCard .containerHeader div {
+    color: var(--text-color);
+    display: flex;
+}
+
+.containerHeader .Left {
+    width: 20%;
+    justify-content: space-around;
+}
+
+.containerHeader .Left svg {
+    color: var(--uncheck-color);
+}
+
+.containerHeader .Right svg {
+    cursor: pointer;
+}
+
+.FriendsCard .HeaderCard::after {
+    content: '';
+    width: 100%;
+    height: 0.2rem;
+    background-color: var(--bg-color);
+    display: flex;
+}
+
+.FriendsCard .CenterCard {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.AddFriend {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.AddFriend .SearchBar {
+    width: 90%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.AddFriend .SearchBar .Bar input {
+    border-radius: 10px;
+    background-color: var(--own-bubble-bg-color-s);
 }

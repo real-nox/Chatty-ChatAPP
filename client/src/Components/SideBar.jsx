@@ -7,7 +7,8 @@ export default function SideBar({
   friendisTyping,
   currentfriend,
   openConversation,
-  isOpen
+  isOpen,
+  toggleFriendsbar
 }) {
   const [searchInput, setSearchInput] = useState("");
 
@@ -32,7 +33,7 @@ export default function SideBar({
       <div className="SearchBar">
         <div className="Title">
           <p>Messages</p>
-          <UserPlus />
+          <UserPlus onClick={toggleFriendsbar}/>
         </div>
         <div className="Bar">
           <Search />

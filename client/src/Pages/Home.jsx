@@ -13,6 +13,7 @@ import {
 import socket from "../utils/Socket";
 import SideBar from "../components/SideBar";
 import ChatChannel from "../components/ChatChannel";
+import FriendsComponent from "../components/Friends";
 
 export default function Home() {
   const [userId, setUserId] = useState("");
@@ -36,6 +37,7 @@ export default function Home() {
 
   const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(true);
+  const [isFriendCard, setIsFriendCard] = useState(false);
 
   const timeout = useRef(null);
   const interval = useRef(null);
@@ -347,8 +349,12 @@ export default function Home() {
   };
 
   const toggleSidebar = () => {
-    setIsOpen(!isOpen)
-  }
+    setIsOpen(!isOpen);
+  };
+
+  const toggleFriendsbar = () => {
+    setIsFriendCard(!isFriendCard);
+  };
 
   useEffect(() => {
     firstLoad.current = true;
@@ -371,6 +377,7 @@ export default function Home() {
         friendList={friendList}
         openConversation={openConversation}
         isOpen={isOpen}
+        toggleFriendsbar={toggleFriendsbar}
       />
 
       <ChatChannel
@@ -387,6 +394,8 @@ export default function Home() {
         toggleSidebar={toggleSidebar}
         isOpen={isOpen}
       />
+      
+      <FriendsComponent isFriendCard={isFriendCard} />
     </div>
   );
 }
