@@ -116,7 +116,6 @@ export const listF = async (user_id) => {
                 list[id] = { created_at: created_at, display_name: display_name, id: id, last_message: last_message, seen: seen, sender_id: sender_id, unseen_count: unseen_count, username: username }
             }
 
-            console.log(list)
             return list
         }
         return []
