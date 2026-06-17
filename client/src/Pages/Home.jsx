@@ -39,6 +39,9 @@ export default function Home() {
   const [isOpen, setIsOpen] = useState(true);
   const [isFriendCard, setIsFriendCard] = useState(false);
 
+  const [requestUsers, setRequestUsers] = useState([]);
+  const [reqNumb, setReqNumb] = useState(0)
+
   const timeout = useRef(null);
   const interval = useRef(null);
 
@@ -369,6 +372,29 @@ export default function Home() {
     }
   }, [messageList]);
 
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      const link = `${import.meta.env.VITE_PATH_SERVER}/friends/requests/requests`;
+
+      try {
+        const response = await fetch(link, {
+          method: "GET",
+          credentials: "include",
+        });
+        const data = await response.json();
+
+        if (data) {
+          setRequestUsers(data)
+          setReqNumb(requestUsers.length)
+        };
+      } catch (err) {
+        console.error(err);
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [requestUsers]);
+
   return (
     <div className="HomeContainer">
       <SideBar
@@ -378,6 +404,7 @@ export default function Home() {
         openConversation={openConversation}
         isOpen={isOpen}
         toggleFriendsbar={toggleFriendsbar}
+        reqNumb={reqNumb}
       />
 
       <ChatChannel
@@ -400,6 +427,10 @@ export default function Home() {
           isFriendCard={isFriendCard}
           toggleFriendsbar={toggleFriendsbar}
           setFriendList={setFriendList}
+          reqNumb={reqNumb}
+          setReqNumb={setReqNumb}
+          requestUsers={requestUsers}
+          setRequestUsers={setRequestUsers}
         />
       )}
     </div>

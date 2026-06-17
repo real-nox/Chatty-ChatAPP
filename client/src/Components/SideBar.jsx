@@ -8,7 +8,8 @@ export default function SideBar({
   currentfriend,
   openConversation,
   isOpen,
-  toggleFriendsbar
+  toggleFriendsbar,
+  reqNumb,
 }) {
   const [searchInput, setSearchInput] = useState("");
 
@@ -34,7 +35,10 @@ export default function SideBar({
       <div className="SearchBar">
         <div className="Title">
           <p>Messages</p>
-          <UserPlus onClick={toggleFriendsbar}/>
+          <div>
+            <UserPlus onClick={toggleFriendsbar}/>
+            {reqNumb > 0 ? <p className="reqRed">{reqNumb}</p> : ""}
+          </div>
         </div>
         <div className="Bar">
           <Search />

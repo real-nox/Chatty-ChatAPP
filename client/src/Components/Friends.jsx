@@ -6,12 +6,15 @@ export default function FriendsComponent({
   isFriendCard,
   toggleFriendsbar,
   setFriendList,
+  setReqNumb,
+  reqNumb,
+  requestUsers,
+  setRequestUsers
 }) {
   const [searchInput, setSearchInput] = useState("");
   const [type, setType] = useState(0);
 
   const [users, setUsers] = useState([]);
-  const [requestUsers, setRequestUsers] = useState([]);
   const [sentUsers, setSentUsers] = useState([]);
 
   const renderBTN = (isFriend, pending, user_id) => {
@@ -97,9 +100,9 @@ export default function FriendsComponent({
       const data = await response.json();
 
       if (data.success) {
-        setUsers((prev) => 
-          prev.map(u => u.id === user_id ? { ...u, pending: user_id} : u)
-      );
+        setUsers((prev) =>
+          prev.map((u) => (u.id === user_id ? { ...u, pending: user_id } : u)),
+        );
       }
     } catch (err) {
       console.error(err);
@@ -129,27 +132,7 @@ export default function FriendsComponent({
     }
   }, [type, searchInput]);
 
-  useEffect(() => {
-    if (type == 1) {
-      const timeout = setTimeout(async () => {
-        const link = `${import.meta.env.VITE_PATH_SERVER}/friends/requests/requests`;
-
-        try {
-          const response = await fetch(link, {
-            method: "GET",
-            credentials: "include",
-          });
-          const data = await response.json();
-
-          if (data) setRequestUsers(data);
-        } catch (err) {
-          console.error(err);
-        }
-      }, 300);
-
-      return () => clearTimeout(timeout);
-    }
-  }, [type, requestUsers]);
+  
 
   useEffect(() => {
     if (type == 2) {
@@ -203,7 +186,12 @@ export default function FriendsComponent({
                 className={type == 1 ? "selected" : ""}
                 onClick={() => setType(1)}
               >
-                Requests
+                Requests{" "}
+                {reqNumb > 0 ? (
+                  <div className="nb">{reqNumb}</div>
+                ) : (
+                  ""
+                )}
               </button>
               <button
                 className={type == 2 ? "selected" : ""}
