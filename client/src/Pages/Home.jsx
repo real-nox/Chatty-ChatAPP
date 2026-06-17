@@ -395,7 +395,13 @@ export default function Home() {
         isOpen={isOpen}
       />
 
-      {isFriendCard && <FriendsComponent isFriendCard={isFriendCard} toggleFriendsbar={toggleFriendsbar} />}
+      {isFriendCard && (
+        <FriendsComponent
+          isFriendCard={isFriendCard}
+          toggleFriendsbar={toggleFriendsbar}
+          setFriendList={setFriendList}
+        />
+      )}
     </div>
   );
 }

@@ -1,8 +1,12 @@
 import { Check, Search, UserPlus, UsersRound, X } from "lucide-react";
-import { SanitizeInput } from "../utils/Utils";
+import { getFriendsList, SanitizeInput } from "../utils/Utils";
 import { useEffect, useState } from "react";
 
-export default function FriendsComponent({ isFriendCard, toggleFriendsbar }) {
+export default function FriendsComponent({
+  isFriendCard,
+  toggleFriendsbar,
+  setFriendList,
+}) {
   const [searchInput, setSearchInput] = useState("");
   const [type, setType] = useState(0);
 
@@ -41,6 +45,18 @@ export default function FriendsComponent({ isFriendCard, toggleFriendsbar }) {
       console.log(data.success);
       if (data.success) {
         setRequestUsers((prev) => prev.filter((u) => u.id !== user_id));
+
+        const updatedList = await getFriendsList();
+        setFriendList((prev) => ({
+          ...updatedList,
+          ...Object.keys(updatedList).reduce((acc, id) => {
+            acc[id] = {
+              ...updatedList[id],
+              presence: prev[id]?.presence ?? updatedList[id].presence,
+            };
+            return acc;
+          }, {}),
+        }));
       }
     } catch (err) {
       console.error(err);
@@ -115,7 +131,6 @@ export default function FriendsComponent({ isFriendCard, toggleFriendsbar }) {
   }, [type, searchInput]);
 
   useEffect(() => {
-    console.log("here", type);
     if (type == 1) {
       const timeout = setTimeout(async () => {
         const link = `${import.meta.env.VITE_PATH_SERVER}/friends/requests/requests`;
