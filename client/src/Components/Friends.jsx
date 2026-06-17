@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 export default function FriendsComponent({ isFriendCard, toggleFriendsbar }) {
   const [searchInput, setSearchInput] = useState("");
-  const [type, setType] = useState(0)
+  const [type, setType] = useState(0);
 
   const [users, setUsers] = useState([]);
   const [requestUsers, setRequestUsers] = useState([]);
@@ -23,6 +23,14 @@ export default function FriendsComponent({ isFriendCard, toggleFriendsbar }) {
         <UserPlus /> Add
       </button>
     );
+  };
+
+  const accept = (user_id) => {
+    
+  };
+
+  const refuse = (user_id) => {
+    
   };
 
   const sendFriendReq = async (user_id) => {
@@ -50,25 +58,52 @@ export default function FriendsComponent({ isFriendCard, toggleFriendsbar }) {
   };
 
   useEffect(() => {
-    const timeout = setTimeout(async () => {
-      if (searchInput.length == 0) return setUsers([]);
-      const link = `${import.meta.env.VITE_PATH_SERVER}/friends/fetch`;
+    if (type == 0) {
+      const timeout = setTimeout(async () => {
+        if (searchInput.length == 0) return setUsers([]);
+        const link = `${import.meta.env.VITE_PATH_SERVER}/friends/fetch`;
 
-      try {
-        const response = await fetch(`${link}?search=${searchInput}`, {
-          method: "POST",
-          credentials: "include",
-        });
-        const data = await response.json();
+        try {
+          const response = await fetch(`${link}?search=${searchInput}`, {
+            method: "POST",
+            credentials: "include",
+          });
+          const data = await response.json();
 
-        if (data.success) return setUsers(data.users);
-      } catch (err) {
-        console.error(err);
-      }
-    }, 300);
+          if (data.success) return setUsers(data.users);
+        } catch (err) {
+          console.error(err);
+        }
+      }, 300);
 
-    return () => clearTimeout(timeout);
-  }, [searchInput]);
+      return () => clearTimeout(timeout);
+    }
+  }, [type, searchInput]);
+
+  useEffect(() => {
+    console.log("here", type)
+    if (type == 1) {
+      const timeout = setTimeout(async () => {
+        const link = `${import.meta.env.VITE_PATH_SERVER}/friends/requests/requests`;
+
+        try {
+          const response = await fetch(link, {
+            method: "GET",
+            credentials: "include",
+          });
+          const data = await response.json();
+
+          console.log(data);
+          if (data) setRequestUsers(data);
+          console.log(requestUsers)
+        } catch (err) {
+          console.error(err);
+        }
+      }, 300);
+
+      return () => clearTimeout(timeout);
+    }
+  }, [type]);
 
   return (
     <div className="FriendsContainerWrapper">
@@ -90,9 +125,24 @@ export default function FriendsComponent({ isFriendCard, toggleFriendsbar }) {
           </div>
           <div className="CenterCard">
             <div className="Options">
-              <button className={type == 0 ? "selected" : "" } onClick={() => setType(0)}>Add People</button>
-              <button className={type == 1 ? "selected" : "" } onClick={() => setType(1)}>Requests</button>
-              <button className={type == 2 ? "selected" : "" } onClick={() => setType(2)}>Sent</button>
+              <button
+                className={type == 0 ? "selected" : ""}
+                onClick={() => setType(0)}
+              >
+                Add People
+              </button>
+              <button
+                className={type == 1 ? "selected" : ""}
+                onClick={() => setType(1)}
+              >
+                Requests
+              </button>
+              <button
+                className={type == 2 ? "selected" : ""}
+                onClick={() => setType(2)}
+              >
+                Sent
+              </button>
             </div>
           </div>
           <div className="Users">
@@ -111,8 +161,7 @@ export default function FriendsComponent({ isFriendCard, toggleFriendsbar }) {
                 </div>
               </div>
               <div className="UsersList">
-                {(type == 0 && users) &&
-                  users.map(
+                {type == 0 && users && users.map(
                     ({
                       id,
                       display_name,
@@ -142,12 +191,37 @@ export default function FriendsComponent({ isFriendCard, toggleFriendsbar }) {
                       );
                     },
                   )}
-                {(type == 1 || !requestUsers) &&
-                  <p>hi</p>
-                }
-                {(type == 2 || !sentUsers) && 
-                  <p>heyi</p>
-                }
+                {type == 1 && requestUsers && requestUsers.map(
+                    ({
+                      id,
+                      username,
+                      display_name,
+                      avatar = null,
+                    }) => {
+                      return (
+                        <div className="FriendTemplate" key={id} id={id}>
+                          <div className="Icon">
+                            <img
+                              src={
+                                avatar ? `${avatar}` : "../../img/avatar.png"
+                              }
+                              alt="Avatar"
+                            />
+                          </div>
+                          <div className="Center">
+                            <h4>{display_name}</h4>
+                            <p>@{username}</p>
+                          </div>
+                          <div className="Right">
+                            <button onClick={() => accept(id)} className="accept"><Check /> Accept</button>
+                            <button onClick={() => refuse(id)} 
+                            className="refuse"><X /> Decline</button>
+                          </div>
+                        </div>
+                      );
+                    },
+                  )}
+                {type == 2 && !sentUsers && <p>heyi</p>}
               </div>
             </div>
           </div>

@@ -14,6 +14,7 @@ export default function SideBar({
 
   const search = useMemo(() => {
     const query = searchInput.trim().toLowerCase();
+    if (!friendList) return
     const filtered = Object.entries(friendList).filter((friend) => {
       return (
         !searchInput ||
@@ -46,7 +47,7 @@ export default function SideBar({
         </div>
       </div>
       <div className="FriendsList">
-        {search.map(
+        {search && search.map(
           ([
             id,
             {

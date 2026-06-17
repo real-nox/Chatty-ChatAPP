@@ -34,7 +34,7 @@ export const getFriendsRequest = async (sender) => {
         if (!sender || !sender.id)
             return { success: false, error: "Could not find current user" }
 
-        const result = await friends_repository.getFriendsRequest(sender.id)
+        const result = await friends_repository.getSentFriendsRequest(sender.id)
 
         return result
     } catch (err) {

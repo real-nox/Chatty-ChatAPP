@@ -25,21 +25,21 @@ export const getFriendRequest = async (receiverId, senderId) => {
     }
 }
 
-export const getFriendsRequest = async (senderId) => {
+export const getSentFriendsRequest = async (receiver_id) => {
     try {
-        const result = await pool.query(`SELECT fr.id, fr.created_at, fr.sender_id, u.username 
+        const result = await pool.query(`SELECT fr.id, u.username, u.display_name
             FROM friends_requests fr JOIN users u ON u.id = fr.sender_id
-            WHERE fr.receiver_id = $1 AND fr.status = 'pending'`,
-            [senderId]
+            WHERE fr.receiver_id = $1 AND fr.status = 'pending'
+            limit 10`,
+            [receiver_id]
         )
 
         if (result?.rowCount > 0) {
             let resultat = Array();
 
             for (const data of result?.rows) {
-                resultat.push({ request_id: data.id, username: data.username, created_at: data.created_at, sender_id: data.sender_id });
+                resultat.push({ id: data.id, username: data.username, display_name: data.display_name });
             }
-            console.log(resultat)
             return resultat
         }
         return false

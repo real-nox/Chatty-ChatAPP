@@ -20,7 +20,7 @@ export const send_request_c = async (req, res, next) => {
     }
 }
 
-export const get_request_c = async (req, res, next) => {
+export const get_sent_c = async (req, res, next) => {
     const sender = req?.user
 
     try {
