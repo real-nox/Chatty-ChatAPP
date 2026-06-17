@@ -42,7 +42,6 @@ export default function FriendsComponent({
 
       const data = await response.json();
 
-      console.log(data.success);
       if (data.success) {
         setRequestUsers((prev) => prev.filter((u) => u.id !== user_id));
 
@@ -76,7 +75,6 @@ export default function FriendsComponent({
 
       const data = await response.json();
 
-      console.log(data.success);
       if (data.success) {
         setRequestUsers((prev) => prev.filter((u) => u.id !== user_id));
       }
@@ -98,7 +96,6 @@ export default function FriendsComponent({
 
       const data = await response.json();
 
-      console.log(data.success);
       if (data.success) {
         setRequestUsers((prev) => prev.filter((u) => u.id === !user_id));
       }
@@ -142,9 +139,7 @@ export default function FriendsComponent({
           });
           const data = await response.json();
 
-          console.log(data);
           if (data) setRequestUsers(data);
-          console.log(requestUsers);
         } catch (err) {
           console.error(err);
         }
@@ -153,6 +148,28 @@ export default function FriendsComponent({
       return () => clearTimeout(timeout);
     }
   }, [type, requestUsers]);
+
+  useEffect(() => {
+    if (type == 2) {
+      const timeout = setTimeout(async () => {
+        const link = `${import.meta.env.VITE_PATH_SERVER}/friends/requests/sent`;
+
+        try {
+          const response = await fetch(link, {
+            method: "GET",
+            credentials: "include",
+          });
+          const data = await response.json();
+
+          if (data) setSentUsers(data.users);
+        } catch (err) {
+          console.error(err);
+        }
+      }, 300);
+
+      return () => clearTimeout(timeout);
+    }
+  }, [type, sentUsers]);
 
   return (
     <div className="FriendsContainerWrapper">
@@ -278,7 +295,33 @@ export default function FriendsComponent({
                       );
                     },
                   )}
-                {type == 2 && !sentUsers && <p>heyi</p>}
+                {type == 2 &&
+                  sentUsers &&
+                  sentUsers.map(
+                    ({ id, username, display_name, avatar = null }) => {
+                      return (
+                        <div className="FriendTemplate" key={id} id={id}>
+                          <div className="Icon">
+                            <img
+                              src={
+                                avatar ? `${avatar}` : "../../img/avatar.png"
+                              }
+                              alt="Avatar"
+                            />
+                          </div>
+                          <div className="Center">
+                            <h4>{display_name}</h4>
+                            <p>@{username}</p>
+                          </div>
+                          <div className="Right">
+                            <button className="refuse">
+                              <X /> Cancel
+                            </button>
+                          </div>
+                        </div>
+                      );
+                    },
+                  )}
               </div>
             </div>
           </div>

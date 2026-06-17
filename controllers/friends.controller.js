@@ -101,3 +101,15 @@ export const lookForUsers = async (req, res, next) => {
         console.log(err)
     }
 }
+
+export const getUserListSent = async (req, res, next) => {
+    const user_id = req?.user?.id
+
+    try {
+        const result = await friends_service.fetchUserListSent(user_id)
+
+        return res.json(result)
+    } catch (err) {
+        console.log(err)
+    }
+}

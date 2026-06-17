@@ -377,7 +377,7 @@
     background: #e8e8e8;
     border-radius: 6px;
     animation: loading 1.6s ease-in-out infinite;
-    height: 1%;
+    height: 3%;
 }
 
 .skel:nth-child(2) {

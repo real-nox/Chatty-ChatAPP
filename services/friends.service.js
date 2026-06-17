@@ -128,7 +128,26 @@ export const fetchUsersByUsername = async (username, user_id) => {
 
         const result = await user_repository.getUsersByUsername(username, user_id);
 
-        if (result == []) return { success: false, error: "No users found" }
+        if (result == []) 
+            return { success: false, error: "No users found" }
+
+        return { success: true, users: result }
+
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+export const fetchUserListSent = async (sender_id) => {
+    try {
+        if (!sender_id)
+            return { success: false, error: "Unfound user_id" }
+
+        const result = await friends_repository.userListSent(sender_id)
+
+        if (result == []) 
+            return { success: false, error: "No users found" }
+        
         return { success: true, users: result }
 
     } catch (err) {

@@ -136,3 +136,22 @@ export const isFriend = async (friend_id, user_id) => {
         console.log(err)
     }
 }
+
+export const userListSent = async (sender_id) => {
+    try {
+        const result = await pool.query(
+            `select 
+            fr.receiver_id as id, u.username, u.display_name 
+            from friends_requests fr 
+            join users u on (fr.receiver_id = u.id)
+            where fr.sender_id = $1 and fr.status = 'pending'
+            `, [sender_id]
+        )
+
+        if (result.rowCount > 0)
+            return result.rows
+        return []
+    } catch (err) {
+        console.error(err)
+    }
+}
