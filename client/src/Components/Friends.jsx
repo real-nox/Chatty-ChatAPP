@@ -25,12 +25,48 @@ export default function FriendsComponent({ isFriendCard, toggleFriendsbar }) {
     );
   };
 
-  const accept = (user_id) => {
-    
+  const accept = async (user_id) => {
+    try {
+      const link = `${import.meta.env.VITE_PATH_SERVER}/friends/requests/${user_id}/accept`;
+
+      const response = await fetch(link, {
+        method: "PATCH",
+        credentials: "include",
+        body: JSON.stringify({ user_id: user_id }),
+        headers: { "Content-Type": "application/json" },
+      });
+
+      const data = await response.json();
+
+      console.log(data.success);
+      if (data.success) {
+        setRequestUsers((prev) => prev.filter((u) => u.id !== user_id));
+      }
+    } catch (err) {
+      console.error(err);
+    }
   };
 
-  const refuse = (user_id) => {
-    
+  const refuse = async (user_id) => {
+    try {
+      const link = `${import.meta.env.VITE_PATH_SERVER}/friends/requests/${user_id}/decline`;
+
+      const response = await fetch(link, {
+        method: "PATCH",
+        credentials: "include",
+        body: JSON.stringify({ user_id: user_id }),
+        headers: { "Content-Type": "application/json" },
+      });
+
+      const data = await response.json();
+
+      console.log(data.success);
+      if (data.success) {
+        setRequestUsers((prev) => prev.filter((u) => u.id !== user_id));
+      }
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   const sendFriendReq = async (user_id) => {
@@ -48,9 +84,7 @@ export default function FriendsComponent({ isFriendCard, toggleFriendsbar }) {
 
       console.log(data.success);
       if (data.success) {
-        setUsers((prev) =>
-          prev.map((u) => (u.id === user_id ? { ...u, pending: user_id } : u)),
-        );
+        setRequestUsers((prev) => prev.filter((u) => u.id === !user_id));
       }
     } catch (err) {
       console.error(err);
@@ -81,7 +115,7 @@ export default function FriendsComponent({ isFriendCard, toggleFriendsbar }) {
   }, [type, searchInput]);
 
   useEffect(() => {
-    console.log("here", type)
+    console.log("here", type);
     if (type == 1) {
       const timeout = setTimeout(async () => {
         const link = `${import.meta.env.VITE_PATH_SERVER}/friends/requests/requests`;
@@ -95,7 +129,7 @@ export default function FriendsComponent({ isFriendCard, toggleFriendsbar }) {
 
           console.log(data);
           if (data) setRequestUsers(data);
-          console.log(requestUsers)
+          console.log(requestUsers);
         } catch (err) {
           console.error(err);
         }
@@ -103,7 +137,7 @@ export default function FriendsComponent({ isFriendCard, toggleFriendsbar }) {
 
       return () => clearTimeout(timeout);
     }
-  }, [type]);
+  }, [type, requestUsers]);
 
   return (
     <div className="FriendsContainerWrapper">
@@ -161,7 +195,9 @@ export default function FriendsComponent({ isFriendCard, toggleFriendsbar }) {
                 </div>
               </div>
               <div className="UsersList">
-                {type == 0 && users && users.map(
+                {type == 0 &&
+                  users &&
+                  users.map(
                     ({
                       id,
                       display_name,
@@ -191,13 +227,10 @@ export default function FriendsComponent({ isFriendCard, toggleFriendsbar }) {
                       );
                     },
                   )}
-                {type == 1 && requestUsers && requestUsers.map(
-                    ({
-                      id,
-                      username,
-                      display_name,
-                      avatar = null,
-                    }) => {
+                {type == 1 &&
+                  requestUsers &&
+                  requestUsers.map(
+                    ({ id, username, display_name, avatar = null }) => {
                       return (
                         <div className="FriendTemplate" key={id} id={id}>
                           <div className="Icon">
@@ -213,9 +246,18 @@ export default function FriendsComponent({ isFriendCard, toggleFriendsbar }) {
                             <p>@{username}</p>
                           </div>
                           <div className="Right">
-                            <button onClick={() => accept(id)} className="accept"><Check /> Accept</button>
-                            <button onClick={() => refuse(id)} 
-                            className="refuse"><X /> Decline</button>
+                            <button
+                              onClick={() => accept(id)}
+                              className="accept"
+                            >
+                              <Check /> Accept
+                            </button>
+                            <button
+                              onClick={() => refuse(id)}
+                              className="refuse"
+                            >
+                              <X /> Decline
+                            </button>
                           </div>
                         </div>
                       );
