@@ -88,9 +88,9 @@ export const listF = async (user_id) => {
                     when f.sender_id = $1 then f.receiver_id 
                     else f.sender_id 
                 end
-                join conversation_members cm1 on cm1.user_id = $1
-                join conversation_members cm2 on cm2.conversation_id = cm1.conversation_id and cm2.user_id = u.id
-                join conversations c on c.id = cm1.conversation_id
+                left join conversation_members cm1 on cm1.user_id = $1
+                left join conversation_members cm2 on cm2.conversation_id = cm1.conversation_id and cm2.user_id = u.id
+                left join conversations c on c.id = cm2.conversation_id
                 left join lateral (
                     select content, created_at, seen, sender_id from messages
                     where conversation_id = c.id
@@ -116,6 +116,7 @@ export const listF = async (user_id) => {
                 list[id] = { created_at: created_at, display_name: display_name, id: id, last_message: last_message, seen: seen, sender_id: sender_id, unseen_count: unseen_count, username: username }
             }
 
+            console.log(list)
             return list
         }
         return []

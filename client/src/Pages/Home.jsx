@@ -183,6 +183,7 @@ export default function Home() {
 
     const handleAllSeen = async ({}) => {
       setMessageList((prev) => {
+        if (!prev) return []
         return (prev ?? []).map((mg) =>
           mg.sender_id == userId ? { ...mg, seen: 1 } : mg,
         );

@@ -416,6 +416,10 @@ emoji-picker {
 
 .startConv {
     height: 100%;
+    color: var(--text-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .FriendTemplate.selectedBTN {
