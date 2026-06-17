@@ -108,7 +108,7 @@ export const setUserTheme = async (user_id, theme) => {
     }
 }
 
-export const EditUser = async(user_id, username, display_name) => {
+export const EditUser = async (user_id, username, display_name) => {
     try {
         const result = await pool.query("update users set display_name = $1, username = $2 where id = $3", [display_name, username, user_id])
 
@@ -120,14 +120,44 @@ export const EditUser = async(user_id, username, display_name) => {
     }
 }
 
-export const getUsersByUsername = async(username) => {
+export const getUsersByUsername = async (username, user_id) => {
     try {
-        const result = await pool.query("select id, username, display_name from users where username ilike $1 limit 10", [`%${username}%`]);
+        const result = await pool.query(`
+            select 
+                u.id, u.username, u.display_name,
+                coalesce(
+                    nullif(fr.sender_id, $2),
+                    nullif(fr.receiver_id, $2)
+                ) as isFriend,
+                coalesce(
+                    nullif(pen.sender_id, $2),
+                    nullif(pen.receiver_id, $2)
+                ) as pending
+                from users u
+                left join lateral (
+                    select sender_id, receiver_id
+                    from friends_requests
+                    where (sender_id = $2 or receiver_id = $2)
+                        and (sender_id = u.id or receiver_id = u.id)
+                        and status = 'accepted'
+                    limit 1
+                ) fr on true
+                left join lateral (
+                    select sender_id, receiver_id
+                    from friends_requests
+                    where (sender_id = $2 or receiver_id = $2)
+                        and (sender_id = u.id or receiver_id = u.id)
+                        and status = 'pending'
+                    limit 1
+                ) pen on true
+                where u.username ilike $1 and u.id != $2
+                limit 10;
+            `, [`%${username}%`, user_id]);
 
         if (result.rowCount > 0)
             return result.rows;
         return []
-    } catch(err) {
+    } catch (err) {
         console.error(err)
     }
 }

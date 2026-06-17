@@ -10,7 +10,7 @@ export default function ChatChannel({ currentfriend, loading, messageList, messa
         <div className="User">
             <TextAlignJustify onClick={toggleSidebar} />
           <p>
-            {currentfriend?.display_name} - {currentfriend?.username}
+            {currentfriend?.display_name} - @{currentfriend?.username}
           </p>
         </div>
         <div className="Options">

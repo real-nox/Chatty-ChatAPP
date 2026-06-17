@@ -505,6 +505,29 @@ emoji-picker {
     align-items: center;
 }
 
+.CenterCard .Options {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    width: 62.5%;
+    padding: 0.5rem;
+    border-radius: 10px;
+    background-color: var(--bg-color);
+}
+
+.CenterCard .Options button {
+    width: 100%;
+    border: 0;
+    background-color: transparent;
+    color: var(--text-color);
+    padding: 0.5rem;
+}
+
+.CenterCard .Options button.selected {
+    border-radius: 10px;
+    background-color: var(--bubble-bg-color-u);
+}
+
 .AddFriend {
     display: flex;
     flex-direction: column;
@@ -540,4 +563,34 @@ emoji-picker {
     border: none;
     border-bottom: 2px solid var(--bg-color);
     display: flex;
+}
+
+.Right {
+    display: flex;
+    justify-content: center;
+}
+
+.Right button {
+    height: 40%;
+    border-radius: 10px;
+    border: 0;
+    width: 65%;
+    text-align: center;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    color: var(--text-color)
+}
+
+.Right button.friends {
+    background-color: rgba(209, 255, 209, 0.281);
+}
+
+.Right button.pending {
+    background-color: var(--bg-color);
+}
+
+.Right button.add {
+    cursor: pointer;
+    background-color: var(--badge-bg-color);
 }

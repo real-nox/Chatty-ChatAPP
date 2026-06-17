@@ -1,9 +1,9 @@
 import * as user_repository from "../repositories/user.repository.js"
 import * as friends_repository from "../repositories/friends.repository.js"
 
-export const sendFriendRequest = async (username, sender) => {
+export const sendFriendRequest = async (user_id, sender) => {
     try {
-        const reciever = await user_repository.getUserViaUsername(username)
+        const reciever = await user_repository.getUserById(user_id)
 
         if (!reciever || !reciever.id)
             return { success: false, error: "Could not find user" }
@@ -17,11 +17,11 @@ export const sendFriendRequest = async (username, sender) => {
         const alreadyRequested = await friends_repository.getFriendRequest(reciever.id, sender.id)
 
         if (alreadyRequested)
-            return { success: false, error: `Request was already been sent to ${username}` }
+            return { success: false, error: `Request was already been sent to ${user_id}` }
         const result = await friends_repository.sendFriendRequest(reciever.id, sender.id)
 
         if (!result)
-            return { success: false, error: `Could not send friend request to ${username}` }
+            return { success: false, error: `Could not send friend request to ${user_id}` }
 
         return { success: true, error: "" }
     } catch (error) {
@@ -118,12 +118,15 @@ export const getFriendInfo = async (friend_id, user_id) => {
     }
 }
 
-export const fetchUsersByUsername = async (username) => {
+export const fetchUsersByUsername = async (username, user_id) => {
     try {
         if (!username)
             return { success: false, error: "Empty search" }
 
-        const result = await user_repository.getUsersByUsername(username);
+        if (!user_id)
+            return { success: false, error: "Unfound user_id" }
+
+        const result = await user_repository.getUsersByUsername(username, user_id);
 
         if (result == []) return { success: false, error: "No users found" }
         return { success: true, users: result }

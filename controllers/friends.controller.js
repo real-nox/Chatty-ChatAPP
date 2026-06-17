@@ -1,15 +1,18 @@
 import * as friends_service from "../services/friends.service.js"
 
 export const send_request_c = async (req, res, next) => {
-    const username = req?.body?.friendUsername
+    const user_id = req?.body?.user_id
 
-    if (!username)
+    if (!user_id)
         return res.json({ success: false, error: "Fill in the form" })
 
     const sender = req?.user
 
+    if (!sender)
+        return res.json({ success: false, error: "Fill in the form" })
+
     try {
-        const result = await friends_service.sendFriendRequest(username, sender)
+        const result = await friends_service.sendFriendRequest(user_id, sender)
 
         return res.json(result)
     } catch (err) {
@@ -88,9 +91,10 @@ export const friend_info_c = async (req, res, next) => {
 
 export const lookForUsers = async (req, res, next) => {
     const { search } = req?.query;
+    const user_id = req?.user?.id 
 
     try {
-        const result = await friends_service.fetchUsersByUsername(search)
+        const result = await friends_service.fetchUsersByUsername(search, user_id)
 
         return res.json(result)
     } catch (err) {
