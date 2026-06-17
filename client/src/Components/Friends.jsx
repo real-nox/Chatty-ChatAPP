@@ -97,7 +97,9 @@ export default function FriendsComponent({
       const data = await response.json();
 
       if (data.success) {
-        setRequestUsers((prev) => prev.filter((u) => u.id === !user_id));
+        setUsers((prev) => 
+          prev.map(u => u.id === user_id ? { ...u, pending: user_id} : u)
+      );
       }
     } catch (err) {
       console.error(err);
@@ -315,7 +317,7 @@ export default function FriendsComponent({
                           </div>
                           <div className="Right">
                             <button className="refuse">
-                              <X /> Cancel
+                              <X />
                             </button>
                           </div>
                         </div>
