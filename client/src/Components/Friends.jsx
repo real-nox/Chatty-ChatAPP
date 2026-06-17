@@ -9,7 +9,7 @@ export default function FriendsComponent({
   setReqNumb,
   reqNumb,
   requestUsers,
-  setRequestUsers
+  setRequestUsers,
 }) {
   const [searchInput, setSearchInput] = useState("");
   const [type, setType] = useState(0);
@@ -45,8 +45,9 @@ export default function FriendsComponent({
 
       const data = await response.json();
 
+      console.log(data)
       if (data.success) {
-        setRequestUsers((prev) => prev.filter((u) => u.id !== user_id));
+        setRequestUsers(prev => prev.filter(u => u.id !== user_id));
 
         const updatedList = await getFriendsList();
         setFriendList((prev) => ({
@@ -59,15 +60,17 @@ export default function FriendsComponent({
             return acc;
           }, {}),
         }));
+
+        setReqNumb(prev => prev - 1);
       }
     } catch (err) {
       console.error(err);
     }
   };
 
-  const refuse = async (user_id) => {
+  const refuseSent = async (user_id) => {
     try {
-      const link = `${import.meta.env.VITE_PATH_SERVER}/friends/requests/${user_id}/decline`;
+      const link = `${import.meta.env.VITE_PATH_SERVER}/friends/requests/${user_id}/decline/sent`;
 
       const response = await fetch(link, {
         method: "PATCH",
@@ -79,7 +82,30 @@ export default function FriendsComponent({
       const data = await response.json();
 
       if (data.success) {
+        setSentUsers((prev) => prev.filter((u) => u.id !== user_id));
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const refuseReq = async (user_id, type = "req") => {
+    try {
+      const link = `${import.meta.env.VITE_PATH_SERVER}/friends/requests/${user_id}/decline/request`;
+
+      const response = await fetch(link, {
+        method: "PATCH",
+        credentials: "include",
+        body: JSON.stringify({ user_id: user_id }),
+        headers: { "Content-Type": "application/json" },
+      });
+
+      const data = await response.json();
+
+      console.log(data);
+      if (data.success) {
         setRequestUsers((prev) => prev.filter((u) => u.id !== user_id));
+        setReqNumb(sentUsers.length);
       }
     } catch (err) {
       console.error(err);
@@ -99,6 +125,7 @@ export default function FriendsComponent({
 
       const data = await response.json();
 
+      console.log(data, users)
       if (data.success) {
         setUsers((prev) =>
           prev.map((u) => (u.id === user_id ? { ...u, pending: user_id } : u)),
@@ -132,8 +159,6 @@ export default function FriendsComponent({
     }
   }, [type, searchInput]);
 
-  
-
   useEffect(() => {
     if (type == 2) {
       const timeout = setTimeout(async () => {
@@ -154,7 +179,7 @@ export default function FriendsComponent({
 
       return () => clearTimeout(timeout);
     }
-  }, [type, sentUsers]);
+  }, [type]);
 
   return (
     <div className="FriendsContainerWrapper">
@@ -183,15 +208,11 @@ export default function FriendsComponent({
                 Add People
               </button>
               <button
-                className={type == 1 ? "selected" : ""}
+                className={`req ${type == 1 ? "selected" : ""}`}
                 onClick={() => setType(1)}
               >
                 Requests{" "}
-                {reqNumb > 0 ? (
-                  <div className="nb">{reqNumb}</div>
-                ) : (
-                  ""
-                )}
+                {reqNumb > 0 ? <div className="Badge">{reqNumb}</div> : ""}
               </button>
               <button
                 className={type == 2 ? "selected" : ""}
@@ -230,7 +251,7 @@ export default function FriendsComponent({
                     }) => {
                       return (
                         <div className="FriendTemplate" key={id} id={id}>
-                          <div className="Icon">
+                          <div className="IconFR">
                             <img
                               src={
                                 avatar ? `${avatar}` : "../../img/avatar.png"
@@ -255,7 +276,7 @@ export default function FriendsComponent({
                     ({ id, username, display_name, avatar = null }) => {
                       return (
                         <div className="FriendTemplate" key={id} id={id}>
-                          <div className="Icon">
+                          <div className="IconFR">
                             <img
                               src={
                                 avatar ? `${avatar}` : "../../img/avatar.png"
@@ -266,20 +287,21 @@ export default function FriendsComponent({
                           <div className="Center">
                             <h4>{display_name}</h4>
                             <p>@{username}</p>
-                          </div>
-                          <div className="Right">
-                            <button
-                              onClick={() => accept(id)}
-                              className="accept"
-                            >
-                              <Check /> Accept
-                            </button>
-                            <button
-                              onClick={() => refuse(id)}
-                              className="refuse"
-                            >
-                              <X /> Decline
-                            </button>
+
+                            <div className="Options">
+                              <button
+                                onClick={() => accept(id)}
+                                className="accept"
+                              >
+                                <Check /> Accept
+                              </button>
+                              <button
+                                onClick={() => refuseReq(id)}
+                                className="refuse"
+                              >
+                                <X /> Decline
+                              </button>
+                            </div>
                           </div>
                         </div>
                       );
@@ -291,7 +313,7 @@ export default function FriendsComponent({
                     ({ id, username, display_name, avatar = null }) => {
                       return (
                         <div className="FriendTemplate" key={id} id={id}>
-                          <div className="Icon">
+                          <div className="IconFR">
                             <img
                               src={
                                 avatar ? `${avatar}` : "../../img/avatar.png"
@@ -304,7 +326,10 @@ export default function FriendsComponent({
                             <p>@{username}</p>
                           </div>
                           <div className="Right">
-                            <button className="refuse">
+                            <button
+                              className="refuse"
+                              onClick={() => refuseSent(id)}
+                            >
                               <X />
                             </button>
                           </div>

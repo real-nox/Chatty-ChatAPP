@@ -169,11 +169,11 @@
 }
 
 .FriendTemplate .Icon {
-    width: 30%;
+    width: 40%;
 }
 
 .FriendTemplate .Icon img {
-    width: 40%;
+    width: 30%;
 }
 
 .FriendTemplate .Center {
@@ -206,13 +206,14 @@
 
 .Badge {
     background-color: var(--badge-bg-color);
-    height: 1.35rem;
-    width: 1.35rem;
+    height: 20px;
+    width: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 2rem;
-    font-size: 0.8em;
+    font-size: 1.22em;
+    color: var(--text-color);
 }
 
 /*Chat Side*/
@@ -458,6 +459,7 @@ emoji-picker {
     display: flex;
     flex-direction: column;
     pointer-events: auto;
+    overflow: hidden;
 }
 
 .HeaderCard {
@@ -532,7 +534,8 @@ emoji-picker {
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 74%;
+    height: 95%;
+    overflow: hidden;
 }
 
 .AddFriend .SearchBar {
@@ -550,12 +553,18 @@ emoji-picker {
 
 .Users {
     height: 100%;
+    width: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
 }
 
 .UsersList {
-    overflow-y: scroll;
+    overflow-y: auto;
     display: grid;
     gap: 1rem;
+    width: 100%;
+    max-height: 100%;
 }
 
 .UsersList .FriendTemplate {
@@ -563,6 +572,7 @@ emoji-picker {
     border: none;
     border-bottom: 2px solid var(--bg-color);
     display: flex;
+    padding: 1rem;
 }
 
 .Right {
@@ -579,7 +589,8 @@ emoji-picker {
     display: flex;
     justify-content: space-around;
     align-items: center;
-    color: var(--text-color)
+    color: var(--text-color);
+    width: 90%;
 }
 
 .Right button.friends {
@@ -593,4 +604,66 @@ emoji-picker {
 .Right button.add {
     cursor: pointer;
     background-color: var(--badge-bg-color);
+}
+
+.sidebarFriend {
+    display: flex;
+}
+
+.sidebarFriend .Badge {
+    position: fixed;
+    left: 90%;
+    top: 1%;
+}
+
+.req {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    align-items: center;
+}
+
+.Center .Options {
+    width: 100%;
+    display: flex;
+    gap: 10px;
+}
+
+.Center .Options button {
+    border: 0;
+    border-radius: 10px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    padding: 0.2rem 0.3rem;
+    color: var(--text-color);
+}
+
+.Center .Options .accept {
+    background-color: var(--badge-bg-color);
+    cursor: pointer;
+}
+
+.Center .Options .refuse {
+    background-color: var(--bg-color);
+    cursor: pointer;
+}
+
+.IconFR {
+    width: 30%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.IconFR img {
+    width: 35%;
+}
+
+.Right .refuse {
+    color: var(--text-color);
+    background-color: transparent;
+    width: max-content;
+    height: 2rem;
+    cursor: pointer;
 }

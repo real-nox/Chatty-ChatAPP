@@ -42,15 +42,15 @@ export const getFriendsRequest = async (sender) => {
     }
 }
 
-export const acceptFriendRequest = async (request_id, user_id) => {
+export const acceptFriendRequest = async (receiver_id, sender_id) => {
     try {
-        if (!request_id)
-            return { success: false, error: "Could not find request" }
+        if (!receiver_id)
+            return { success: false, error: "Could not find receiver" }
 
-        if (!user_id)
-            return { success: false, error: "Unfound user" }
+        if (!sender_id)
+            return { success: false, error: "Could not find sender" }
 
-        const result = await friends_repository.acceptReqF(request_id, user_id)
+        const result = await friends_repository.acceptReqF(receiver_id, sender_id)
 
         if (result)
             return { success: true, error: "" }
@@ -60,15 +60,16 @@ export const acceptFriendRequest = async (request_id, user_id) => {
     }
 }
 
-export const declineFriendRequest = async (request_id, user_id) => {
+export const declineFriendRequest = async (receiver_id, sender_id) => {
     try {
-        if (!request_id)
-            return { success: false, error: "Could not find request" }
+        if (!receiver_id)
+            return { success: false, error: "Could not find receiver" }
 
-        if (!user_id)
-            return { success: false, error: "Unfound user" }
+        if (!sender_id)
+            return { success: false, error: "Could not find sender" }
 
-        const result = await friends_repository.declinetReqF(request_id, user_id)
+        console.log(receiver_id, sender_id)
+        const result = await friends_repository.declinetReqF(receiver_id, sender_id)
 
         if (result)
             return { success: true, error: "" }

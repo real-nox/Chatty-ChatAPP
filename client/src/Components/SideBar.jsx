@@ -35,9 +35,9 @@ export default function SideBar({
       <div className="SearchBar">
         <div className="Title">
           <p>Messages</p>
-          <div>
+          <div className="sidebarFriend">
             <UserPlus onClick={toggleFriendsbar}/>
-            {reqNumb > 0 ? <p className="reqRed">{reqNumb}</p> : ""}
+            {reqNumb > 0 ? <div className="Badge">{reqNumb}</div> : ""}
           </div>
         </div>
         <div className="Bar">

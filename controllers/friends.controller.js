@@ -33,14 +33,30 @@ export const get_sent_c = async (req, res, next) => {
 }
 
 export const accept_request_c = async (req, res, next) => {
-    const request_id = req?.params?.id
+    const friend_id = req?.params?.id
     const user_id = req?.user?.id
 
     try {
-        if (!request_id)
-            return res.json({ success: false, error: "Request id is not provided"})
+        if (!friend_id)
+            return res.json({ success: false, error: "Friend_id is not provided"})
 
-        const resultat = await friends_service.acceptFriendRequest(request_id, user_id)
+        const resultat = await friends_service.acceptFriendRequest(user_id, friend_id)
+
+        return res.json(resultat)
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+export const decline_sent_c = async (req, res, next) => {
+    const friend_id = req?.params?.id
+    const user_id = req?.user?.id
+
+    try {
+        if (!friend_id)
+            return res.json({ success: false, error: "Friend_id id is not provided"})
+
+        const resultat = await friends_service.declineFriendRequest(friend_id, user_id)
 
         return res.json(resultat)
     } catch (err) {
@@ -49,14 +65,14 @@ export const accept_request_c = async (req, res, next) => {
 }
 
 export const decline_request_c = async (req, res, next) => {
-    const request_id = req?.params?.id
+    const friend_id = req?.params?.id
     const user_id = req?.user?.id
 
     try {
-        if (!request_id)
+        if (!friend_id)
             return res.json({ success: false, error: "Request id is not provided"})
 
-        const resultat = await friends_service.declineFriendRequest(request_id, user_id)
+        const resultat = await friends_service.declineFriendRequest(user_id, friend_id)
 
         return res.json(resultat)
     } catch (err) {

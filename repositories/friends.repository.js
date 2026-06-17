@@ -27,7 +27,7 @@ export const getFriendRequest = async (receiverId, senderId) => {
 
 export const getSentFriendsRequest = async (receiver_id) => {
     try {
-        const result = await pool.query(`SELECT fr.id, u.username, u.display_name
+        const result = await pool.query(`SELECT fr.sender_id as id, u.username, u.display_name
             FROM friends_requests fr JOIN users u ON u.id = fr.sender_id
             WHERE fr.receiver_id = $1 AND fr.status = 'pending'
             limit 10`,
@@ -38,7 +38,7 @@ export const getSentFriendsRequest = async (receiver_id) => {
             let resultat = Array();
 
             for (const data of result?.rows) {
-                resultat.push({ id: data.id, username: data.username, display_name: data.display_name });
+                resultat.push({ id: data.id, username: data.username, display_name: data.display_name, pending: receiver_id });
             }
             return resultat
         }
@@ -48,9 +48,9 @@ export const getSentFriendsRequest = async (receiver_id) => {
     }
 }
 
-export const acceptReqF = async (request_id, user_id) => {
+export const acceptReqF = async (receiver_id, sender_id) => {
     try {
-        const result = await pool.query("update friends_requests set status = 'accepted' where id = $1 and receiver_id = $2", [request_id, user_id])
+        const result = await pool.query("update friends_requests set status = 'accepted' where receiver_id = $1 and sender_id = $2", [receiver_id, sender_id])
 
         if (result?.rowCount > 0)
             return true
@@ -60,9 +60,9 @@ export const acceptReqF = async (request_id, user_id) => {
     }
 }
 
-export const declinetReqF = async (request_id, user_id) => {
+export const declinetReqF = async (receiver_id, sender_id) => {
     try {
-        const result = await pool.query("update friends_requests set status = 'declined' where id = $1 and receiver_id = $2", [request_id, user_id])
+        const result = await pool.query("delete from friends_requests where receiver_id = $1 and sender_id = $2", [parseInt(receiver_id), parseInt(sender_id)])
 
         if (result?.rowCount > 0)
             return result?.rows
