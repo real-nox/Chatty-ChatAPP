@@ -41,12 +41,15 @@ export default function Home() {
 
   const [requestUsers, setRequestUsers] = useState([]);
   const [reqNumb, setReqNumb] = useState(0)
+  
+  const [type, setType] = useState(0);
 
   const timeout = useRef(null);
   const interval = useRef(null);
 
   const firstLoad = useRef(true);
   const messagesEndRef = useRef(null);
+  const prevLen = useRef(0);
 
   const navigate = useNavigate();
 
@@ -396,6 +399,35 @@ export default function Home() {
     return () => clearInterval(interval);
   }, [requestUsers]);
 
+  useEffect(() => {
+    if (requestUsers.length <= prevLen.current) {
+      prevLen.current = requestUsers.length;
+      return;
+    }
+
+    prevLen.current = requestUsers.length;
+    console.log(typeof requestUsers, requestUsers);
+    const notify = () => {
+      const latest_user = requestUsers[requestUsers.length - 1];
+      const noti = new Notification("New Friend Request", {
+        body: `${latest_user.display_name} has sent you a friend request!`,
+      });
+
+      noti.onclick = () => {
+        setType(1);
+        setIsFriendCard(true);
+      };
+    };
+    if (Notification.permission === "granted") {
+      notify();
+    } else if (Notification.permission === "default") {
+      Notification.requestPermission().then((perm) => {
+        if (perm === "granted") {
+          notify();
+        }
+      });
+    }
+  }, [requestUsers]);
   return (
     <div className="HomeContainer">
       <SideBar
@@ -426,12 +458,15 @@ export default function Home() {
       {isFriendCard && (
         <FriendsComponent
           isFriendCard={isFriendCard}
+          setIsFriendCard={setIsFriendCard}
           toggleFriendsbar={toggleFriendsbar}
           setFriendList={setFriendList}
           reqNumb={reqNumb}
           setReqNumb={setReqNumb}
           requestUsers={requestUsers}
           setRequestUsers={setRequestUsers}
+          setType={setType}
+          type={type}
         />
       )}
     </div>

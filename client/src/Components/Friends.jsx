@@ -1,18 +1,20 @@
 import { Check, Search, UserPlus, UsersRound, X } from "lucide-react";
 import { getFriendsList, SanitizeInput } from "../utils/Utils";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function FriendsComponent({
   isFriendCard,
+  setIsFriendCard,
   toggleFriendsbar,
   setFriendList,
   setReqNumb,
   reqNumb,
   requestUsers,
   setRequestUsers,
+  type,
+  setType
 }) {
   const [searchInput, setSearchInput] = useState("");
-  const [type, setType] = useState(0);
 
   const [users, setUsers] = useState([]);
   const [sentUsers, setSentUsers] = useState([]);
@@ -45,9 +47,8 @@ export default function FriendsComponent({
 
       const data = await response.json();
 
-      console.log(data)
       if (data.success) {
-        setRequestUsers(prev => prev.filter(u => u.id !== user_id));
+        setRequestUsers((prev) => prev.filter((u) => u.id !== user_id));
 
         const updatedList = await getFriendsList();
         setFriendList((prev) => ({
@@ -61,7 +62,7 @@ export default function FriendsComponent({
           }, {}),
         }));
 
-        setReqNumb(prev => prev - 1);
+        setReqNumb((prev) => prev - 1);
       }
     } catch (err) {
       console.error(err);
@@ -125,7 +126,7 @@ export default function FriendsComponent({
 
       const data = await response.json();
 
-      console.log(data, users)
+      console.log(data, users);
       if (data.success) {
         setUsers((prev) =>
           prev.map((u) => (u.id === user_id ? { ...u, pending: user_id } : u)),
