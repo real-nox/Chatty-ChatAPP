@@ -72,8 +72,6 @@ export default function Home() {
     };
 
     getList();
-
-    console.log(friendList);
   }, []);
 
   useEffect(() => {
