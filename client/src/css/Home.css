@@ -52,9 +52,12 @@
 }
 
 .SideBar {
-    border-right: 1px solid var(--sidebar-border-color);
-    height: 100%;
+    height: 100vh;
     width: 20vw;
+    display: flex;
+    flex-direction: column;
+
+    border-right: 1px solid var(--sidebar-border-color);
     padding-top: 1rem 0;
     transition: transform 0.3s ease, margin-left 0.3s ease;
     transform: translateX(0);
@@ -65,56 +68,8 @@
     margin-left: -20vw;
 }
 
-.SideBar .SearchBar {
-    padding: 1.5rem 1rem;
-    border-bottom: 1px solid var(--sidebar-border-color);
+/*Chat Side*/
 
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    flex-direction: column;
-}
-
-.SearchBar .Title {
-    display: flex;
-    width: 100%;
-    justify-content: space-between;
-}
-
-.SearchBar .Title p {
-    color: var(--text-color);
-    font-size: 1.3em;
-}
-
-.SearchBar .Title svg,
-.TopBarUser .User svg {
-    cursor: pointer;
-    background-color: transparent;
-    border-radius: 10px;
-    padding: 0.2rem;
-    transition: background-color 0.5s ease-in-out;
-    color: var(--svg-bg-color);
-}
-
-.SearchBar .Title svg:hover,
-.TopBarUser .User svg:hover {
-    background-color: var(--selected-btn-bg-color);
-}
-
-.SearchBar .Bar {
-    width: 100%;
-
-    display: flex;
-    align-items: center;
-}
-
-.SearchBar .Bar svg {
-    position: fixed;
-    padding-left: 1rem;
-    color: var(--svg-bg-color);
-}
-
-.SearchBar .Bar input,
 .Chat input {
     color: var(--text-color);
     border: 1px solid transparent;
@@ -123,100 +78,7 @@
     font-size: 0.9rem;
     border-radius: 10px;
     background-color: var(--bg-color-input);
-    overflow: hidden;
 }
-
-.SearchBar .Bar input:focus {
-    outline: none;
-    border: 2px solid blue;
-}
-
-/*Friends*/
-
-.SideBar .FriendsList {
-    width: 100%;
-    height: calc(100vh - 22vh);
-    display: flex;
-    flex-direction: column;
-    overflow-y: auto;
-}
-
-.FriendsList .FriendTemplate {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 5rem;
-    border: 0;
-    flex-shrink: 0;
-    background-color: var(--bg-color);
-
-    transition: background-color 0.7s ease;
-    cursor: pointer;
-}
-
-.FriendsList .FriendTemplate:hover {
-    background-color: var(--hover-template);
-}
-
-.FriendsList .FriendTemplate.active {
-    background-color: rgb(255, 0, 0);
-}
-
-.FriendTemplate .Icon,
-.FriendTemplate .Center,
-.FriendTemplate .Right {
-    color: var(--text-color);
-}
-
-.FriendTemplate .Icon {
-    width: 40%;
-}
-
-.FriendTemplate .Icon img {
-    width: 30%;
-}
-
-.FriendTemplate .Center {
-    width: 50%;
-    display: flex;
-    flex-direction: column;
-    align-items: start;
-    gap: 0.5rem;
-}
-
-.FriendTemplate .Center h4 {
-    font-size: 1.3em;
-}
-
-.FriendTemplate .Center p {
-    font-size: 1.2em;
-    color: var(--sidebar-border-color);
-    width: 100%;
-    overflow-x: hidden;
-    text-align: start;
-}
-
-.FriendTemplate .Right {
-    display: flex;
-    flex-direction: column;
-    width: 20%;
-    gap: 0.9rem;
-    align-items: center;
-}
-
-.Badge {
-    background-color: var(--badge-bg-color);
-    height: 20px;
-    width: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 2rem;
-    font-size: 1.22em;
-    color: var(--text-color);
-}
-
-/*Chat Side*/
 
 .RightSection {
     width: 80vw;
@@ -276,7 +138,7 @@
 }
 
 .RightSection .Chat {
-    height: 7vh;
+    height: 8vh;
     border-top: 1px solid var(--sidebar-border-color);
     display: flex;
     align-items: center;
@@ -285,7 +147,7 @@
 
 .Chat .Chatbar {
     height: 50%;
-    width: 85%;
+    width: 95%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -307,6 +169,15 @@
     height: inherit;
 }
 
+::-webkit-scrollbar {
+    background-color: transparent;
+    width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: var(--sidebar-border-color);
+    border-radius: 100px;
+}
 /* Messages */
 
 .Messages {
@@ -420,10 +291,6 @@ emoji-picker {
     display: flex;
     justify-content: center;
     align-items: center;
-}
-
-.FriendTemplate.selectedBTN {
-    background-color: var(--selected-btn-bg-color);
 }
 
 /*Friends card*/

@@ -1,7 +1,7 @@
 import { Search, UserPlus } from "lucide-react";
 import { formatedDate, SanitizeInput } from "../utils/Utils";
 import { useEffect, useMemo, useState } from "react";
-import '../css/SideBar.css'
+import "../css/SideBar.css";
 
 export default function SideBar({
   friendList,
@@ -45,13 +45,16 @@ export default function SideBar({
           </div>
         </div>
         <div className="Bar">
-          <Search />
-          <input
-            type="text"
-            placeholder="Search conversations..."
-            value={searchInput}
-            onInput={(ev) => setSearchInput(SanitizeInput(ev.target.value))}
-          />
+          <label htmlFor="conv">
+            <Search />
+            <input
+              type="text"
+              id="conv"
+              placeholder="Search conversations..."
+              value={searchInput}
+              onInput={(ev) => setSearchInput(SanitizeInput(ev.target.value))}
+            />
+          </label>
         </div>
       </div>
       <div className="FriendsList">
