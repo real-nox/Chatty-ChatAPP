@@ -13,6 +13,7 @@ export default function SideBar({
   toggleFriendsbar,
   reqNumb,
   me,
+  settings
 }) {
   const [searchInput, setSearchInput] = useState("");
   const [isActive, setIsActive] = useState(false);
@@ -142,7 +143,7 @@ export default function SideBar({
       <div className="OwnBar">
         <div className={`Options ${isActive ? "active" : ""}`}>
           <div className="Settings">
-            <button>
+            <button onClick={settings}>
               <Settings /> Settings
             </button>
             <button className="logout" onClick={logout}>

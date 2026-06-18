@@ -15,6 +15,7 @@ import socket from "../utils/Socket";
 import SideBar from "../components/SideBar";
 import ChatChannel from "../components/ChatChannel";
 import FriendsComponent from "../components/Friends";
+import Settings from "../components/Settings";
 
 export default function Home() {
   const [userId, setUserId] = useState("");
@@ -51,6 +52,8 @@ export default function Home() {
   const [requestUsers, setRequestUsers] = useState([]);
   const [reqNumb, setReqNumb] = useState(0);
 
+  const [isSettings, setIsSettings] = useState(false);
+
   const [type, setType] = useState(0);
 
   const timeout = useRef(null);
@@ -59,7 +62,7 @@ export default function Home() {
   const firstLoad = useRef(true);
   const messagesEndRef = useRef(null);
   const prevLen = useRef(0);
-  const userID = useRef(null)
+  const userID = useRef(null);
 
   const navigate = useNavigate();
 
@@ -111,7 +114,7 @@ export default function Home() {
 
     return () => socket.off("friendRequestAccepted");
   }, []);
-  
+
   //WebSocket connection
   useEffect(() => {
     socket.connect();
@@ -398,6 +401,10 @@ export default function Home() {
     setIsFriendCard(!isFriendCard);
   };
 
+  const toggleSettingssbar = () => {
+    setIsSettings(!isSettings);
+  };
+
   useEffect(() => {
     firstLoad.current = true;
   }, [currentChannel]);
@@ -465,8 +472,13 @@ export default function Home() {
   }, [requestUsers]);
 
   useEffect(() => {
-    userID.current = userId
-  }, [userId])
+    userID.current = userId;
+  }, [userId]);
+
+  const settings = () => {
+    setIsSettings(!isSettings);
+  };
+
   return (
     <div className="HomeContainer">
       <SideBar
@@ -478,6 +490,7 @@ export default function Home() {
         toggleFriendsbar={toggleFriendsbar}
         reqNumb={reqNumb}
         me={me}
+        settings={settings}
       />
 
       <ChatChannel
@@ -509,6 +522,8 @@ export default function Home() {
           type={type}
         />
       )}
+
+      {isSettings && <Settings isSettings={isSettings} toggleSettingssbar={toggleSettingssbar} />}
     </div>
   );
 }
