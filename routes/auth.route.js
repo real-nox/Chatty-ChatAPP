@@ -16,7 +16,7 @@ authR.get("/me", async(req, res) => {
     if (req?.session?.userId) {
         const {display_name, id, username} = await getUserById(req?.session?.userId)
 
-        res.json({ id: id, display_name: display_name, username:    username, avatar: null, prescence: true })
+        res.json({ id: id, display_name: display_name, username:    username, avatar: null, presence: true })
     } else
         res.json(false)
 })

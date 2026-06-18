@@ -73,7 +73,7 @@
 
 .SideBar.closed {
     transform: translateX(-100%);
-    margin-left: -20vw;
+    margin-left: -18vw;
 }
 
 /*Chat Side*/
@@ -425,16 +425,19 @@ emoji-picker {
 }
 
 .AddFriend .SearchBar {
-    width: 90%;
+    width: 100%;
+    padding: 0rem 1rem;
     display: flex;
-    justify-content: center;
+    align-items: center;
     flex-direction: column;
-    padding-bottom: 1rem;
 }
 
-.AddFriend .SearchBar .Bar input {
-    border-radius: 10px;
-    background-color: var(--own-bubble-bg-color-s);
+.AddFriend .SearchBar .Bar {
+    width: 90%;
+}
+
+.AddFriend .SearchBar .Bar label {
+    background-color: var(--bg-color);
 }
 
 .Users {

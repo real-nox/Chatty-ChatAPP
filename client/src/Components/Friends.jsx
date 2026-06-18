@@ -230,15 +230,18 @@ export default function FriendsComponent({
             <div className="AddFriend">
               <div className="SearchBar">
                 <div className="Bar">
-                  <Search />
-                  <input
-                    type="text"
-                    placeholder="Search conversations..."
-                    value={searchInput}
-                    onChange={(ev) =>
-                      setSearchInput(SanitizeInput(ev.target.value))
-                    }
-                  />
+                  <label htmlFor="search">
+                    <Search />
+                    <input
+                      type="text"
+                      id="search"
+                      placeholder="Search conversations..."
+                      value={searchInput}
+                      onInput={(ev) =>
+                        setSearchInput(SanitizeInput(ev.target.value))
+                      }
+                    />
+                  </label>
                 </div>
               </div>
               <div className="UsersList">

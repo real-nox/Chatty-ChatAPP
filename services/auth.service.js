@@ -36,7 +36,6 @@ export const login_s = async (userInfo) => {
 
     const IsPassWord = bcrypt.compareSync(pwd, FoundUser.password)
 
-    console.log(IsPassWord)
     if (!IsPassWord)
         return { success: false, error: "Email or Password is incorrect." }
 

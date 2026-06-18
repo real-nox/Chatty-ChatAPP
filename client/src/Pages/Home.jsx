@@ -59,6 +59,7 @@ export default function Home() {
   const firstLoad = useRef(true);
   const messagesEndRef = useRef(null);
   const prevLen = useRef(0);
+  const userID = useRef(null)
 
   const navigate = useNavigate();
 
@@ -77,7 +78,7 @@ export default function Home() {
           display_name: user.display_name,
           id: user.id,
           username: user.username,
-          presence: user.prescence,
+          presence: user.presence,
         });
         setUserId(isUser);
       }
@@ -110,9 +111,9 @@ export default function Home() {
 
     return () => socket.off("friendRequestAccepted");
   }, []);
+  
   //WebSocket connection
   useEffect(() => {
-    if (!me.id) return
     socket.connect();
     socket.on("connect", (s) =>
       console.log("Connected to server : ", socket.id),
@@ -214,16 +215,16 @@ export default function Home() {
     const handleSeenMsg = async ({ message_id }) => {
       setMessageList((prev) => {
         return prev.map((mg) =>
-          mg.id == message_id ? { ...mg, seen: 1 } : mg,
+          mg.id === message_id ? { ...mg, seen: 1 } : mg,
         );
       });
     };
 
-    const handleAllSeen = async ({}) => {
+    const handleAllSeen = async () => {
       setMessageList((prev) => {
         if (!prev) return [];
         return (prev ?? []).map((mg) =>
-          mg.sender_id == userId ? { ...mg, seen: 1 } : mg,
+          mg.sender_id === userID.current ? { ...mg, seen: 1 } : mg,
         );
       });
 
@@ -233,10 +234,10 @@ export default function Home() {
       });
     };
 
-    const handleAllSeenReader = async ({}) => {
+    const handleAllSeenReader = async () => {
       setMessageList((prev) => {
         return (prev ?? []).map((mg) =>
-          mg.sender_id != userId ? { ...mg, seen: 1 } : mg,
+          mg.sender_id !== userID.current ? { ...mg, seen: 1 } : mg,
         );
       });
     };
@@ -311,20 +312,20 @@ export default function Home() {
     };
 
     const handleOffline = (data) => {
-      handleFriendPresence({ userId: data.userId, presence: "offline" });
+      handleFriendpresence({ userId: data.userId, presence: "offline" });
     };
 
     const handleOnline = (data) => {
-      handleFriendPresence({ userId: data.userId, presence: "online" });
+      handleFriendpresence({ userId: data.userId, presence: "online" });
     };
 
-    const handleFriendPresence = ({ userId, presence }) => {
+    const handleFriendpresence = ({ userId, presence }) => {
       setFriendList((prev) => {
         const updated = { ...prev };
         if (updated[userId]) {
           updated[userId] = {
             ...updated[userId],
-            presence: presence == "online" ? true : false,
+            presence: presence === "online" ? true : false,
           };
         }
 
@@ -351,8 +352,7 @@ export default function Home() {
     setCurrentChannel(channel);
     setCurrentFriend({
       id: id,
-      username,
-      username,
+      username: username,
       display_name: display_name,
     });
 
@@ -424,7 +424,7 @@ export default function Home() {
 
         if (data) {
           setRequestUsers(data);
-          setReqNumb(requestUsers.length);
+          setReqNumb(data.length);
         }
       } catch (err) {
         console.error(err);
@@ -432,7 +432,7 @@ export default function Home() {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [requestUsers]);
+  }, []);
 
   useEffect(() => {
     if (requestUsers.length <= prevLen.current) {
@@ -463,6 +463,10 @@ export default function Home() {
       });
     }
   }, [requestUsers]);
+
+  useEffect(() => {
+    userID.current = userId
+  }, [userId])
   return (
     <div className="HomeContainer">
       <SideBar

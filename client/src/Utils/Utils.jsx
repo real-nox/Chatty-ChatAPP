@@ -86,7 +86,7 @@ export const formatedDateMsg = (timestamp) => {
 
   if (isToday) return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
 
-    if (isYesterday) return date.toLocaleTimeString([], { day:"2-digit", hour: "2-digit", minute: "2-digit" })
+    if (isYesterday) return "Yesterday | " + date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
 
     return date.toLocaleDateString([], { day: "2-digit", month: "short" });
 };
