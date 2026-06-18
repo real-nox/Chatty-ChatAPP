@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
-import "../css/Auth.css";
-import { Link, useNavigate } from "react-router-dom";
 import { getUser, SanitizeInput } from "../utils/Utils";
+import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import Avatar from '../assets/avatar.png'
+import "../css/Auth.css";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -57,7 +58,7 @@ export default function Login() {
           <div className="InfoContainer">
             <form onSubmit={(ev) => submitLogin(ev)}>
               <Link to="/">
-                <img src="../../../img/icon.png" alt="broken" />
+                <img src={Avatar} alt="broken" />
                 Chatty
               </Link>
               <div className="Welcome">

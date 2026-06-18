@@ -3,6 +3,8 @@ import { getFriendsList, SanitizeInput } from "../utils/Utils";
 import { useEffect, useRef, useState } from "react";
 import socket from "../utils/Socket";
 
+import Avatar from "../assets/avatar.png";
+
 export default function FriendsComponent({
   isFriendCard,
   setIsFriendCard,
@@ -260,9 +262,7 @@ export default function FriendsComponent({
                         <div className="FriendTemplate" key={id} id={id}>
                           <div className="IconFR">
                             <img
-                              src={
-                                avatar ? `${avatar}` : "../../img/avatar.png"
-                              }
+                              src={avatar ? `${avatar}` : Avatar}
                               alt="Avatar"
                             />
                           </div>
@@ -285,9 +285,7 @@ export default function FriendsComponent({
                         <div className="FriendTemplate" key={id} id={id}>
                           <div className="IconFR">
                             <img
-                              src={
-                                avatar ? `${avatar}` : "../../img/avatar.png"
-                              }
+                              src={avatar ? `${avatar}` : Avatar}
                               alt="Avatar"
                             />
                           </div>
@@ -322,9 +320,7 @@ export default function FriendsComponent({
                         <div className="FriendTemplate" key={id} id={id}>
                           <div className="IconFR">
                             <img
-                              src={
-                                avatar ? `${avatar}` : "../../img/avatar.png"
-                              }
+                              src={avatar ? `${avatar}` : Avatar}
                               alt="Avatar"
                             />
                           </div>

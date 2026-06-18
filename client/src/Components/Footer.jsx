@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import Logo from "../assets/icon.png";
 
 export default function Footer() {
   return (
@@ -7,7 +8,7 @@ export default function Footer() {
         <div className="PartTopFooter">
           <div className="topPart">
             <Link to="/">
-              <img src="../img/icon.png" alt="Chatty" />
+              <img src={Logo} alt="Chatty" />
               <h3>Chatty</h3>
             </Link>
           </div>
@@ -23,7 +24,7 @@ export default function Footer() {
             <h3>Product</h3>
           </div>
           <div className="centerPart">
-              <Link to="/features">Features</Link>
+            <Link to="/features">Features</Link>
           </div>
         </div>
         <div className="PartTopFooter">
@@ -31,7 +32,7 @@ export default function Footer() {
             <h3>Company</h3>
           </div>
           <div className="centerPart">
-              <Link to="/about">About us</Link>
+            <Link to="/about">About us</Link>
           </div>
         </div>
         <div className="PartTopFooter">
@@ -39,8 +40,8 @@ export default function Footer() {
             <h3>Legal</h3>
           </div>
           <div className="centerPart">
-              <Link>Privacy Policy</Link>
-              <Link>Terms of Service</Link>
+            <Link>Privacy Policy</Link>
+            <Link>Terms of Service</Link>
           </div>
         </div>
       </div>

@@ -1,8 +1,9 @@
 import { LogOut, Search, Settings, UserPlus } from "lucide-react";
 import { formatedDate, SanitizeInput } from "../utils/Utils";
 import { useEffect, useMemo, useState } from "react";
-import "../css/SideBar.css";
 import { useNavigate } from "react-router-dom";
+import Avatar from "../assets/avatar.png";
+import "../css/SideBar.css";
 
 export default function SideBar({
   friendList,
@@ -82,78 +83,71 @@ export default function SideBar({
         </div>
       </div>
       <div className="FriendsList">
-        {pageLoading ? (
-          [...Array(Math.floor(Math.random()) + 5)].map((_, i) => (
-            <button
-              className="FriendTemplate Loading"
-            >
-              <div className="Icon">
-              </div>
-              <div className="Center">
-                <div className="dis1"></div>
-                <div className="dis1"></div>
-              </div>
-            </button>))
-        ) : (
-          search &&
-          search.map(
-            ([
-              id,
-              {
-                created_at,
-                display_name,
-                last_message,
-                seen,
-                sender_id,
-                unseen_count,
-                username,
-                avatar = null,
-                presence = false,
-              },
-            ]) => {
-              return (
-                <button
-                  className={`FriendTemplate ${currentfriend.id == id ? "selectedBTN" : ""}`}
-                  key={id}
-                  id={id}
-                  onClick={() =>
-                    openConversation({
-                      id: id,
-                      username: username,
-                      display_name: display_name,
-                    })
-                  }
-                >
-                  <div className="Icon">
-                    <img
-                      src={avatar ? `${avatar}` : "../../img/avatar.png"}
-                      alt="Avatar"
-                    />
-                    <div
-                      className={`activity ${presence ? "online" : "offline"}`}
-                    >
-                      <div className="dot"></div>
+        {pageLoading
+          ? [...Array(Math.floor(Math.random()) + 5)].map((_, i) => (
+              <button className="FriendTemplate Loading">
+                <div className="Icon"></div>
+                <div className="Center">
+                  <div className="dis1"></div>
+                  <div className="dis1"></div>
+                </div>
+              </button>
+            ))
+          : search &&
+            search.map(
+              ([
+                id,
+                {
+                  created_at,
+                  display_name,
+                  last_message,
+                  seen,
+                  sender_id,
+                  unseen_count,
+                  username,
+                  avatar = null,
+                  presence = false,
+                },
+              ]) => {
+                return (
+                  <button
+                    className={`FriendTemplate ${currentfriend.id == id ? "selectedBTN" : ""}`}
+                    key={id}
+                    id={id}
+                    onClick={() =>
+                      openConversation({
+                        id: id,
+                        username: username,
+                        display_name: display_name,
+                      })
+                    }
+                  >
+                    <div className="Icon">
+                      <img src={avatar ? `${avatar}` : Avatar} alt="Avatar" />
+                      <div
+                        className={`activity ${presence ? "online" : "offline"}`}
+                      >
+                        <div className="dot"></div>
+                      </div>
                     </div>
-                  </div>
-                  <div className="Center">
-                    <h4>{display_name}</h4>
-                    {friendisTyping.ongoing ? (
-                      <p>{`${currentfriend.display_name} Writing ${".".repeat(friendisTyping.dots)}`}</p>
-                    ) : (
-                      <p>{last_message}</p>
-                    )}
-                  </div>
-                  <div className="Right">
-                    <p>{formatedDate(created_at)}</p>
-                    {unseen_count > 0 && (
-                      <div className="Badge">{unseen_count}</div>
-                    )}
-                  </div>
-                </button>
-              );
-            },
-          )
-        )}
+                    <div className="Center">
+                      <h4>{display_name}</h4>
+                      {friendisTyping.ongoing ? (
+                        <p>{`${currentfriend.display_name} Writing ${".".repeat(friendisTyping.dots)}`}</p>
+                      ) : (
+                        <p>{last_message}</p>
+                      )}
+                    </div>
+                    <div className="Right">
+                      <p>{formatedDate(created_at)}</p>
+                      {unseen_count > 0 && (
+                        <div className="Badge">{unseen_count}</div>
+                      )}
+                    </div>
+                  </button>
+                );
+              },
+            )}
       </div>
       <div className="OwnBar">
         <div className={`Options ${isActive ? "active" : ""}`}>
@@ -173,10 +167,7 @@ export default function SideBar({
           id={me.id}
         >
           <div className="Icon">
-            <img
-              src={me.avatar ? `${me.avatar}` : "../../img/avatar.png"}
-              alt="Avatar"
-            />
+            <img src={me.avatar ? `${me.avatar}` : Avatar} alt="Avatar" />
             <div className={`activity ${me.presence ? "online" : "offline"}`}>
               <div className="dot"></div>
             </div>

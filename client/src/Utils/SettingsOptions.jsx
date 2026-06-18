@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
 import { setTheme as applyTheme } from "./Utils";
+import { useEffect, useState } from "react";
 
-export function Appearance({theme, setTheme}) {
+export function Appearance({ theme, setTheme }) {
   const [currentTheme, setCurrentTheme] = useState(1);
 
   const toggleTheme = async (n) => {
@@ -10,29 +10,32 @@ export function Appearance({theme, setTheme}) {
 
       switch (n) {
         case 0:
-          await applyTheme("Light")
-          setTheme("Light")
+          await applyTheme("Light");
+          setTheme("Light");
           break;
         case 1:
-          await applyTheme("Dark")
-          setTheme("Dark")
+          await applyTheme("Dark");
+          setTheme("Dark");
           break;
         case 2:
-          const matched = window.matchMedia("(prefers-color-scheme: dark)").matches ? "Dark" : "Light"
-          await applyTheme(matched)
-          setTheme(matched)
+          const matched = window.matchMedia("(prefers-color-scheme: dark)")
+            .matches
+            ? "Dark"
+            : "Light";
+          await applyTheme(matched);
+          setTheme(matched);
           break;
       }
     }
   };
 
   useEffect(() => {
-    if(theme === 'Dark') {
-      setCurrentTheme(1)
+    if (theme === "Dark") {
+      setCurrentTheme(1);
     } else {
-      setCurrentTheme(0)
+      setCurrentTheme(0);
     }
-  }, [theme])
+  }, [theme]);
 
   return (
     <div className="appearance">

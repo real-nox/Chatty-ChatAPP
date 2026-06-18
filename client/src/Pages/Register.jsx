@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
-import "../css/Auth.css";
-import { Link, useNavigate } from "react-router-dom";
 import { getUser, SanitizeInput } from "../utils/Utils";
+import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import Avatar from "../assets/avatar.png";
+import "../css/Auth.css";
 
 export default function Register() {
   const [displayn, setDisplayn] = useState("");
@@ -23,7 +24,7 @@ export default function Register() {
 
   useEffect(() => {
     document.title = "Sign in | Chatty - Chat App";
-    
+
     const checkUser = async () => {
       const isUser = await getUser();
 
@@ -203,7 +204,7 @@ export default function Register() {
           <div className="InfoContainer">
             <form onSubmit={(ev) => submitRegister(ev)}>
               <Link to="/">
-                <img src="../../../img/icon.png" alt="Chatty" />
+                <img src={Avatar} alt="Chatty" />
                 Chatty
               </Link>
               <div className="Welcome">

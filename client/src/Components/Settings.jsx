@@ -1,9 +1,14 @@
-import { Palette, User } from "lucide-react";
-import "../css/Settings.css";
-import { useState } from "react";
 import { Appearance } from "../utils/SettingsOptions";
+import { Palette, User } from "lucide-react";
+import { useState } from "react";
+import "../css/Settings.css";
 
-export default function Settings({ isSettings, toggleSettingssbar, theme, setTheme }) {
+export default function Settings({
+  isSettings,
+  toggleSettingssbar,
+  theme,
+  setTheme,
+}) {
   const [type, setType] = useState(0);
 
   const Setting = (numb) => setType(numb);
@@ -13,7 +18,7 @@ export default function Settings({ isSettings, toggleSettingssbar, theme, setThe
       case 0:
         return <p>Coming soon</p>;
       case 1:
-        return <Appearance theme={theme} setTheme={setTheme}/>;
+        return <Appearance theme={theme} setTheme={setTheme} />;
 
       default:
         return null;
@@ -47,7 +52,9 @@ export default function Settings({ isSettings, toggleSettingssbar, theme, setThe
               </div>
             </div>
           </div>
-          <div className="Sets"><SettingOpt /></div>
+          <div className="Sets">
+            <SettingOpt />
+          </div>
         </div>
       </div>
     </div>

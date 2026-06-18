@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { getUser } from "../Utils/Utils";
+import Logo from '../assets/icon.png'
 
 export default function Topbar() {
   const [IsLogged, setIsLogged] = useState(false);
@@ -19,7 +20,7 @@ export default function Topbar() {
     <div className="Topbar">
       <div className="Leftbar">
         <Link to="/">
-          <img src="../img/icon.png" alt="Chatty" />
+          <img src={Logo} alt="Chatty" />
           Chatty
         </Link>
       </div>
