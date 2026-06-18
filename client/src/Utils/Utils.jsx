@@ -28,7 +28,7 @@ export const getFullUser = async () => {
     });
 
     const response = await result.json();
-    
+
     if (response) return response;
     else return false;
   } catch (err) {
@@ -56,37 +56,88 @@ export const getFriendsList = async () => {
 };
 
 export const formatedDate = (timestamp) => {
-  const date = new Date(timestamp)
-  const now = new Date()
+  const date = new Date(timestamp);
+  const now = new Date();
 
-  const isToday = date.toDateString() === now.toDateString()
+  const isToday = date.toDateString() === now.toDateString();
 
-  const yesterday = new Date(now)
-  yesterday.setDate(now.getDate() - 1)
+  const yesterday = new Date(now);
+  yesterday.setDate(now.getDate() - 1);
 
-  const isYesterday = date.toDateString() === yesterday.toDateString()
+  const isYesterday = date.toDateString() === yesterday.toDateString();
 
-  if (isToday) return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+  if (isToday)
+    return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
 
-    if (isYesterday) return "Yesterday"
+  if (isYesterday) return "Yesterday";
 
-    return date.toLocaleDateString([], { day: "2-digit", month: "short" });
+  return date.toLocaleDateString([], { day: "2-digit", month: "short" });
 };
 
 export const formatedDateMsg = (timestamp) => {
-  const date = new Date(timestamp)
-  const now = new Date()
+  const date = new Date(timestamp);
+  const now = new Date();
 
-  const isToday = date.toDateString() === now.toDateString()
+  const isToday = date.toDateString() === now.toDateString();
 
-  const yesterday = new Date(now)
-  yesterday.setDate(now.getDate() - 1)
+  const yesterday = new Date(now);
+  yesterday.setDate(now.getDate() - 1);
 
-  const isYesterday = date.toDateString() === yesterday.toDateString()
+  const isYesterday = date.toDateString() === yesterday.toDateString();
 
-  if (isToday) return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+  if (isToday)
+    return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
 
-    if (isYesterday) return "Yesterday | " + date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+  if (isYesterday)
+    return (
+      "Yesterday | " +
+      date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+    );
 
-    return date.toLocaleDateString([], { day: "2-digit", month: "short" });
+  return date.toLocaleDateString([], { day: "2-digit", month: "short" });
+};
+
+export const getTheme = async () => {
+  try {
+    const response = await fetch(
+      `${import.meta.env.VITE_PATH_SERVER}/auth/theme`,
+      {
+        credentials: "include",
+        method: "GET",
+      },
+    );
+
+    const data = await response.json();
+
+    if (data.success) {
+      if (data.theme === "dark") return "Dark";
+      else return "Light";
+    }
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+export const setTheme = async (theme) => {
+  try {
+    console.log(theme.toLowerCase())
+    const response = await fetch(
+      `${import.meta.env.VITE_PATH_SERVER}/auth/theme`,
+      {
+        credentials: "include",
+        method: "PATCH",
+        body: JSON.stringify({theme: theme.toLowerCase()}),
+        headers: { "Content-Type": "application/json" },
+      },
+    );
+
+    const data = await response.json();
+
+    if (data.success) {
+      if (data.theme === "dark") return "Dark";
+      else return "Light";
+    }
+  } catch (err) {
+    console.error(err);
+  }
 };

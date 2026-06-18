@@ -84,7 +84,7 @@ export const user_get_c = async (req, res, next) => {
 
 export const user_get_theme_c = async (req, res, next) => {
     try {
-        let user_id = req?.body?.user_id
+        let user_id = req?.session?.userId
 
         let theme = await auth_service.getUserTheme_s(user_id)
 
@@ -96,7 +96,7 @@ export const user_get_theme_c = async (req, res, next) => {
 
 export const user_set_theme_c = async (req, res, next) => {
     try {
-        let user_id = req?.body?.user_id
+        let user_id = req?.session?.userId
         let theme = req?.body?.theme
 
         let result = await auth_service.setUserTheme_s(user_id, theme)

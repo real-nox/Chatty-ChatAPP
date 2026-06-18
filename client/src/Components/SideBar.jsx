@@ -13,7 +13,8 @@ export default function SideBar({
   toggleFriendsbar,
   reqNumb,
   me,
-  settings
+  settings,
+  pageLoading,
 }) {
   const [searchInput, setSearchInput] = useState("");
   const [isActive, setIsActive] = useState(false);
@@ -46,7 +47,7 @@ export default function SideBar({
         credentials: "include",
       });
 
-      console.log(response)
+      console.log(response);
       const data = await response.json();
 
       if (data) {
@@ -81,7 +82,20 @@ export default function SideBar({
         </div>
       </div>
       <div className="FriendsList">
-        {search &&
+        {pageLoading ? (
+          [...Array(Math.floor(Math.random()) + 5)].map((_, i) => (
+            <button
+              className="FriendTemplate Loading"
+            >
+              <div className="Icon">
+              </div>
+              <div className="Center">
+                <div className="dis1"></div>
+                <div className="dis1"></div>
+              </div>
+            </button>))
+        ) : (
+          search &&
           search.map(
             ([
               id,
@@ -138,7 +152,8 @@ export default function SideBar({
                 </button>
               );
             },
-          )}
+          )
+        )}
       </div>
       <div className="OwnBar">
         <div className={`Options ${isActive ? "active" : ""}`}>

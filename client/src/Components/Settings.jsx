@@ -3,7 +3,7 @@ import "../css/Settings.css";
 import { useState } from "react";
 import { Appearance } from "../utils/SettingsOptions";
 
-export default function Settings({ isSettings, toggleSettingssbar }) {
+export default function Settings({ isSettings, toggleSettingssbar, theme, setTheme }) {
   const [type, setType] = useState(0);
 
   const Setting = (numb) => setType(numb);
@@ -13,7 +13,7 @@ export default function Settings({ isSettings, toggleSettingssbar }) {
       case 0:
         return <p>Coming soon</p>;
       case 1:
-        return <Appearance />;
+        return <Appearance theme={theme} setTheme={setTheme}/>;
 
       default:
         return null;

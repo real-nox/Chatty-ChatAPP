@@ -193,7 +193,7 @@
 
 .SideBar .OwnBar {
     background-color: transparent;
-    height: 9.5vh;
+    height: 9.9vh;
     overflow: hidden;
 }
 
@@ -264,4 +264,52 @@
 
 .SideBar .OwnBar .FriendTemplate .Center {
     width: 70%;
+}
+
+/* Loading */
+
+.FriendTemplate.Loading .Icon {
+    width: 50px;
+    height: 48px;
+    border-radius: 100%;
+    background-color: var(--bg-color-input);
+    animation: loading 1.6s ease-in-out infinite;
+}
+
+.FriendTemplate.Loading .Center {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.FriendTemplate.Loading .Center .dis1 {
+    width: 80%;
+    background: var(--bubble-bg-color-s);
+    border-radius: 6px;
+    animation: loading 1.6s ease-in-out infinite;
+    height: 15%;
+}
+
+.FriendTemplate.Loading .Center .dis1:nth-child(2) {
+    animation-delay: .2s;
+    width: 50%;
+}
+
+.FriendTemplate.Loading .Center .dis1:nth-child(3) {
+    animation-delay: .4s;
+    width: 10%;
+}
+
+
+@keyframes loading {
+
+    0%,
+    100% {
+        opacity: .4;
+    }
+
+    50% {
+        opacity: 1;
+    }
 }

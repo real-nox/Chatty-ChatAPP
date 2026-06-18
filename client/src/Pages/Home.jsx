@@ -7,6 +7,7 @@ import {
   formatedDateMsg,
   getFriendsList,
   getFullUser,
+  getTheme,
   getUser,
   SanitizeInput,
 } from "../utils/Utils";
@@ -22,6 +23,7 @@ export default function Home() {
   const [currentChannel, setCurrentChannel] = useState("");
   const [friendList, setFriendList] = useState([]);
   const [messageList, setMessageList] = useState([]);
+  const [theme, setTheme] = useState("");
 
   const [input, setInput] = useState("");
 
@@ -45,6 +47,8 @@ export default function Home() {
     dots: 1,
   });
 
+  const [pageLoading, setPageLoading] = useState(false);
+  const [contentLoading, setContentLoading] = useState(true)
   const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(true);
   const [isFriendCard, setIsFriendCard] = useState(false);
@@ -67,8 +71,20 @@ export default function Home() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    const Themes = async () => {
+      setTheme(await getTheme());
+    };
+    Themes();
+  }, []);
+
+  useEffect(() => {
+    if (!theme) return;
+    document.documentElement.setAttribute("data-theme", theme);
+    setContentLoading(false)
+  }, [theme]);
+
+  useEffect(() => {
     document.title = "Home | Chatty - Chat App";
-    document.documentElement.setAttribute("data-theme", "Dark");
 
     const checkUser = async () => {
       const isUser = await getUser();
@@ -94,7 +110,13 @@ export default function Home() {
       setFriendList(data);
     };
 
+    setPageLoading(true);
     getList();
+    const timeout = setTimeout(() => {
+      setPageLoading(false)
+    }, 1000)
+
+    return () => clearTimeout(timeout)
   }, []);
 
   useEffect(() => {
@@ -448,7 +470,6 @@ export default function Home() {
     }
 
     prevLen.current = requestUsers.length;
-    console.log(typeof requestUsers, requestUsers);
     const notify = () => {
       const latest_user = requestUsers[requestUsers.length - 1];
       const noti = new Notification("New Friend Request", {
@@ -480,7 +501,7 @@ export default function Home() {
   };
 
   return (
-    <div className="HomeContainer">
+    <div className={`HomeContainer ${contentLoading ? "Loading" : ""}`}>
       <SideBar
         currentfriend={currentfriend}
         friendisTyping={friendisTyping}
@@ -491,8 +512,8 @@ export default function Home() {
         reqNumb={reqNumb}
         me={me}
         settings={settings}
+        pageLoading={pageLoading}
       />
-
       <ChatChannel
         Typing={Typing}
         currentfriend={currentfriend}
@@ -507,7 +528,6 @@ export default function Home() {
         toggleSidebar={toggleSidebar}
         isOpen={isOpen}
       />
-
       {isFriendCard && (
         <FriendsComponent
           isFriendCard={isFriendCard}
@@ -522,8 +542,14 @@ export default function Home() {
           type={type}
         />
       )}
-
-      {isSettings && <Settings isSettings={isSettings} toggleSettingssbar={toggleSettingssbar} />}
+      {isSettings && (
+        <Settings
+          isSettings={isSettings}
+          toggleSettingssbar={toggleSettingssbar}
+          theme={theme}
+          setTheme={setTheme}
+        />
+      )}
     </div>
   );
 }
