@@ -48,7 +48,7 @@ export const logout_c = async (req, res, next) => {
     req.session.destroy((err) => {
         if (err) return next(err)
         res.clearCookie("connect.sid")
-        return res.redirect("/auth/login")
+        return res.json(true)
     })
 }
 

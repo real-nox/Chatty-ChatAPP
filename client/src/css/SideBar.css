@@ -119,11 +119,13 @@
 }
 
 .FriendTemplate .Icon img {
-    width: 70%;
+    width: 80%;
+    border-radius: 100%;
+    background-color: rgb(110, 110, 110);
 }
 
 .Icon .activity {
-    width: 90%;
+    width: 100%;
     height: 1rem;
     display: flex;
     justify-content: end;
@@ -192,6 +194,66 @@
 .SideBar .OwnBar {
     background-color: transparent;
     height: 9.5vh;
+    overflow: hidden;
+}
+
+.SideBar .OwnBar .Options {
+    overflow: hidden;
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    bottom: 8.3%;
+    width: 100%;
+    height: 0;
+    opacity: 0;
+    transition: height 0.5s ease-in-out, opacity 0.5s ease-in-out;
+    z-index: -999;
+}
+
+.SideBar .OwnBar .Options.active {
+    opacity: 1;
+    z-index: 0;
+    height: max-content;
+}
+
+.SideBar .OwnBar .Options .Settings {
+    margin: 0.5rem;
+    background-color: var(--bg-color-input);
+    width: 95%;
+    display: flex;
+    flex-direction: column;
+    height: 90%;
+    border-radius: 15px;
+    box-shadow: 0px 0px 15px rgba(41, 41, 41, 0.192);
+    overflow: hidden;
+}
+
+.SideBar .OwnBar .Options .Settings button {
+    overflow: hidden;
+    background-color: transparent;
+    color: var(--text-color);
+    border: 0;
+    font-size: 1em;
+    padding: 0.8rem 1.2rem;
+    cursor: pointer;
+    text-align: start;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.SideBar .OwnBar .Options .Settings button:hover {
+    background-color: var(--svg-bg-color);
+}
+
+.SideBar .OwnBar .Options .Settings .logout {
+    color: rgb(228, 114, 114);
+}
+
+.SideBar .OwnBar .Options .Settings .logout:hover {
+    background-color: rgb(255, 213, 213);
 }
 
 .SideBar .OwnBar .FriendTemplate {

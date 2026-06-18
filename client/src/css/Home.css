@@ -1,6 +1,10 @@
 :root[data-theme="Light"] {
     --bg-color: rgb(255, 255, 255);
-    --sidebar-border-color: rgba(206, 206, 206, 0.527);
+    --chat-bg-color: rgb(236, 236, 236);
+
+    --fr-btn-bg-color: rgb(238, 238, 238);
+
+    --sidebar-border-color: rgba(94, 94, 94, 0.527);
     --svg-bg-color: rgb(197, 197, 197);
     --text-color: black;
     --hover-template: #e7e7e7;
@@ -23,6 +27,10 @@
 
 :root[data-theme="Dark"] {
     --bg-color: rgb(49, 49, 49);
+    --chat-bg-color: rgb(77, 77, 77);
+
+    --fr-btn-bg-color: rgb(41, 41, 41);
+    
     --sidebar-border-color: rgb(211, 211, 211);
     --svg-bg-color: rgb(197, 197, 197);
     --text-color: rgb(255, 255, 255);
@@ -53,7 +61,7 @@
 
 .SideBar {
     height: 100vh;
-    width: 20vw;
+    width: 18vw;
     display: flex;
     flex-direction: column;
 
@@ -81,11 +89,12 @@
 }
 
 .RightSection {
-    width: 80vw;
+    width: 82vw;
     height: 100%;
     display: grid;
     grid-template-rows: auto 1fr auto auto;
     transition: width 0.3s ease;
+    background-color: var(--chat-bg-color);
 }
 
 .RightSection.expanded {
@@ -93,13 +102,19 @@
 }
 
 .RightSection.Empty {
+    background-color: var(--chat-bg-color);
+}
+
+.RightSection.Empty .TopBarUser,
+.RightSection.Empty .Messages,
+.RightSection.Empty .Chat,
+.RightSection.Empty .Bar {
     display: none;
 }
 
 .RightSection .TopBarUser {
     border-bottom: 1px solid var(--sidebar-border-color);
     height: 7.9vh;
-    background-color: var(--bg-color);
     display: flex;
     justify-content: space-between;
     padding: 0 2rem;
@@ -126,7 +141,6 @@
 }
 
 .RightSection .Messages {
-    background-color: var(--bg-color);
     overflow-y: auto;
     scroll-behavior: smooth;
     flex-direction: column;
@@ -178,6 +192,7 @@
     background-color: var(--sidebar-border-color);
     border-radius: 100px;
 }
+
 /* Messages */
 
 .Messages {
@@ -246,7 +261,7 @@
 
 .skel {
     width: 40%;
-    background: #e8e8e8;
+    background: var(--bubble-bg-color-s);
     border-radius: 6px;
     animation: loading 1.6s ease-in-out infinite;
     height: 3%;

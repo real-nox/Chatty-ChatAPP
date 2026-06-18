@@ -72,7 +72,6 @@ export default function Home() {
       if (!isUser) return navigate("/");
       else {
         const user = await getFullUser();
-        console.log(user);
         setMe({
           avatar: user.avatar,
           display_name: user.display_name,
@@ -113,6 +112,7 @@ export default function Home() {
   }, []);
   //WebSocket connection
   useEffect(() => {
+    if (!me.id) return
     socket.connect();
     socket.on("connect", (s) =>
       console.log("Connected to server : ", socket.id),

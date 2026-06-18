@@ -27,7 +27,6 @@ export default function Login() {
   const submitLogin = async (ev) => {
     ev.preventDefault();
     try {
-      console.log(remember_me);
       const result = await fetch(
         `${import.meta.env.VITE_PATH_SERVER}/auth/login`,
         {

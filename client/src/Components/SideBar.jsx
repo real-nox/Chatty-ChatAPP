@@ -1,7 +1,8 @@
-import { Search, UserPlus } from "lucide-react";
+import { LogOut, Search, Settings, UserPlus } from "lucide-react";
 import { formatedDate, SanitizeInput } from "../utils/Utils";
 import { useEffect, useMemo, useState } from "react";
 import "../css/SideBar.css";
+import { useNavigate } from "react-router-dom";
 
 export default function SideBar({
   friendList,
@@ -14,6 +15,9 @@ export default function SideBar({
   me,
 }) {
   const [searchInput, setSearchInput] = useState("");
+  const [isActive, setIsActive] = useState(false);
+
+  const navigate = useNavigate();
 
   const search = useMemo(() => {
     const query = searchInput.trim().toLowerCase();
@@ -32,7 +36,25 @@ export default function SideBar({
     return filtered;
   }, [searchInput, friendList]);
 
-  console.log(me);
+  const logout = async () => {
+    const link = `${import.meta.env.VITE_PATH_SERVER}/auth/logout`;
+
+    try {
+      const response = await fetch(link, {
+        method: "GET",
+        credentials: "include",
+      });
+
+      console.log(response)
+      const data = await response.json();
+
+      if (data) {
+        navigate("/login");
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   return (
     <div className={`SideBar ${!isOpen ? "closed" : ""}`}>
@@ -118,7 +140,22 @@ export default function SideBar({
           )}
       </div>
       <div className="OwnBar">
-        <button className="FriendTemplate" key={me.id} id={me.id}>
+        <div className={`Options ${isActive ? "active" : ""}`}>
+          <div className="Settings">
+            <button>
+              <Settings /> Settings
+            </button>
+            <button className="logout" onClick={logout}>
+              <LogOut /> Logout
+            </button>
+          </div>
+        </div>
+        <button
+          onClick={() => setIsActive(!isActive)}
+          className="FriendTemplate"
+          key={me.id}
+          id={me.id}
+        >
           <div className="Icon">
             <img
               src={me.avatar ? `${me.avatar}` : "../../img/avatar.png"}
