@@ -1,0 +1,20 @@
+.FriendTemplate,
+.FriendsList .FriendTemplate {
+    display: flex;
+    align-items: center;
+
+    border: 0px;
+    padding-top: 10px;
+    flex-shrink: 0;
+    background-color: var(--bg-color);
+    transition: background-color 0.7s ease;
+    cursor: pointer;
+}
+
+.SideBar .OwnBar {
+    background-color: transparent;
+}
+
+.SideBar .OwnBar .FriendTemplate {
+    border-top: 1px solid var(--sidebar-border-color);
+}

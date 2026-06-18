@@ -6,6 +6,7 @@ import {
   formatedDate,
   formatedDateMsg,
   getFriendsList,
+  getFullUser,
   getUser,
   SanitizeInput,
 } from "../utils/Utils";
@@ -30,6 +31,14 @@ export default function Home() {
     avatar: null,
   });
 
+  const [me, setMe] = useState({
+    id: null,
+    display_name: null,
+    username: null,
+    avatar: null,
+    presence: true,
+  });
+
   const [friendisTyping, setFriendisTyping] = useState({
     ongoing: false,
     dots: 1,
@@ -40,8 +49,8 @@ export default function Home() {
   const [isFriendCard, setIsFriendCard] = useState(false);
 
   const [requestUsers, setRequestUsers] = useState([]);
-  const [reqNumb, setReqNumb] = useState(0)
-  
+  const [reqNumb, setReqNumb] = useState(0);
+
   const [type, setType] = useState(0);
 
   const timeout = useRef(null);
@@ -61,7 +70,18 @@ export default function Home() {
       const isUser = await getUser();
 
       if (!isUser) return navigate("/");
-      else setUserId(isUser);
+      else {
+        const user = await getFullUser();
+        console.log(user);
+        setMe({
+          avatar: user.avatar,
+          display_name: user.display_name,
+          id: user.id,
+          username: user.username,
+          presence: user.prescence,
+        });
+        setUserId(isUser);
+      }
     };
 
     checkUser();
@@ -76,21 +96,21 @@ export default function Home() {
 
   useEffect(() => {
     socket.on("friendRequestAccepted", async () => {
-      const updatedList = await getFriendsList()
-      setFriendList(prev => ({
+      const updatedList = await getFriendsList();
+      setFriendList((prev) => ({
         ...updatedList,
         ...Object.keys(updatedList).reduce((acc, id) => {
           acc[id] = {
             ...updatedList[id],
-            presence: prev[id]?.presence ?? updatedList[id]?.presence
-          }
-          return acc
-        }, {})
-      }))
-    })
+            presence: prev[id]?.presence ?? updatedList[id]?.presence,
+          };
+          return acc;
+        }, {}),
+      }));
+    });
 
-    return () => socket.off("friendRequestAccepted")
-  }, [])
+    return () => socket.off("friendRequestAccepted");
+  }, []);
   //WebSocket connection
   useEffect(() => {
     socket.connect();
@@ -201,7 +221,7 @@ export default function Home() {
 
     const handleAllSeen = async ({}) => {
       setMessageList((prev) => {
-        if (!prev) return []
+        if (!prev) return [];
         return (prev ?? []).map((mg) =>
           mg.sender_id == userId ? { ...mg, seen: 1 } : mg,
         );
@@ -403,9 +423,9 @@ export default function Home() {
         const data = await response.json();
 
         if (data) {
-          setRequestUsers(data)
-          setReqNumb(requestUsers.length)
-        };
+          setRequestUsers(data);
+          setReqNumb(requestUsers.length);
+        }
       } catch (err) {
         console.error(err);
       }
@@ -453,6 +473,7 @@ export default function Home() {
         isOpen={isOpen}
         toggleFriendsbar={toggleFriendsbar}
         reqNumb={reqNumb}
+        me={me}
       />
 
       <ChatChannel

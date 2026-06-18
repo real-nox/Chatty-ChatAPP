@@ -20,6 +20,22 @@ export const getUser = async () => {
   }
 };
 
+export const getFullUser = async () => {
+  try {
+    const result = await fetch(`${import.meta.env.VITE_PATH_SERVER}/auth/me`, {
+      method: "GET",
+      credentials: "include",
+    });
+
+    const response = await result.json();
+    
+    if (response) return response;
+    else return false;
+  } catch (err) {
+    console.error(err);
+  }
+};
+
 export const getFriendsList = async () => {
   try {
     const result = await fetch(

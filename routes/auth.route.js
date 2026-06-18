@@ -1,13 +1,23 @@
 import { Router } from "express"
 import * as auth_controller from "../controllers/auth.controller.js"
 import { auth_m, ifLogged } from "../middlewares/auth.middleware.js"
+import { getUserById } from "../repositories/user.repository.js"
 
 const authR = Router()
 
 authR.get("/", (req, res) => {
-    if (req?.session?.userId)
+    if (req?.session?.userId) {
         res.json(req?.session?.userId)
-    else
+    } else
+        res.json(false)
+})
+
+authR.get("/me", async(req, res) => {
+    if (req?.session?.userId) {
+        const {display_name, id, username} = await getUserById(req?.session?.userId)
+
+        res.json({ id: id, display_name: display_name, username:    username, avatar: null, prescence: true })
+    } else
         res.json(false)
 })
 
