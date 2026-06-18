@@ -76,6 +76,23 @@ export default function Home() {
     console.log(friendList);
   }, []);
 
+  useEffect(() => {
+    socket.on("friendRequestAccepted", async () => {
+      const updatedList = await getFriendsList()
+      setFriendList(prev => ({
+        ...updatedList,
+        ...Object.keys(updatedList).reduce((acc, id) => {
+          acc[id] = {
+            ...updatedList[id],
+            presence: prev[id]?.presence ?? updatedList[id]?.presence
+          }
+          return acc
+        }, {})
+      }))
+    })
+
+    return () => socket.off("friendRequestAccepted")
+  }, [])
   //WebSocket connection
   useEffect(() => {
     socket.connect();

@@ -114,5 +114,10 @@ export function initSocket(io) {
         socket.on("writing", ({ roomName }) => socket.to(roomName).emit("friendWriting", { username }))
 
         socket.on("stopWriting", ({ roomName }) => socket.to(roomName).emit("friendStopWriting", { username }))
+
+        socket.on("friendRequestAccepted", ({ sender_id }) => {
+            console.log(onlineUsers[sender_id])
+            io.to(onlineUsers[sender_id]).emit("friendRequestAccepted")
+        })
     })
 }

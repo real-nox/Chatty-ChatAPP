@@ -1,6 +1,7 @@
 import { Check, Search, UserPlus, UsersRound, X } from "lucide-react";
 import { getFriendsList, SanitizeInput } from "../utils/Utils";
 import { useEffect, useRef, useState } from "react";
+import socket from "../utils/Socket";
 
 export default function FriendsComponent({
   isFriendCard,
@@ -12,7 +13,7 @@ export default function FriendsComponent({
   requestUsers,
   setRequestUsers,
   type,
-  setType
+  setType,
 }) {
   const [searchInput, setSearchInput] = useState("");
 
@@ -49,6 +50,8 @@ export default function FriendsComponent({
 
       if (data.success) {
         setRequestUsers((prev) => prev.filter((u) => u.id !== user_id));
+
+        socket.emit("friendRequestAccepted", { sender_id: user_id });
 
         const updatedList = await getFriendsList();
         setFriendList((prev) => ({
