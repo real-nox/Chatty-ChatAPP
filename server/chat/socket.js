@@ -1,9 +1,11 @@
+import { sessionM } from "../middlewares/session.middleware.js"
 import { getConversation, getMessages, MarkAllMsgAsSeen, saveMessage, setSeenMsg } from "../repositories/chat.repository.js"
 import { listF } from "../repositories/friends.repository.js"
 import { getUserById } from "../repositories/user.repository.js"
 
 const onlineUsers = {}
 export function initSocket(io) {
+    io.engine.use(sessionM)
     io.on("connection", async (socket) => {
         const user_id = socket.request.session.userId
         if (!user_id) return socket.disconnect()

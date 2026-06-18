@@ -25,25 +25,7 @@ authR.post("/register", auth_controller.register_c)
 
 authR.post("/login", auth_controller.login_c)
 
-
-//To be removed
-authR.get("/", (req, res) => {
-    return res.redirect("/")
-})
-
-authR.get("/register", ifLogged, (req, res) => {
-    res.render("pages/register")
-})
-
-authR.get("/login", ifLogged, (req, res) => {
-    res.render("pages/login")
-})
-
 authR.get("/logout", auth_controller.logout_c)
-
-authR.get("/forgot-password", ifLogged, (req, res) => {
-    res.render("pages/forgotpass")
-})
 
 authR.post("/get-user", auth_controller.user_get_c)
 
