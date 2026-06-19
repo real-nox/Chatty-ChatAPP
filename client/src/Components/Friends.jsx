@@ -1,7 +1,7 @@
 import { Check, Search, UserPlus, UsersRound, X } from "lucide-react";
-import { getFriendsList, SanitizeInput } from "../utils/Utils";
+import { getFriendsList, SanitizeInput } from "../utils/Utils.jsx";
 import { useEffect, useRef, useState } from "react";
-import socket from "../utils/Socket";
+import socket from "../utils/Socket.jsx";
 
 import Avatar from "../assets/avatar.png";
 

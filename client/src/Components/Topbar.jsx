@@ -1,6 +1,6 @@
 import { Link, NavLink } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { getUser } from "../utils/Utils";
+import { getUser } from "../utils/Utils.jsx";
 import Logo from '../assets/icon.png'
 
 export default function Topbar() {

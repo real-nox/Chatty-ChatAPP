@@ -1,7 +1,7 @@
-import HomeFeatures from "../pages/HomeFeatures";
-import HomeCenter from "../pages/HomeCenter";
-import HomeAbout from "../pages/HomeAbout";
-import NotFound from "../pages/404";
+import HomeFeatures from "../pages/HomeFeatures.jsx";
+import HomeCenter from "../pages/HomeCenter.jsx";
+import HomeAbout from "../pages/HomeAbout.jsx";
+import NotFound from "../pages/404.jsx";
 
 export default function Center({ type }) {
   const choice = () => {

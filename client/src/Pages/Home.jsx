@@ -12,13 +12,13 @@ import {
   getUser,
   SanitizeInput,
   setNoti,
-} from "../utils/Utils";
+} from "../utils/Utils.jsx";
 
-import socket from "../utils/Socket";
-import SideBar from "../components/SideBar";
-import ChatChannel from "../components/ChatChannel";
-import FriendsComponent from "../components/Friends";
-import Settings from "../components/Settings";
+import socket from "../utils/Socket.jsx";
+import SideBar from "../components/SideBar.jsx";
+import ChatChannel from "../components/ChatChannel.jsx";
+import FriendsComponent from "../components/Friends.jsx";
+import Settings from "../components/Settings.jsx";
 
 export default function Home() {
   const [userId, setUserId] = useState("");

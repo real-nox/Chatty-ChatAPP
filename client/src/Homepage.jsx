@@ -1,6 +1,6 @@
-import Center from "./components/Center";
-import Footer from "./components/Footer";
-import Topbar from "./components/Topbar";
+import Center from "./components/Center.jsx";
+import Footer from "./components/Footer.jsx";
+import Topbar from "./components/Topbar.jsx";
 
 export default function Homepage({ type }) {
   return (

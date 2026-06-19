@@ -1,4 +1,4 @@
-import { Appearance } from "../utils/SettingsOptions";
+import { Appearance } from "../utils/SettingsOptions.jsx";
 import { Palette, User } from "lucide-react";
 import { useState } from "react";
 import "../css/Settings.css";
