@@ -44,7 +44,9 @@ export default function Home() {
     presence: true,
   });
 
-  const [friendisTyping, setFriendisTyping] = useState({
+  const [friendisTyping, setFriendisTyping] = useState({});
+
+  const [friendisTypingOnChat, setFriendisTypingOnChat] = useState({
     ongoing: false,
     dots: 1,
   });
@@ -62,8 +64,11 @@ export default function Home() {
 
   const [type, setType] = useState(0);
 
-  const timeout = useRef(null);
-  const interval = useRef(null);
+  const typingTimeouts = useRef({});
+  const typingIntervals = useRef({});
+
+  const timeout1 = useRef(null);
+  const interval1 = useRef(null);
 
   const firstLoad = useRef(true);
   const messagesEndRef = useRef(null);
@@ -123,15 +128,15 @@ export default function Home() {
 
   useEffect(() => {
     socket.on("friendRequestAccepted", async ({ receiver_id }) => {
-      console.log("Receiver = "+ receiver_id)
+      console.log("Receiver = " + receiver_id);
       const updatedList = await getFriendsList();
       setFriendList((prev) => ({
         ...updatedList,
         ...Object.keys(updatedList).reduce((acc, id) => {
-          console.log(id)
+          console.log(id);
           acc[id] = {
             ...updatedList[id],
-            presence: receiver_id == id ? true : (prev[id]?.presence && false),
+            presence: receiver_id == id ? true : prev[id]?.presence && false,
           };
           return acc;
         }, {}),
@@ -163,13 +168,14 @@ export default function Home() {
       setMessageList(messages);
     });
 
-    const handleLastSeen = (content) => {
+    const handleLastSeen = (content, created_at) => {
       setFriendList((prev) => {
         const updated = { ...prev };
         if (updated[currentfriend.id]) {
           updated[currentfriend.id] = {
             ...updated[currentfriend.id],
             last_message: content,
+            created_at: created_at,
             unseen_count: 0,
           };
         }
@@ -178,7 +184,15 @@ export default function Home() {
       });
     };
 
-    const handleMessageReceived = ({ content, username, id, userId }) => {
+    const handleMessageReceived = ({
+      content,
+      username,
+      id,
+      userId,
+      created_at,
+      conversation_id,
+    }) => {
+      if (conversation_id !== currentChannel) return;
       setMessageList((prev) => {
         if (!Array.isArray(prev))
           return [
@@ -203,7 +217,7 @@ export default function Home() {
         ];
       });
 
-      handleLastSeen(content, userId);
+      handleLastSeen(content, created_at);
 
       if (currentChannel)
         socket.emit("readMessage", {
@@ -212,7 +226,15 @@ export default function Home() {
         });
     };
 
-    const handleMessageSent = ({ content, username, id, userId }) => {
+    const handleMessageSent = ({
+      content,
+      username,
+      id,
+      userId,
+      created_at,
+      conversation_id,
+    }) => {
+      if (conversation_id !== currentChannel) return;
       setMessageList((prev) => {
         if (!Array.isArray(prev))
           return [
@@ -237,7 +259,7 @@ export default function Home() {
         ];
       });
 
-      handleLastSeen(content);
+      handleLastSeen(content, created_at);
       socket.emit("stopWriting", { roomName: currentChannel });
     };
 
@@ -271,27 +293,30 @@ export default function Home() {
       });
     };
 
-    const handleFriendWriting = ({ username }) => {
-      setFriendisTyping((prev) => ({ ...prev, ongoing: true }));
+    const handleFriendWriting = ({ conversation_id }) => {
+      if (conversation_id !== currentChannel) return;
 
-      clearTimeout(timeout.current);
-      clearInterval(interval.current);
-
-      let dots = 3;
-      interval.current = setInterval(() => {
-        setFriendisTyping((prev) => ({ ...prev, dots: (prev.dots % 3) + 1 }));
+      setFriendisTypingOnChat({ ongoing: true, dots: 1 });
+      clearTimeout(timeout1.current);
+      clearInterval(interval1.current);
+      interval1.current = setInterval(() => {
+        setFriendisTypingOnChat((prev) => ({
+          ...prev,
+          dots: (prev?.dots % 3) + 1,
+        }));
       }, 500);
-
-      timeout.current = setTimeout(() => {
-        clearInterval(interval.current);
-        setFriendisTyping({ ongoing: false, dots: 1 });
+      timeout1.current = setTimeout(() => {
+        clearInterval(interval1.current);
+        setFriendisTypingOnChat({ ongoing: false, dots: 1 });
       }, 10000);
     };
 
-    const handleFriendStopWriting = ({ username }) => {
-      clearTimeout(timeout.current);
-      clearInterval(interval.current);
-      setFriendisTyping({ ongoing: false, dots: 1 });
+    const handleFriendStopWriting = ({ conversation_id }) => {
+      if (conversation_id !== currentChannel) return;
+
+      clearTimeout(timeout1.current);
+      clearInterval(interval1.current);
+      setFriendisTypingOnChat({ ongoing: false, dots: 1 });
     };
 
     socket.on("newMessage", handleMessageReceived);
@@ -320,17 +345,70 @@ export default function Home() {
     };
   }, [currentChannel]);
 
+  useEffect(() => {
+    clearTimeout(timeout1.current);
+    clearInterval(interval1.current);
+    setFriendisTypingOnChat({ ongoing: false, dots: 1 });
+  }, [currentChannel]);
+
   //Off chat events
+
+  useEffect(() => {
+    const handleFriendWriting = ({ userId }) => {
+      setFriendisTyping((prev) => ({
+        ...prev,
+        [userId]: { ongoing: true, dots: prev[userId]?.dots ?? 1 },
+      }));
+
+      clearTimeout(typingTimeouts.current[userId]);
+      clearInterval(typingIntervals.current[userId]);
+      typingIntervals.current[userId] = setInterval(() => {
+        setFriendisTyping((prev) => ({
+          ...prev,
+          [userId]: {
+            ongoing: true,
+            dots: ((prev[userId]?.dots ?? 1) % 3) + 1,
+          },
+        }));
+      }, 500);
+      typingTimeouts.current[userId] = setTimeout(() => {
+        clearInterval(typingIntervals.current[userId]);
+        setFriendisTyping((prev) => ({
+          ...prev,
+          [userId]: { ongoing: false, dots: 1 },
+        }));
+      }, 10000);
+    };
+
+    const handleFriendStopWriting = ({ userId }) => {
+      clearTimeout(typingTimeouts.current[userId]);
+      clearInterval(typingIntervals.current[userId]);
+      setFriendisTyping((prev) => ({
+        ...prev,
+        [userId]: { ongoing: false, dots: 1 },
+      }));
+    };
+
+    socket.on("friendStopWriting", handleFriendStopWriting);
+    socket.on("friendWriting", handleFriendWriting);
+
+    return () => {
+      socket.off("friendStopWriting", handleFriendStopWriting);
+      socket.off("friendWriting", handleFriendWriting);
+    };
+  }, []);
+
   useEffect(() => {
     if (!friendList) return;
 
-    const messageShowList = ({ content, userId }) => {
+    const messageShowList = ({ content, userId, created_at }) => {
       if (String(userId) === String(currentfriend.id)) return;
       setFriendList((prev) => {
         const updated = { ...prev };
         if (updated[userId]) {
           updated[userId] = {
             ...updated[userId],
+            created_at: created_at,
             last_message: content,
             unseen_count: String(Number(updated[userId].unseen_count ?? 0) + 1),
           };
@@ -375,61 +453,6 @@ export default function Home() {
       socket.off("friendOffline", handleOffline);
     };
   }, [friendList]);
-
-  const openConversation = ({ id, username, display_name }) => {
-    const channel = [userId, id].sort().join("_");
-    setCurrentChannel(channel);
-    setCurrentFriend({
-      id: id,
-      username: username,
-      display_name: display_name,
-    });
-
-    socket.emit("joinroom", channel);
-    console.log(channel, currentfriend.id);
-    socket.emit("MarkAllMsgAsSeen", { roomName: channel, friendId: id });
-
-    setFriendList((prev) => {
-      const updated = { ...prev };
-      if (updated[id]) {
-        updated[id] = {
-          ...updated[id],
-          unseen_count: 0,
-        };
-      }
-
-      return updated;
-    });
-    setLoading(true);
-  };
-
-  const Typing = () => {
-    socket.emit("writing", { roomName: currentChannel });
-  };
-
-  const submitMessage = () => {
-    if (!currentfriend.id || !input.trim()) return;
-
-    socket.emit("messageSend", {
-      roomName: currentChannel,
-      content: input,
-      userId: userId,
-    });
-
-    setInput("");
-  };
-
-  const toggleSidebar = () => {
-    setIsOpen(!isOpen);
-  };
-
-  const toggleFriendsbar = () => {
-    setIsFriendCard(!isFriendCard);
-  };
-
-  const toggleSettingssbar = () => {
-    setIsSettings(!isSettings);
-  };
 
   useEffect(() => {
     firstLoad.current = true;
@@ -479,13 +502,13 @@ export default function Home() {
       const isNotified = await getNoti(latest_user.id);
 
       if (!isNotified) {
-        //await setNoti(latest_user.id)
+        await setNoti(latest_user.id);
         const noti = new Notification("New Friend Request", {
           body: `${latest_user.display_name} has sent you a friend request!`,
         });
 
         noti.onclick = () => {
-          window.focus()
+          window.focus();
           setType(1);
           setIsFriendCard(true);
         };
@@ -505,6 +528,61 @@ export default function Home() {
   useEffect(() => {
     userID.current = userId;
   }, [userId]);
+
+  const openConversation = ({ id, username, display_name }) => {
+    const channel = [userId, id].sort().join("_");
+    setCurrentChannel(channel);
+    setCurrentFriend({
+      id: id,
+      username: username,
+      display_name: display_name,
+    });
+
+    socket.emit("joinroom", channel);
+    console.log(channel, currentfriend.id);
+    socket.emit("MarkAllMsgAsSeen", { roomName: channel, friendId: id });
+
+    setFriendList((prev) => {
+      const updated = { ...prev };
+      if (updated[id]) {
+        updated[id] = {
+          ...updated[id],
+          unseen_count: 0,
+        };
+      }
+
+      return updated;
+    });
+    setLoading(true);
+  };
+
+  const Typing = () => {
+    socket.emit("writing", { roomName: currentChannel, userId: userId });
+  };
+
+  const submitMessage = () => {
+    if (!currentfriend.id || !input.trim()) return;
+
+    socket.emit("messageSend", {
+      roomName: currentChannel,
+      content: input,
+      userId: userId,
+    });
+
+    setInput("");
+  };
+
+  const toggleSidebar = () => {
+    setIsOpen(!isOpen);
+  };
+
+  const toggleFriendsbar = () => {
+    setIsFriendCard(!isFriendCard);
+  };
+
+  const toggleSettingssbar = () => {
+    setIsSettings(!isSettings);
+  };
 
   const settings = () => {
     setIsSettings(!isSettings);
@@ -527,7 +605,7 @@ export default function Home() {
       <ChatChannel
         Typing={Typing}
         currentfriend={currentfriend}
-        friendisTyping={friendisTyping}
+        friendisTypingOnChat={friendisTypingOnChat}
         input={input}
         loading={loading}
         messageList={messageList}

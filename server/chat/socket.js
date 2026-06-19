@@ -77,16 +77,16 @@ export function initSocket(io) {
                 socket.conversation_id = conversation_id
             }
 
-            let { id = null } = await saveMessage(socket.conversation_id, userId, content)
+            let { id = null, created_at = new Date() } = await saveMessage(socket.conversation_id, userId, content)
 
-            socket.to(roomName).emit("newMessage", { content, username, id, userId })
-            socket.emit("messageSent", { content, username, id, userId })
+            socket.to(roomName).emit("newMessage", { content, username, id, userId, created_at, conversation_id: socket.conversation_id })
+            socket.emit("messageSent", { content, username, id, userId, created_at, conversation_id: socket.conversation_id })
 
             const [user1_id, user2_id] = roomName.split("_")
             const recipientId = String(user1_id) === String(userId) ? user2_id : user1_id
             const recipientSocketId = onlineUsers[recipientId]
             if (recipientSocketId) {
-                io.to(recipientSocketId).emit("showMessage", { content, userId })
+                io.to(recipientSocketId).emit("showMessage", { content, userId, created_at })
             }
         })
 
@@ -115,12 +115,36 @@ export function initSocket(io) {
                 socket.to(roomName).emit("UpdateMessages", { roomName, currentfriend })
         })
 
-        socket.on("writing", ({ roomName }) => socket.to(roomName).emit("friendWriting", { username }))
+        socket.on("writing", ({ roomName }) => {
+            const [user1_id, user2_id] = roomName.split("_")
+            const recipientId = String(user1_id) === String(user_id) ? user2_id : user1_id
+            const recipientSocketId = onlineUsers[recipientId]
 
-        socket.on("stopWriting", ({ roomName }) => socket.to(roomName).emit("friendStopWriting", { username }))
+            if (recipientSocketId) {
+                io.to(recipientSocketId).emit("friendWriting", {
+                    username,
+                    userId: user_id,
+                    conversation_id: roomName
+                })
+            }
+        })
+
+        socket.on("stopWriting", ({ roomName }) => {
+            const [user1_id, user2_id] = roomName.split("_")
+            const recipientId = String(user1_id) === String(user_id) ? user2_id : user1_id
+            const recipientSocketId = onlineUsers[recipientId]
+
+            if (recipientSocketId) {
+                io.to(recipientSocketId).emit("friendStopWriting", {
+                    username,
+                    userId: user_id,
+                    conversation_id: roomName
+                })
+            }
+        })
 
         socket.on("friendRequestAccepted", ({ sender_id }) => {
-            io.to(onlineUsers[sender_id]).emit("friendRequestAccepted", { receiver_id : user_id })
+            io.to(onlineUsers[sender_id]).emit("friendRequestAccepted", { receiver_id: user_id })
         })
     })
 }

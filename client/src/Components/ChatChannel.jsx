@@ -16,7 +16,7 @@ export default function ChatChannel({
   loading,
   messageList,
   messagesEndRef,
-  friendisTyping,
+  friendisTypingOnChat,
   input,
   Typing,
   submitMessage,
@@ -72,11 +72,11 @@ export default function ChatChannel({
       </div>
 
       <div className="Bar">
-        {friendisTyping.ongoing && (
+        {friendisTypingOnChat.ongoing && (
           <p>
             {currentfriend.display_name}{" "}
             {`Writing
-              ${".".repeat(friendisTyping.dots)}`}
+              ${".".repeat(friendisTypingOnChat.dots)}`}
           </p>
         )}
       </div>

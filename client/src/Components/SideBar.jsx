@@ -132,8 +132,8 @@ export default function SideBar({
                     </div>
                     <div className="Center">
                       <h4>{display_name}</h4>
-                      {(friendisTyping.ongoing && (currentfriend.id === id))? (
-                        <p>{`${currentfriend.display_name} Writing ${".".repeat(friendisTyping.dots)}`}</p>
+                      {friendisTyping[id]?.ongoing ? (
+                        <p>{`${display_name} Writing ${".".repeat(friendisTyping[id]?.dots)}`}</p>
                       ) : (
                         <p>{last_message}</p>
                       )}
