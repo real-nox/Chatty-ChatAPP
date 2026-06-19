@@ -4,6 +4,7 @@ const URL = import.meta.env.VITE_PATH_SERVER;
 const socket = io(URL, {
   withCredentials: true,
   autoConnect: false,
+  transports: ["polling", "websocket"],
 });
 
 export default socket;
