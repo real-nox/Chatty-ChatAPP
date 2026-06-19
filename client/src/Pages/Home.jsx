@@ -7,9 +7,11 @@ import {
   formatedDateMsg,
   getFriendsList,
   getFullUser,
+  getNoti,
   getTheme,
   getUser,
   SanitizeInput,
+  setNoti,
 } from "../utils/Utils";
 
 import socket from "../utils/Socket";
@@ -48,7 +50,7 @@ export default function Home() {
   });
 
   const [pageLoading, setPageLoading] = useState(false);
-  const [contentLoading, setContentLoading] = useState(true)
+  const [contentLoading, setContentLoading] = useState(true);
   const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(true);
   const [isFriendCard, setIsFriendCard] = useState(false);
@@ -80,7 +82,7 @@ export default function Home() {
   useEffect(() => {
     if (!theme) return;
     document.documentElement.setAttribute("data-theme", theme);
-    setContentLoading(false)
+    setContentLoading(false);
   }, [theme]);
 
   useEffect(() => {
@@ -113,10 +115,10 @@ export default function Home() {
     setPageLoading(true);
     getList();
     const timeout = setTimeout(() => {
-      setPageLoading(false)
-    }, 1000)
+      setPageLoading(false);
+    }, 1000);
 
-    return () => clearTimeout(timeout)
+    return () => clearTimeout(timeout);
   }, []);
 
   useEffect(() => {
@@ -470,16 +472,22 @@ export default function Home() {
     }
 
     prevLen.current = requestUsers.length;
-    const notify = () => {
+    const notify = async () => {
       const latest_user = requestUsers[requestUsers.length - 1];
-      const noti = new Notification("New Friend Request", {
-        body: `${latest_user.display_name} has sent you a friend request!`,
-      });
+      const isNotified = await getNoti(latest_user.id);
 
-      noti.onclick = () => {
-        setType(1);
-        setIsFriendCard(true);
-      };
+      if (!isNotified) {
+        await setNoti(latest_user.id)
+        const noti = new Notification("New Friend Request", {
+          body: `${latest_user.display_name} has sent you a friend request!`,
+        });
+
+        noti.onclick = () => {
+          window.focus()
+          setType(1);
+          setIsFriendCard(true);
+        };
+      }
     };
     if (Notification.permission === "granted") {
       notify();

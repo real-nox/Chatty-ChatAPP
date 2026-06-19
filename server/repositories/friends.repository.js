@@ -155,3 +155,25 @@ export const userListSent = async (sender_id) => {
         console.error(err)
     }
 }
+
+export const getFriendRequestNotification = async (receiver_id, sender_id) => {
+    try {
+        const result = await pool.query(`select notified from friends_requests where receiver_id = $1 and sender_id = $2 and status = 'pending'`, [receiver_id, sender_id])
+
+        if (result.rowCount > 0)
+            return result.rows[0]?.notified
+        return false
+    } catch (err) {
+        console.error(err)
+    }
+}
+
+export const setFriendRequestNotification = async (receiver_id, sender_id) => {
+    try {
+        const result = await pool.query(`update friends_requests set notified = 1 where receiver_id = $1 and sender_id = $2 and status = 'pending' and notified = 0`, [receiver_id, sender_id])
+
+        return true
+    } catch (err) {
+        console.error(err)
+    }
+}

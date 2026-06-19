@@ -38,7 +38,7 @@ export const accept_request_c = async (req, res, next) => {
 
     try {
         if (!friend_id)
-            return res.json({ success: false, error: "Friend_id is not provided"})
+            return res.json({ success: false, error: "Friend_id is not provided" })
 
         const resultat = await friends_service.acceptFriendRequest(user_id, friend_id)
 
@@ -54,7 +54,7 @@ export const decline_sent_c = async (req, res, next) => {
 
     try {
         if (!friend_id)
-            return res.json({ success: false, error: "Friend_id id is not provided"})
+            return res.json({ success: false, error: "Friend_id id is not provided" })
 
         const resultat = await friends_service.declineFriendRequest(friend_id, user_id)
 
@@ -70,7 +70,7 @@ export const decline_request_c = async (req, res, next) => {
 
     try {
         if (!friend_id)
-            return res.json({ success: false, error: "Request id is not provided"})
+            return res.json({ success: false, error: "Request id is not provided" })
 
         const resultat = await friends_service.declineFriendRequest(user_id, friend_id)
 
@@ -107,7 +107,7 @@ export const friend_info_c = async (req, res, next) => {
 
 export const lookForUsers = async (req, res, next) => {
     const { search } = req?.query;
-    const user_id = req?.user?.id 
+    const user_id = req?.user?.id
 
     try {
         const result = await friends_service.fetchUsersByUsername(search, user_id)
@@ -127,5 +127,31 @@ export const getUserListSent = async (req, res, next) => {
         return res.json(result)
     } catch (err) {
         console.log(err)
+    }
+}
+
+export const noti = async (req, res, next) => {
+    const receiver_id = req?.user?.id
+    const sender_id = req?.body?.sender_id
+
+    try {
+        const result = await friends_service.getNotificationFR(receiver_id, sender_id)
+
+        return res.json(result)
+    } catch (err) {
+        console.error(err)
+    }
+}
+
+export const setnoti = async (req, res, next) => {
+    const receiver_id = req?.user?.id
+    const sender_id = req?.body?.sender_id
+
+    try {
+        const result = await friends_service.setNotificationFR(receiver_id, sender_id)
+
+        return res.json(result)
+    } catch (err) {
+        console.error(err)
     }
 }

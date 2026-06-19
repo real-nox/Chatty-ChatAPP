@@ -155,3 +155,29 @@ export const fetchUserListSent = async (sender_id) => {
         console.log(err)
     }
 }
+
+export const getNotificationFR = async (receiver_id, sender_id) => {
+    try {
+        if (!sender_id || !receiver_id)
+            return { success: false, error: "Unfound user_id" }
+
+        const result = await friends_repository.getFriendRequestNotification(receiver_id, sender_id)
+
+        return result
+    } catch (err) {
+        console.error(err)
+    }
+}
+
+export const setNotificationFR = async (receiver_id, sender_id) => {
+    try {
+        if (!sender_id || !receiver_id)
+            return { success: false, error: "Unfound user_id" }
+
+        const result = await friends_repository.setFriendRequestNotification(receiver_id, sender_id)
+
+        return result
+    } catch (err) {
+        console.error(err)
+    }
+}

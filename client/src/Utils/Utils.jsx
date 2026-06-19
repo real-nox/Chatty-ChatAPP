@@ -120,13 +120,12 @@ export const getTheme = async () => {
 
 export const setTheme = async (theme) => {
   try {
-    console.log(theme.toLowerCase())
     const response = await fetch(
       `${import.meta.env.VITE_PATH_SERVER}/auth/theme`,
       {
         credentials: "include",
         method: "PATCH",
-        body: JSON.stringify({theme: theme.toLowerCase()}),
+        body: JSON.stringify({ theme: theme.toLowerCase() }),
         headers: { "Content-Type": "application/json" },
       },
     );
@@ -137,6 +136,48 @@ export const setTheme = async (theme) => {
       if (data.theme === "dark") return "Dark";
       else return "Light";
     }
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+export const getNoti = async (sender_id) => {
+  try {
+    const response = await fetch(
+      `${import.meta.env.VITE_PATH_SERVER}/friends/requests/notification`,
+      {
+        credentials: "include",
+        method: "POST",
+        body: JSON.stringify({ sender_id: sender_id }),
+        headers: { "Content-Type": "application/json" },
+      },
+    );
+
+    const data = await response.json();
+
+    if (data)
+      return data
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+export const setNoti = async (sender_id) => {
+  try {
+    const response = await fetch(
+      `${import.meta.env.VITE_PATH_SERVER}/friends/requests/notification/edit`,
+      {
+        credentials: "include",
+        method: "POST",
+        body: JSON.stringify({ sender_id: sender_id }),
+        headers: { "Content-Type": "application/json" },
+      },
+    );
+
+    const data = await response.json();
+
+    if (data)
+      return data
   } catch (err) {
     console.error(err);
   }

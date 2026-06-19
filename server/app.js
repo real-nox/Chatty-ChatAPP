@@ -24,13 +24,13 @@ app.use(auth_m)
 app.use("/auth", authR)
 app.use("/friends", friendsR)
 
-app.use((req, res) => {
+/*app.use((req, res) => {
     res.status(404).render("errors/404")
 })
 
 app.use((err, req, res, next) => {
     console.error(err.stack)
     res.status(500).render("errors/500")
-})
+})*/
 
 export default app;
