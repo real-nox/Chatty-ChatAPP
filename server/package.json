@@ -5,9 +5,9 @@
   "main": "app.js",
   "type": "module",
   "scripts": {
-    "test": "nodemon --env-file=../.env ./server.js; ",
-    "dev": "nodemon --env-file=../.env ./server.js",
-    "start": "node --env-file=../.env ./server.js"
+    "test": "nodemon server.js",
+    "dev": "node ./server.js",
+    "start": "node server.js"
   },
   "author": "Rayane",
   "license": "ISC",

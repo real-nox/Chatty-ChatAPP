@@ -1,8 +1,54 @@
+name: chatty
+
 services:
-  app:
-    build: .
+
+  db:
+    image: postgres
     ports:
-      - "5500:5500"
+      - "5432:5432"
+    volumes:
+      - postgre_data:/data/db
+    networks:
+      - chatty-net
     env_file:
       - .env
     restart: unless-stopped
+
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - "5500:5500"
+    env_file:
+      - ./server/.env
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+    networks:
+      - chatty-net
+    restart: unless-stopped
+
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+    env_file:
+      - ./client/.env
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+    command: npm run dev -- --host
+    networks:
+      - chatty-net
+    depends_on:
+      - server
+    restart: unless-stopped
+
+volumes:
+  postgre_data:
+networks:
+  chatty-net:
+    driver: bridge
