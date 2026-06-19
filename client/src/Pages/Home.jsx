@@ -15,10 +15,10 @@ import {
 } from "../Utils/Utils.jsx";
 
 import socket from "../Utils/Socket.jsx";
-import SideBar from "../components/SideBar.jsx";
-import ChatChannel from "../components/ChatChannel.jsx";
-import FriendsComponent from "../components/Friends.jsx";
-import Settings from "../components/Settings.jsx";
+import SideBar from "../Components/SideBar.jsx";
+import ChatChannel from "../Components/ChatChannel.jsx";
+import FriendsComponent from "../Components/Friends.jsx";
+import Settings from "../Components/Settings.jsx";
 
 export default function Home() {
   const [userId, setUserId] = useState("");
