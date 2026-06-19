@@ -79,8 +79,8 @@ export function initSocket(io) {
 
             let { id = null, created_at = new Date() } = await saveMessage(socket.conversation_id, userId, content)
 
-            socket.to(roomName).emit("newMessage", { content, username, id, userId, created_at, conversation_id: socket.conversation_id })
-            socket.emit("messageSent", { content, username, id, userId, created_at, conversation_id: socket.conversation_id })
+            socket.to(roomName).emit("newMessage", { content, username, id, userId, created_at, conversation_id: roomName })
+            socket.emit("messageSent", { content, username, id, userId, created_at, conversation_id: roomName })
 
             const [user1_id, user2_id] = roomName.split("_")
             const recipientId = String(user1_id) === String(userId) ? user2_id : user1_id

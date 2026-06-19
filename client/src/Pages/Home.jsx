@@ -192,7 +192,7 @@ export default function Home() {
       created_at,
       conversation_id,
     }) => {
-      if (conversation_id !== currentChannel) return;
+      if (conversation_id != currentChannel) return;
       setMessageList((prev) => {
         if (!Array.isArray(prev))
           return [
@@ -234,7 +234,7 @@ export default function Home() {
       created_at,
       conversation_id,
     }) => {
-      if (conversation_id !== currentChannel) return;
+      if (conversation_id != currentChannel) return;
       setMessageList((prev) => {
         if (!Array.isArray(prev))
           return [
