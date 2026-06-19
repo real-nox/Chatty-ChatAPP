@@ -12,9 +12,9 @@ import {
   getUser,
   SanitizeInput,
   setNoti,
-} from "../utils/Utils.jsx";
+} from "../Utils/Utils.jsx";
 
-import socket from "../utils/Socket.jsx";
+import socket from "../Utils/Socket.jsx";
 import SideBar from "../components/SideBar.jsx";
 import ChatChannel from "../components/ChatChannel.jsx";
 import FriendsComponent from "../components/Friends.jsx";

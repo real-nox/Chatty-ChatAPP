@@ -1,5 +1,5 @@
 import { LogOut, Search, Settings, UserPlus } from "lucide-react";
-import { formatedDate, SanitizeInput } from "../utils/Utils.jsx";
+import { formatedDate, SanitizeInput } from "../Utils/Utils.jsx";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Avatar from "../assets/avatar.png";

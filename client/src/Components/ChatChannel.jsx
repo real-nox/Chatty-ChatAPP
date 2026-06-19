@@ -7,7 +7,7 @@ import {
   TextAlignJustify,
   VideoIcon,
 } from "lucide-react";
-import { formatedDateMsg, SanitizeInput } from "../utils/Utils.jsx";
+import { formatedDateMsg, SanitizeInput } from "../Utils/Utils.jsx";
 import EmojiPicker from "emoji-picker-react";
 import { useState } from "react";
 

@@ -1,4 +1,4 @@
-import { getUser, SanitizeInput } from "../utils/Utils.jsx";
+import { getUser, SanitizeInput } from "../Utils/Utils.jsx";
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Avatar from '../assets/avatar.png'
