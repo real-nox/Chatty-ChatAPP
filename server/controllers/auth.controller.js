@@ -33,11 +33,24 @@ export const login_c = async (req, res, next) => {
         if (!success)
             return res.json({ success: false, error: error })
 
+        console.log(user.id)
         req.session.userId = user.id
+
+        console.log(req.session)
 
         if (remember_me)
             req.session.cookie.maxAge = 1000 * 60 * 60 * 24 * 30
-        
+
+        req.session.save((err) => {
+            if (err) {
+                console.error('Session save error:', err);
+                return res.json({ success: false, error: 'Session error' });
+            }
+            console.log('Session saved:', req.session);
+            console.log('Session ID:', req.sessionID);
+            return res.json({ success: true, error: null });
+        })
+
         return res.json({ success: true, error: null })
     } catch (err) {
         next(err)

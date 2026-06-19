@@ -6,6 +6,7 @@ import { getUserById } from "../repositories/user.repository.js"
 const authR = Router()
 
 authR.get("/", (req, res) => {
+    console.log(req?.session)
     if (req?.session?.userId) {
         res.json(req?.session?.userId)
     } else

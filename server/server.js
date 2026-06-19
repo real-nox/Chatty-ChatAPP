@@ -14,12 +14,12 @@ const server = createServer(app);
 console.log(process.env.VITE_PATH_CLIENT)
 
 const io = new Server(server, {
-  cors: { origin: process.env.VITE_PATH_CLIENT, credentials: true }
+  cors: { origin: "https://chatty-82wa.onrender.com", credentials: true }
 });
 
 initSocket(io);
 LoadDB();
 
-server.listen(PORT, async () => {
+server.listen(PORT, '0.0.0.0', async () => {
     console.log(`[SERVER] Running on http://localhost:${process.env.PORT} or ${process.env.VITE_PATH_CLIENT}`);
 })
