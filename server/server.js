@@ -19,5 +19,5 @@ initSocket(io);
 LoadDB();
 
 server.listen(5500, async () => {
-    console.log(`[SERVER] Running on http://localhost:${process.env.PORT}`);
+    console.log(`[SERVER] Running on http://localhost:${process.env.PORT} or ${process.env.VITE_PATH_CLIENT}`);
 })

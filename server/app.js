@@ -12,7 +12,7 @@ import { sessionM } from "./middlewares/session.middleware.js"
 
 const app = express()
 
-app.use(cors({ origin: "http://localhost:5173", credentials: true }))
+app.use(cors({ origin: process.env.VITE_PATH_CLIENT, credentials: true }))
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use(cookieParser())
