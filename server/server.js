@@ -1,11 +1,11 @@
 import dotenv from "dotenv";
 dotenv.config({ quiet: true })
 
-import { initSocket } from "./server/chat/socket.js";
-import { LoadDB } from "./server/db/index.db.js";
+import { initSocket } from "./chat/socket.js";
+import { LoadDB } from "./db/index.db.js";
 import { createServer } from "http";
 import { Server } from "socket.io";
-import app from "./server/app.js";
+import app from "./app.js";
 
 const PORT = process.env.PORT || 5500;
 
