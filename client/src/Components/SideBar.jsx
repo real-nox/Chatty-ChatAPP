@@ -85,7 +85,7 @@ export default function SideBar({
       <div className="FriendsList">
         {pageLoading
           ? [...Array(Math.floor(Math.random()) + 5)].map((_, i) => (
-              <button className="FriendTemplate Loading">
+              <button key={i} className="FriendTemplate Loading">
                 <div className="Icon"></div>
                 <div className="Center">
                   <div className="dis1"></div>

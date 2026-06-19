@@ -85,8 +85,9 @@ export function initSocket(io) {
             const [user1_id, user2_id] = roomName.split("_")
             const recipientId = String(user1_id) === String(userId) ? user2_id : user1_id
             const recipientSocketId = onlineUsers[recipientId]
-            if (recipientSocketId){
-                io.to(recipientSocketId).emit("showMessage", { content, userId })}
+            if (recipientSocketId) {
+                io.to(recipientSocketId).emit("showMessage", { content, userId })
+            }
         })
 
         socket.on("readMessage", async ({ roomName, message_id }) => {
@@ -99,10 +100,11 @@ export function initSocket(io) {
             const [user1_id, user2_id] = roomName.split("_")
             const conversation = (await getConversation(user1_id, user2_id))
             const result = await MarkAllMsgAsSeen(conversation.id, friendId)
-            if (result){
+            if (result) {
                 const friendSocket_id = onlineUsers[friendId]
                 if (friendSocket_id)
-                    io.to(friendSocket_id).emit("allMessagesRead", { roomName })}
+                    io.to(friendSocket_id).emit("allMessagesRead", { roomName })
+            }
         })
 
         socket.on("MessagesRead", async ({ roomName, currentfriend }) => {
@@ -118,8 +120,7 @@ export function initSocket(io) {
         socket.on("stopWriting", ({ roomName }) => socket.to(roomName).emit("friendStopWriting", { username }))
 
         socket.on("friendRequestAccepted", ({ sender_id }) => {
-            console.log(onlineUsers[sender_id])
-            io.to(onlineUsers[sender_id]).emit("friendRequestAccepted")
+            io.to(onlineUsers[sender_id]).emit("friendRequestAccepted", { receiver_id : user_id })
         })
     })
 }

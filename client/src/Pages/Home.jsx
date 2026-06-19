@@ -122,14 +122,16 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    socket.on("friendRequestAccepted", async () => {
+    socket.on("friendRequestAccepted", async ({ receiver_id }) => {
+      console.log("Receiver = "+ receiver_id)
       const updatedList = await getFriendsList();
       setFriendList((prev) => ({
         ...updatedList,
         ...Object.keys(updatedList).reduce((acc, id) => {
+          console.log(id)
           acc[id] = {
             ...updatedList[id],
-            presence: true,
+            presence: receiver_id == id ? true : (prev[id]?.presence && false),
           };
           return acc;
         }, {}),
@@ -477,7 +479,7 @@ export default function Home() {
       const isNotified = await getNoti(latest_user.id);
 
       if (!isNotified) {
-        await setNoti(latest_user.id)
+        //await setNoti(latest_user.id)
         const noti = new Notification("New Friend Request", {
           body: `${latest_user.display_name} has sent you a friend request!`,
         });
