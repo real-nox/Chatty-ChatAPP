@@ -61,7 +61,7 @@ export default function FriendsComponent({
           ...Object.keys(updatedList).reduce((acc, id) => {
             acc[id] = {
               ...updatedList[id],
-              presence: prev[id]?.presence ?? updatedList[id].presence,
+              presence: true,
             };
             return acc;
           }, {}),
