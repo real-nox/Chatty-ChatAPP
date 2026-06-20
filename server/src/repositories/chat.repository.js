@@ -1,3 +1,4 @@
+import { pool } from "../db/index.db.js"
 import { getUserById } from "./user.repository.js"
 
 export const CreateConversation_Get_id = async () => {
