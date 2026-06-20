@@ -198,3 +198,14 @@
 .errorP.Strong {
     color: rgb(14, 7, 227);
 }
+
+@media (max-width:700px) {
+    .AuthContainer {
+        grid-template-columns: 1fr;
+    }
+
+    .LeftContainer,
+    .RightContainer {
+        height: 100vh;
+    }
+}

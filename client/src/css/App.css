@@ -13,7 +13,8 @@
 }
 
 .Page {
-    height: 100vh;
+    min-height: 100vh;
+    width: 100%;
 }
 
 .Topbar {
@@ -278,4 +279,51 @@ footer .Bottom {
     color: var(--text-color-footer);
     padding-top: 5rem;
     padding-bottom: 3rem;
+}
+
+@media (max-width: 800px) {
+    .Topbar {
+        flex-direction: column;
+        height: auto;
+        padding: 1rem 0;
+        gap: 0.5rem;
+    }
+
+    .Leftbar,
+    .Centerbar,
+    .Rightbar {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .Leftbar a {
+        justify-content: center;
+        gap: 15px;
+    }
+
+    .TopHome {
+        padding: 4rem 1rem;
+    }
+
+    .TopHome .Elements h1 {
+        font-size: 2.2em;
+    }
+
+    .TopHome .Elements p {
+        padding: 0 5%;
+    }
+
+    .Whychoose .List {
+        width: 90%;
+        grid-template-columns: 1fr;
+    }
+
+    footer .Top {
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    .Top .PartTopFooter {
+        width: 100%;
+    }
 }

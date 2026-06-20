@@ -77,14 +77,14 @@
     flex-direction: column;
 
     border-right: 1px solid var(--sidebar-border-color);
-    padding-top: 1rem 0;
-    transition: transform 0.3s ease, margin-left 0.3s ease;
+    transition: transform 0.3s ease, margin-left 0.3s ease, width 0.5s ease;
     transform: translateX(0);
 }
 
 .SideBar.closed {
     transform: translateX(-100%);
     margin-left: -18vw;
+    width: 18vw;
 }
 
 /*Chat Side*/
@@ -100,16 +100,12 @@
 }
 
 .RightSection {
-    width: 82vw;
-    height: 100%;
+    flex: 1;
+    height: 100vh;
     display: grid;
     grid-template-rows: auto 1fr auto auto;
     transition: width 0.3s ease;
     background-color: var(--chat-bg-color);
-}
-
-.RightSection.expanded {
-    width: 100vw;
 }
 
 .RightSection.Empty {
@@ -566,4 +562,13 @@ emoji-picker {
     width: max-content;
     height: 2rem;
     cursor: pointer;
+}
+
+@media (max-width:1250px) {
+    .SideBar {
+        width: 35%;
+    }    
+    .TopBarUser .User {
+        width: 25%;
+    }
 }
