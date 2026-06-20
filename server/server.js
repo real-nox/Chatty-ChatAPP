@@ -11,7 +11,7 @@ const PORT = process.env.PORT || 5500;
 const PRODUCTION = process.env.PRODUCTION || false;
 
 const CLIENT = process.env.CLIENT_PATH
-const SERVER = process.env.CLIENT_PATH
+const SERVER = process.env.SERVER_PATH
 
 const server = createServer(app);
 

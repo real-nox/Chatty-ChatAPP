@@ -12,7 +12,9 @@ import { sessionM } from "./middlewares/session.middleware.js"
 
 const app = express()
 
-app.use(cors({ origin: process.env.VITE_PATH_CLIENT, credentials: true }))
+const CLIENT = process.env.CLIENT_PATH
+
+app.use(cors({ origin: CLIENT, credentials: true }))
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use(cookieParser())
@@ -25,13 +27,13 @@ app.use(auth_m)
 app.use("/auth", authR)
 app.use("/friends", friendsR)
 
-app.use((req, res) => {
+/*app.use((req, res) => {
     res.status(404).json("errors/404")
 })
 
 app.use((err, req, res, next) => {
     console.error(err.stack)
     res.status(500).render("errors/500")
-})
+})*/
 
 export default app;
