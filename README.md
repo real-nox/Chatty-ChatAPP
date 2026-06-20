@@ -25,13 +25,13 @@ A real-time chat application built with React, Express.js, Socket.io and Postgre
 <h3>Offline states / seen status</h3>
 
 <img width="1919" height="951" alt="image" src="https://github.com/user-attachments/assets/4503d67a-6172-4f12-8f3a-9a0fa4b32115" />
-
-
-
+<img width="1919" height="989" alt="image" src="https://github.com/user-attachments/assets/278cc896-da17-405c-aec4-91567bd43131" />
 <br>
 <br>
 
 <h3>Register/Logging</h3>
+<img width="1919" height="991" alt="image" src="https://github.com/user-attachments/assets/12de8426-e6a1-476d-8cff-43e5e59538ac" />
+<img width="1919" height="991" alt="image" src="https://github.com/user-attachments/assets/dae84309-0167-4d07-bb45-b1a5bff5401e" />
 
 
 ---
