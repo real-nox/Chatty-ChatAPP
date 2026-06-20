@@ -25,6 +25,14 @@ jobs:
 
       - run: npm ci
       - run: npm run test
+        env:
+          NODE_ENV: test
+          PORT: 5000
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          CLIENT_PATH: https://chatty-82wa.onrender.com
+          SERVER_PATH: https://api-chatty-12ji.onrender.com
+          PRODUCTION: false
+          SSSKEY: ${{ secrets.SSSKEY }}
 
   test-frontend:
     name: Test Frontend
@@ -42,6 +50,6 @@ jobs:
             cache-dependency-path: client/package-lock.json
 
         - run: npm ci
-        - run: npm run dev
+        - run: npm run build
           env:
             VITE_PATH_SERVER: ${{ secrets.VITE_PATH_SERVER }}
