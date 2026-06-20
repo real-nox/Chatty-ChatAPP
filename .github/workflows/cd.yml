@@ -1,0 +1,27 @@
+name: CD - Chatty
+
+on:
+    push:
+        branches: [main]
+    workflow_dispatch:
+
+jobs:
+    
+    deploy:
+        name: Deploy to Render
+        runs-on: ubuntu-latest
+
+        steps:
+          - name: Deploy backend
+            run: |
+                curl -X POST \
+                -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
+                -H "Content-Type: application/json" \
+                https://api.render.com/v1/services/${{ secrets.RENDER_SERVICE_ID_BACKEND }}/deploys
+
+          - name: Deploy frontend
+            run: |
+                curl -X POST \
+                -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
+                -H "Content-Type: application/json" \
+                https://api.render.com/v1/services/${{ secrets.RENDER_SERVICE_ID_FRONTEND }}/deploys

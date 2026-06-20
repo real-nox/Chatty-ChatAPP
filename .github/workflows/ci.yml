@@ -2,41 +2,44 @@ name: CI - Chatty
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
+  test-backend:
+    name: Test Backend
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: server
 
-  #build:
+    steps:
+      - uses: actions/checkout@v4
 
-  #  runs-on: ubuntu-latest
+      - uses: actions/setup-node@v6.0.0
+        with:
+          node-version: 20
+          cache: npm
 
-  #  steps:
-  #  - name: Checkout code
-  #    uses: actions/checkout@v4
+      - run: npm ci
+      - run: npm run test
 
-  #  - name: Setup Node.js environment
-  #    uses: actions/setup-node@v6.0.0
-  #    with:
-  #      node-version: 18
-  #      cache: npm
+  test-frontend:
+    name: Test Frontend
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: client
 
-  #  - name: Dependencies
-  #    run: npm install
+    steps:
+        - uses: actions/checkout@v4
+        - uses: actions/setup-node@v6.0.0
+          with:
+            node-version: 20
+            cache: npm
 
-  #  - name: Build docker image
-  #    run: docker build -t chatty .
-
-  # deploy:
-  #   needs: build
-  #   runs-on: ubuntu-latest
-  #   if: github.ref == 'refs/heads/main'
-
-  #   steps:
-  #     - name: Deploy to render
-  #       run: |
-  #         curl -X POST \
-  #           -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
-  #           -H "Content-Type: application/json" \
-  #           https://api.render.com/v1/services/${{ secrets.RENDER_SERVICE_ID }}/deploys
+        - run: npm ci
+        - run: npm run dev
+          env:
+            VITE_PATH_SERVER: ${{ secrets.VITE_PATH_SERVER }}
