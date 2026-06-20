@@ -33,10 +33,7 @@ export const login_c = async (req, res, next) => {
         if (!success)
             return res.json({ success: false, error: error })
 
-        console.log(user.id)
         req.session.userId = user.id
-
-        console.log(req.session)
 
         if (remember_me)
             req.session.cookie.maxAge = 1000 * 60 * 60 * 24 * 30
@@ -104,7 +101,6 @@ export const user_set_theme_c = async (req, res, next) => {
 
         let result = await auth_service.setUserTheme_s(user_id, theme)
 
-        console.log(result)
         return res.json(result)
     } catch (err) {
         next(err)

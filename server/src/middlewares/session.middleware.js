@@ -6,6 +6,8 @@ config({quiet:true})
 
 const PGStore = connectpg(session)
 
+const isProd = process.env.PRODUCTION === 'true'
+
 export const sessionM = session({
     store: new PGStore({ pool: pool }),
     secret: process.env.SSSKEY,
@@ -13,9 +15,9 @@ export const sessionM = session({
     saveUninitialized: false,
     cookie: {
         maxAge: 1000 * 60 * 60 * 24 * 2,
-        sameSite: 'none',
+        sameSite: isProd ? 'none' : 'lax',
         httpOnly: true,
-        secure: true,
-        partitioned: true
+        secure: isProd,
+        partitioned: isProd
     }
 })
