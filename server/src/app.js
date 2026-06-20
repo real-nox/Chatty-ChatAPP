@@ -12,7 +12,7 @@ import { sessionM } from "./middlewares/session.middleware.js"
 
 const app = express()
 
-const CLIENT = process.env.CLIENT_PATH
+const CLIENT = process.env.CLIENT_PATH || "https://chatty-82wa.onrender.com"
 
 app.use(cors({ origin: CLIENT, credentials: true }))
 app.use(express.urlencoded({ extended: true }))

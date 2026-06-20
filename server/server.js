@@ -10,7 +10,7 @@ import app from "./src/app.js";
 const PORT = process.env.PORT || 5500;
 const PRODUCTION = process.env.PRODUCTION || false;
 
-const CLIENT = process.env.CLIENT_PATH
+const CLIENT = process.env.CLIENT_PATH || "https://chatty-82wa.onrender.com"
 const SERVER = process.env.SERVER_PATH
 
 const server = createServer(app);
