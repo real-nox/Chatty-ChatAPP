@@ -113,7 +113,7 @@ export default function Register() {
 
         case 3:
           res = "Good password";
-          setValid((prev) => ({ ...prev, password: false }));
+          setValid((prev) => ({ ...prev, password: true }));
           break;
 
         case 4:
