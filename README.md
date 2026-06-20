@@ -1,38 +1,37 @@
-## Under Major update!
-
 ![Node.js](https://img.shields.io/badge/Node.js-18+-green)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-blue)
 ![Socket.io](https://img.shields.io/badge/Socket.io-real--time-black)
-![CI/CD](https://github.com/real-nox/ChatAPP/actions/workflows/ci.yml/badge.svg)
+![CI](https://github.com/real-nox/ChatAPP/actions/workflows/ci.yml/badge.svg)
+![CD](https://github.com/real-nox/ChatAPP/actions/workflows/cd.yml/badge.svg)
 ![License](https://img.shields.io/badge/license-ISC-lightgrey)
 
 <img width="272" height="267" alt="Icon" src="https://github.com/user-attachments/assets/9eae5ee3-6af1-496a-8ea0-fec818f92135" />
 
 # Chatty 💬
 
-A real-time chat application built with Node.js, Socket.io and PostgreSQL. Add friends, chat instantly, and see when they're online.
+A real-time chat application built with React, Express.js, Socket.io and PostgreSQL. Add friends, chat instantly, and see when they're online.
 
-🔗 **[Live Demo](https://chatapp-1y95.onrender.com/)**
+🔗 **[Live Demo](https://chatty-82wa.onrender.com/)**
 
 ---
 
 ## Screenshots
 
-<img width="1919" height="962" alt="image" src="https://github.com/user-attachments/assets/7712b958-d9cb-4ba7-8ec1-0eaa28f48cac" />
-<img width="1919" height="957" alt="image" src="https://github.com/user-attachments/assets/44c38e48-b01f-4eca-ae5a-6baf21a1a679" />
+<img width="1919" height="958" alt="image" src="https://github.com/user-attachments/assets/b6ad175e-73ae-4e76-a266-d55ba9b80f6e" />
+<img width="1919" height="957" alt="image" src="https://github.com/user-attachments/assets/b4d557cb-1fbb-4854-9a05-8303867a75e9" />
+<img width="1919" height="990" alt="image" src="https://github.com/user-attachments/assets/91b23393-c706-4a1c-8467-6d4f170a1ef4" />
 <br>
 <br>
 <h3>Offline states / seen status</h3>
 
-<img width="1919" height="956" alt="image" src="https://github.com/user-attachments/assets/d214af0c-b02f-4c63-b3c4-f8ae45f1d94d" />
-<img width="1919" height="964" alt="image" src="https://github.com/user-attachments/assets/c6e64dc3-ae25-4bcc-accb-0718afe845f1" />
+<img width="1919" height="951" alt="image" src="https://github.com/user-attachments/assets/4503d67a-6172-4f12-8f3a-9a0fa4b32115" />
+
+
+
 <br>
 <br>
 
 <h3>Register/Logging</h3>
-
-<img width="1919" height="955" alt="image" src="https://github.com/user-attachments/assets/963953f8-f14a-4bd3-879a-0eb039e921e3" />
-<img width="1919" height="951" alt="image" src="https://github.com/user-attachments/assets/9262c6b0-34b4-4eaa-b451-b6c4230e73ca" />
 
 
 ---
@@ -55,9 +54,9 @@ A real-time chat application built with Node.js, Socket.io and PostgreSQL. Add f
 
 | Layer | Technology |
 |---|---|
-| Runtime | Node.js |
-| Framework | Express.js |
-| Templating | EJS (Getting replaced with react.js) |
+| Frontend | React |
+| Backend Runtime | Node.js |
+| Backend Framework | Express.js |
 | Real-time | Socket.io |
 | Database | PostgreSQL |
 | ORM | node-postgres (pg) |
@@ -68,7 +67,13 @@ A real-time chat application built with Node.js, Socket.io and PostgreSQL. Add f
 
 ## Architecture
 
-This project follows a clean **3-layer architecture**:
+This project is split into two top level apps:
+
+```
+client/     → Frontend : React client
+server/     → Backend  : Express.js REST Full API + Socket.io server
+```
+The backend follows a clean **3-layer architecture**:
 
 ```
 controllers/     → handles HTTP requests and responses
@@ -76,7 +81,7 @@ services/        → business logic
 repositories/    → database queries
 ```
 
-Each feature (auth, friends, messages) has its own controller, service, and repository — keeping the codebase modular and maintainable.
+Each feature (auth, friends, messages) has its own controller, service, and repository, keeping the codebase modular and maintainable.
 
 ---
 
@@ -89,6 +94,8 @@ Each feature (auth, friends, messages) has its own controller, service, and repo
 - Handling **session-based authentication** securely with bcrypt and PostgreSQL
 - **Deploying a full-stack app** on Render with a cloud database (Neon)
 - Use of docker, containerizing the app without need of downloading dependencies, the app will be working as expected
+- Splitting a monolithic EJS app into a separate React frontend and Express API backend
+- Running both apps together locally with a single ``start.sh``
 
 ## Getting Started
 
@@ -101,46 +108,61 @@ Each feature (auth, friends, messages) has its own controller, service, and repo
 ## Without Docker
 ```bash
 # Clone the repository
-git clone https://github.com/real-nox/chatty.git
-cd chatty
+git clone https://github.com/real-nox/Chatty-ChatAPP
+cd Chatty-ChatAPP
 
-# Install dependencies
-npm install
+# Install dependencies for both apps
+cd client; npm install; cd ../server; npm install; cd ..
 
-# Create a .env file
-cp .env.example .env
+# Create a .env file in both apps
+cp server/.env.example server/.env; cp client/.env.example client/.env
 ```
 
 ### Run the App
 
 ```bash
-npm start
+# Recommended: use Git Bash
+cd Chatty-ChatAPP
+bash start.sh
+
+# Or, on Windows
+./start.sh
 ```
 
-Visit `http://localhost:5500`
+- Frontend: ``http://localhost:5173``
+- Backend:  ``http://localhost:5500``
 
 ## Using Docker
 ```bash
 # Clone the repository
-git clone https://github.com/real-nox/chatty.git
-cd chatty
+git clone https://github.com/real-nox/Chatty-ChatAPP
+cd Chatty-ChatAPP
 
-# Create a .env file
-cp .env.example .env
+# Create a .env file in both apps
+cd client; npm install; cd ../server; npm install; cd ..
 
 docker compose up --build
 ```
 
-Visit `http://localhost:5500`
+Visit `http://localhost:5173`
 
 ### Environment Variables
 
 Create a `.env` file in the root directory:
 
 ```env
-DB_URL = your_postgresql_connection_string
-# Session key
-SSSKEY=your_session_secret
+DATABASE_URL = your_postgresql_connection_string
+
+PORT = 5400
+CLIENT_PATH =
+SERVER_PATH =
+PRODUCTION = false
+
+SSSKEY = your_session_secret
+
+POSTGRES_PASSWORD = 
+POSTGRES_USER = 
+POSTGRES_DB = 
 ```
 
 ### Database Setup
@@ -154,6 +176,7 @@ CREATE TABLE users (
   username VARCHAR(50) UNIQUE NOT NULL,
   email VARCHAR(100) UNIQUE NOT NULL,
   password TEXT NOT NULL,
+  theme TEXT DEFAULT 'dark';
   created_at TIMESTAMP DEFAULT NOW()
 );
 
@@ -171,6 +194,7 @@ CREATE TABLE friends_requests (
   sender_id INTEGER REFERENCES users(id),
   reciever_id INTEGER REFERENCES users(id),
   status TEXT DEFAULT 'pending',
+  notified INTEGER DEFAULT 0,
   created_at TIMESTAMP DEFAULT NOW()
 );
 
@@ -204,23 +228,34 @@ CREATE TABLE messages (
 
 ```
 chatty/
-├── controllers/        # Request handlers
-├── services/           # Business logic
-├── repositories/       # Database queries
-├── routes/             # Express routers
-├── middlewares/        # Auth and session middleware
-├── views/              # EJS templates
-├── public/             # Static files (CSS, JS)
-├── chat/               # Socket.io logic
-├── db/                 # Database connection
-└── app.js              # Entry point
+├── client/                     # React app
+│   ├── icon/
+│   ├── src/
+│   ├── Dockerfile
+│   └── package.json
+├── server/                     # Express.js API + Socket.io
+│   ├── src/ 
+│   │   ├── controllers/        # Request handlers
+│   │   ├── services/           # Business logic
+│   │   ├── repositories/       # Database queries
+│   │   ├── routes/             # Express routers
+│   │   ├── middlewares/        # Auth and session middleware
+│   │   ├── views/              # EJS templates
+│   │   ├──  public/            # Static files (CSS, JS)
+│   │   ├── chat/               # Socket.io logic
+│   │   ├── db/                 # Database connection
+│   │   ├── Dockerfile
+│   │   └── app.js              # Express App
+│   └── server.js               # Entry point
+├── start.sh                    # Starts frontend + backend
+└── docker-compose.yml
 ```
 
 ---
 
 ## Author
 
-**real-nox (Rayane Sirri)** — [GitHub](https://github.com/real-nox)
+**real-nox (Rayane Sirri) :** [GitHub](https://github.com/real-nox)
 
 ---
 
