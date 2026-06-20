@@ -33,6 +33,12 @@ A real-time chat application built with React, Express.js, Socket.io and Postgre
 <img width="1919" height="991" alt="image" src="https://github.com/user-attachments/assets/12de8426-e6a1-476d-8cff-43e5e59538ac" />
 <img width="1919" height="991" alt="image" src="https://github.com/user-attachments/assets/dae84309-0167-4d07-bb45-b1a5bff5401e" />
 
+<h3>Friends Requests</h3>
+<img width="1918" height="955" alt="image" src="https://github.com/user-attachments/assets/828164b2-d799-4960-9d16-1583ab80ad7d" />
+<img width="1919" height="955" alt="image" src="https://github.com/user-attachments/assets/168f2c00-c516-4772-bd97-efa6c08901f5" />
+<img width="1919" height="956" alt="image" src="https://github.com/user-attachments/assets/a0c854ca-b995-4ae9-b400-b8746e647f86" />
+<img width="1919" height="958" alt="image" src="https://github.com/user-attachments/assets/0134b32c-a193-423a-9ca1-e24ee8d86856" />
+<img width="1919" height="955" alt="image" src="https://github.com/user-attachments/assets/e44ba090-2e62-4c0c-bbaf-16e46b0316cd" />
 
 ---
 
