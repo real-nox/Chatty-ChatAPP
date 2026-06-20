@@ -24,7 +24,24 @@ jobs:
           cache-dependency-path: server/package-lock.json
 
       - run: npm ci
-      - run: npm run test
+
+      - name: Boot check
+        run: |
+          npm run test &
+          SERVER_PID=$!
+
+          for i in {1..10}; do
+            if curl -s http://localhost:5000 > /dev/null; then
+              echo "Server is up"
+              kill $SERVER_PID
+              exit 0
+            fi
+            sleep 1
+          done
+
+          echo "Server failed to start within 10s"
+          kill $SERVER_PID 2>/dev/null
+          exit 1
         env:
           NODE_ENV: test
           PORT: 5000
