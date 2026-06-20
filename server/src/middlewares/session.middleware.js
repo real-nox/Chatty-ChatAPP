@@ -1,6 +1,8 @@
 import session from "express-session"
 import connectpg from "connect-pg-simple"
 import { pool } from "../db/index.db.js"
+import { config } from "dotenv"
+config({quiet:true})
 
 const PGStore = connectpg(session)
 

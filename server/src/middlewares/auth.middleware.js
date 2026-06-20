@@ -1,7 +1,6 @@
 import * as auth_service from "../services/auth.service.js"
 
 export const auth_m = async (req, res, next) => {
-    console.log("here")
     if (!req.session.userId) {
         req.user = null
         return next()
