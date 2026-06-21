@@ -1,6 +1,6 @@
 import * as auth_service from "../services/auth.service.js"
 
-export const auth_m = async (req, res, next) => {
+export const attachUser = async (req, res, next) => {
     if (!req.session.userId) {
         req.user = null
         return next()
@@ -13,10 +13,4 @@ export const auth_m = async (req, res, next) => {
     } catch (error) {
         next(error)
     }
-}
-
-export const ifLogged = (req, res, next) => {
-    if (req.session.userId)
-        return res.redirect("/")
-    next()
 }

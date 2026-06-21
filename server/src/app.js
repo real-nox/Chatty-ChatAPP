@@ -4,11 +4,12 @@ import cookieParser from "cookie-parser"
 
 //Routes
 import authR from "./routes/auth.route.js"
+import userR from "./routes/user.route.js"
 import friendsR from "./routes/friends.route.js"
 
 //Middlewares
-import { auth_m } from "./middlewares/auth.middleware.js"
 import { sessionM } from "./middlewares/session.middleware.js"
+import { attachUser } from "./middlewares/auth.middleware.js"
 
 const app = express()
 
@@ -21,10 +22,11 @@ app.use(cookieParser())
 
 app.set('trust proxy', 1)
 app.use(sessionM)
-app.use(auth_m)
+app.use(attachUser)
 
 //Routes
 app.use("/auth", authR)
+app.use("/user", userR)
 app.use("/friends", friendsR)
 
 /*app.use((req, res) => {

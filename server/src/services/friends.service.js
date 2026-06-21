@@ -1,7 +1,7 @@
 import * as user_repository from "../repositories/user.repository.js"
 import * as friends_repository from "../repositories/friends.repository.js"
 
-export const sendFriendRequest = async (user_id, sender) => {
+export const sendFriendRequest_s = async (user_id, sender) => {
     try {
         const reciever = await user_repository.getUserById(user_id)
 
@@ -29,7 +29,7 @@ export const sendFriendRequest = async (user_id, sender) => {
     }
 }
 
-export const getFriendsRequest = async (sender) => {
+export const getFriendsRequest_s = async (sender) => {
     try {
         if (!sender || !sender.id)
             return { success: false, error: "Could not find current user" }
@@ -42,7 +42,7 @@ export const getFriendsRequest = async (sender) => {
     }
 }
 
-export const acceptFriendRequest = async (receiver_id, sender_id) => {
+export const acceptFriendRequest_s = async (receiver_id, sender_id) => {
     try {
         if (!receiver_id)
             return { success: false, error: "Could not find receiver" }
@@ -60,7 +60,7 @@ export const acceptFriendRequest = async (receiver_id, sender_id) => {
     }
 }
 
-export const declineFriendRequest = async (receiver_id, sender_id) => {
+export const declineFriendRequest_s = async (receiver_id, sender_id) => {
     try {
         if (!receiver_id)
             return { success: false, error: "Could not find receiver" }
@@ -79,7 +79,7 @@ export const declineFriendRequest = async (receiver_id, sender_id) => {
     }
 }
 
-export const listFriends = async (user_id) => {
+export const listFriends_s = async (user_id) => {
     try {
         if (!user_id)
             return { success: false, error: "Unfound user_id" }
@@ -95,7 +95,7 @@ export const listFriends = async (user_id) => {
     }
 }
 
-export const getFriendInfo = async (friend_id, user_id) => {
+export const getFriendInfo_s = async (friend_id, user_id) => {
     try {
         if (!user_id)
             return { success: false, error: "Unfound user_id" }
@@ -119,7 +119,7 @@ export const getFriendInfo = async (friend_id, user_id) => {
     }
 }
 
-export const fetchUsersByUsername = async (username, user_id) => {
+export const fetchUsersByUsername_s = async (username, user_id) => {
     try {
         if (!username)
             return { success: false, error: "Empty search" }
@@ -139,7 +139,7 @@ export const fetchUsersByUsername = async (username, user_id) => {
     }
 }
 
-export const fetchUserListSent = async (sender_id) => {
+export const fetchUserListSent_s = async (sender_id) => {
     try {
         if (!sender_id)
             return { success: false, error: "Unfound user_id" }
@@ -156,7 +156,7 @@ export const fetchUserListSent = async (sender_id) => {
     }
 }
 
-export const getNotificationFR = async (receiver_id, sender_id) => {
+export const getNotificationFR_s = async (receiver_id, sender_id) => {
     try {
         if (!sender_id || !receiver_id)
             return { success: false, error: "Unfound user_id" }
@@ -169,7 +169,7 @@ export const getNotificationFR = async (receiver_id, sender_id) => {
     }
 }
 
-export const setNotificationFR = async (receiver_id, sender_id) => {
+export const setNotificationFR_s = async (receiver_id, sender_id) => {
     try {
         if (!sender_id || !receiver_id)
             return { success: false, error: "Unfound user_id" }

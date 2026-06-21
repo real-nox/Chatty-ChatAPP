@@ -1,128 +1,88 @@
 import { pool } from "../db/index.db.js"
+import { catchDBAsync } from "../utils/functions.js"
 
-export const getUsernames = async (username) => {
-    try {
-        const result = await pool.query("select username from users where username = $1", [username])
+export const getUserById = catchDBAsync(async (userId) => {
+    const result = await pool.query("select * from users where id = $1", [userId])
 
-        if (result?.rowCount > 0)
-            return true
-        return false
-    } catch (error) {
-        console.log(error)
-    }
-}
+    if (result?.rowCount > 0)
+        return result.rows[0]
+    return false
+})
 
-export const getEmails = async (email) => {
-    try {
-        const result = await pool.query("select email from users where email = $1", [email])
+export const getUserByEmail = catchDBAsync(async (email) => {
+    const result = await pool.query("select * from users where email = $1", [email])
 
-        if (result?.rowCount > 0)
-            return true
-        return false
-    } catch (error) {
-        console.log(error)
-    }
-}
+    if (result?.rowCount > 0)
+        return result.rows[0]
+    return false
+})
 
-export const getUserById = async (userId) => {
-    try {
-        const result = await pool.query("select * from users where id = $1", [userId])
+export const getUserByUsername = catchDBAsync(async (username) => {
+    const result = await pool.query("select * from users where username= $1", [username])
 
-        if (result?.rowCount > 0)
-            return result.rows[0]
-        return false
-    } catch (error) {
-        console.log(error)
-    }
-}
+    if (result?.rowCount > 0)
+        return result.rows[0]
+    return false
+})
 
-export const getUserByEmail = async (email) => {
-    try {
-        const result = await pool.query("select * from users where email = $1", [email])
+export const updateUser = catchDBAsync(async (user_id, username, display_name) => {
+    const result = await pool.query("update users set display_name = $1, username = $2 where id = $3", [display_name, username, user_id])
 
-        if (result?.rowCount > 0)
-            return result.rows[0]
-        return false
-    } catch (error) {
-        console.log(error)
-    }
-}
+    if (result.rowCount > 0)
+        return true
+    return false
+})
 
-export const getUserViaUsername = async (username) => {
-    try {
-        const result = await pool.query("select * from users where username= $1", [username])
+export const updateUserPwd = catchDBAsync(async (user_id, new_pwd) => {
+    const result = await pool.query("update users set password = $1 where id = $2", [new_pwd, user_id])
 
-        if (result?.rowCount > 0)
-            return result.rows[0]
-        return false
-    } catch (error) {
-        console.log(error)
-    }
-}
+    if (result?.rowCount > 0)
+        return true
+    return false
+})
 
-export const addUser = async (user_info) => {
-    try {
-        const result = await pool.query("insert into users (display_name, username, email, password) values ($1, $2, $3, $4)", [user_info.display_name, user_info.username, user_info.email, user_info.pwd])
+export const addUser = catchDBAsync(async (user_info) => {
+    const result = await pool.query("insert into users (display_name, username, email, password) values ($1, $2, $3, $4)", [user_info.display_name, user_info.username, user_info.email, user_info.pwd])
 
-        if (result?.rowCount > 0)
-            return true
-        return false
-    } catch (error) {
-        console.log(error)
-    }
-}
+    if (result?.rowCount > 0)
+        return true
+    return false
+})
 
-export const updatePwdUser = async (user_id, new_pwd) => {
-    try {
-        const result = await pool.query("update users set password = $1 where id = $2", [new_pwd, user_id])
+export const getUserTheme = catchDBAsync(async (user_id) => {
+    const result = await pool.query("select theme from users where id=$1", [user_id])
 
-        if (result?.rowCount > 0)
-            return true
-        return false
-    } catch (err) {
-        console.log(err)
-    }
-}
+    if (result?.rowCount > 0)
+        return result?.rows[0].theme
+    return false
+})
 
-export const getUserTheme = async (user_id) => {
-    try {
-        const result = await pool.query("select theme from users where id=$1", [user_id])
+export const setUserTheme = catchDBAsync(async (user_id, theme) => {
+    const result = await pool.query("update users set theme = $2 where id = $1", [user_id, theme])
 
-        if (result?.rowCount > 0)
-            return result?.rows[0].theme
-        return false
-    } catch (err) {
-        console.log(err)
-    }
-}
+    if (result?.rowCount > 0)
+        return true
+    return false
+})
 
-export const setUserTheme = async (user_id, theme) => {
-    try {
-        const result = await pool.query("update users set theme = $2 where id = $1", [user_id, theme])
+export const getUsernames = catchDBAsync(async (username) => {
+    const result = await pool.query("select username from users where username = $1", [username])
 
-        if (result?.rowCount > 0)
-            return true
-        return false
-    } catch (err) {
-        console.log(err)
-    }
-}
+    if (result?.rowCount > 0)
+        return true
+    return false
+})
 
-export const EditUser = async (user_id, username, display_name) => {
-    try {
-        const result = await pool.query("update users set display_name = $1, username = $2 where id = $3", [display_name, username, user_id])
+export const getEmails = catchDBAsync(async (email) => {
+    const result = await pool.query("select email from users where email = $1", [email])
 
-        if (result.rowCount > 0)
-            return true
-        return false
-    } catch (err) {
-        console.error(err)
-    }
-}
+    if (result?.rowCount > 0)
+        return true
+    return false
+})
 
-export const getUsersByUsername = async (username, user_id) => {
-    try {
-        const result = await pool.query(`
+export const getUsersByUsername = catchDBAsync(async (username, user_id) => {
+    const result = await pool.query(`
             select 
                 u.id, u.username, u.display_name,
                 coalesce(
@@ -154,10 +114,7 @@ export const getUsersByUsername = async (username, user_id) => {
                 limit 10;
             `, [`%${username}%`, user_id]);
 
-        if (result.rowCount > 0)
-            return result.rows;
-        return []
-    } catch (err) {
-        console.error(err)
-    }
-}
+    if (result.rowCount > 0)
+        return result.rows;
+    return []
+})

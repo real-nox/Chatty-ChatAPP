@@ -1,31 +1,29 @@
 import { Router } from "express";
-import { accept_request_c, decline_request_c, decline_sent_c, friend_info_c, get_sent_c, getUserListSent, list_friends_c, lookForUsers, noti, send_request_c, setnoti } from "../controllers/friends.controller.js";
-import { auth_m } from "../middlewares/auth.middleware.js";
+
+import * as friends_controller from "../controllers/friends.controller.js";
 
 const friendsR = Router()
 
-friendsR.use(auth_m)
+friendsR.post("/requests/send", friends_controller.send_request_c)
 
-friendsR.post("/requests/send", send_request_c)
+friendsR.get("/requests/requests", friends_controller.get_sent_c)
 
-friendsR.patch("/requests/:id/accept", accept_request_c)
+friendsR.patch("/requests/:id/accept", friends_controller.accept_request_c)
 
-friendsR.patch("/requests/:id/decline/sent", decline_sent_c)
+friendsR.patch("/requests/:id/decline/sent", friends_controller.decline_sent_c)
 
-friendsR.patch("/requests/:id/decline/request", decline_request_c)
+friendsR.patch("/requests/:id/decline/request", friends_controller.decline_request_c)
 
-friendsR.get("/requests/requests", get_sent_c)
+friendsR.get("/requests/sent", friends_controller.get_sent_user_list_c)
 
-friendsR.get("/requests/sent", getUserListSent)
+friendsR.post("/requests/notification", friends_controller.get_notification_c)
 
-friendsR.get("/list", list_friends_c)
+friendsR.post("/requests/notification/edit", friends_controller.set_notification_c)
 
-friendsR.get("/:friend", friend_info_c)
+friendsR.get("/list", friends_controller.list_friends_c)
 
-friendsR.post("/fetch", lookForUsers)
+friendsR.get("/:friend", friends_controller.friend_info_c)
 
-friendsR.post("/requests/notification", noti)
-
-friendsR.post("/requests/notification/edit", setnoti)
+friendsR.post("/fetch", friends_controller.find_users_c)
 
 export default friendsR
