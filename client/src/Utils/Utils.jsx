@@ -46,6 +46,11 @@ export const formatedDateMsg = (timestamp) => {
   return date.toLocaleDateString([], { day: "2-digit", month: "short" });
 };
 
-export const catchAsync = (fct) => (...arg) => {
-    Promise.resolve(fct(...arg)).catch((err) => console.error(err))
+export const apiCall = (fct) => async(...arg) => {
+  try {
+    return await fct(...arg);
+  } catch (err) {
+    console.error(err)
+    return { success: false, error: "Something went wrong. Please try again." };
+  }
 }

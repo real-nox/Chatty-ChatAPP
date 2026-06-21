@@ -1,4 +1,3 @@
-import { setTheme as applyTheme } from "./Utils";
 import { useEffect, useState } from "react";
 
 export function Appearance({ theme, setTheme }) {

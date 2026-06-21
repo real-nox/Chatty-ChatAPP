@@ -1,7 +1,8 @@
 import * as user_repository from "../repositories/user.repository.js"
+import { catchFctAsync } from "../utils/functions.js"
 
-export const get_user_s = async (userId) => {
-    if (!userid)
+export const get_user_s = catchFctAsync(async (userId) => {
+    if (!userId)
         return { success: false, error: "User ID was not provided!" }
 
     const user = await user_repository.getUserById(userId)
@@ -12,10 +13,10 @@ export const get_user_s = async (userId) => {
     const { display_name, id, username } = user
 
     return { id: id, display_name: display_name, username: username, avatar: null, presence: true }
-}
+})
 
-export const update_user_s = async (userId, display_name, username) => {
-    if (!userid)
+export const update_user_s = catchFctAsync(async (userId, display_name, username) => {
+    if (!userId)
         return { success: false, error: "User ID was not provided!" }
 
     const user = await user_repository.getUserById(userId)
@@ -34,50 +35,59 @@ export const update_user_s = async (userId, display_name, username) => {
     if (found_username)
         return { success: false, msg: "Username already been used! Comme up with a new one!" }
 
-    const result = await auth_repository.EditUser(userId, username, display_name)
+    const result = await user_repository.EditUser(userId, username, display_name)
 
     if (result)
         return { success: true, msg: "User profile has been updated!" }
     return { success: false, msg: "User profile could not be updated, try again." }
-}
+})
 
-export const get_user_theme_s = async (userid) => {
+export const get_user_theme_s = catchFctAsync(async (userid) => {
     if (!userid)
         return { success: false, error: "User ID was not provided!" }
 
-    let user = await auth_repository.getUserById(userid)
+    let user = await user_repository.getUserById(userid)
 
     if (!user)
         return { success: false, error: "User is not found!" }
 
-    const theme = await auth_repository.getUserTheme(userid)
+    const theme = await user_repository.getUserTheme(userid)
 
     if (theme)
         return { success: true, theme: theme, error: "" }
     return { success: false, error: "Could not retrieve user's theme." }
-}
+})
 
-export const set_user_theme_s = async (userid, theme) => {
+export const set_user_theme_s = catchFctAsync(async (userid, theme) => {
     if (!userid)
         return { success: false, error: "User ID was not provided!" }
 
     if (!theme)
         return { success: false, error: "Theme was not provided!" }
 
-    let user = await auth_repository.getUserById(userid)
+    let user = await user_repository.getUserById(userid)
 
     if (!user)
         return { success: false, error: "User is not found!" }
 
-    const result = await auth_repository.setUserTheme(userid, theme)
+    const result = await user_repository.setUserTheme(userid, theme)
 
     if (result)
         return { success: true, error: "" }
     return { success: false, error: "Could not update user's theme." }
-}
+})
 
-/*export const fetchUserByEmail = async (email) => {
-    let User = await auth_repository.getUserByEmail(email)
+export const fetchUser = catchFctAsync(async (userId) => {
+    const User = await user_repository.getUserById(userId)
+
+    if (!User)
+        return { success: false, error: "User is not found!" }
+
+    return { success: true, error: "", user: User }
+})
+
+/*export const fetchUserByEmail = catchFctAsync(async (email) => {
+    let User = await user_repository.getUserByEmail(email)
 
     if (!User)
         return { success: false, error: "User is not found!" }
@@ -86,8 +96,8 @@ export const set_user_theme_s = async (userid, theme) => {
     return { success: true, error: "", user: User }
 }
 
-export const changeUserPWD = async (email, new_pwd) => {
-    const User = await auth_repository.getUserByEmail(email)
+export const changeUserPWD = catchFctAsync(async (email, new_pwd) => {
+    const User = await user_repository.getUserByEmail(email)
 
     if (!User)
         return { success: false, error: "User is not found!" }
@@ -98,7 +108,7 @@ export const changeUserPWD = async (email, new_pwd) => {
 
     const salt = bcrypt.genSaltSync()
     const newPWD = bcrypt.hashSync(new_pwd, salt)
-    const changePWD = await auth_repository.updatePwdUser(User.id, newPWD)
+    const changePWD = await user_repository.updatePwdUser(User.id, newPWD)
 
     console.log(changePWD)
     if (changePWD)

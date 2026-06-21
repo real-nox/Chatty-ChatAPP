@@ -8,12 +8,9 @@ import {
   SanitizeInput,
 } from "../Utils/Utils.jsx";
 import {
-  setNoti,
   getUser,
   getTheme,
-  getNoti,
   getFullUser,
-  getFriendsList,
 } from "../api/User.api.jsx";
 
 import socket from "../Utils/Socket.jsx";
@@ -21,7 +18,7 @@ import SideBar from "../Components/SideBar.jsx";
 import ChatChannel from "../Components/ChatChannel.jsx";
 import FriendsComponent from "../Components/Friends.jsx";
 import Settings from "../Components/Settings.jsx";
-import { getFriendRequests } from "../api/Friends.api.jsx";
+import { getFriendRequests, getFriendsList, getNoti, setNoti } from "../api/Friends.api.jsx";
 
 export default function Home() {
   const [userId, setUserId] = useState("");
@@ -117,6 +114,7 @@ export default function Home() {
 
     const getList = async () => {
       const data = await getFriendsList();
+      console.log(data)
       setFriendList(data);
     };
 
@@ -492,7 +490,7 @@ export default function Home() {
     prevLen.current = requestUsers.length;
     const notify = async () => {
       const latest_user = requestUsers[requestUsers.length - 1];
-      const isNotified = await getNoti(latest_user.id);
+      const isNotified = await getNoti(last_id);
 
       if (!isNotified) {
         await setNoti(latest_user.id);

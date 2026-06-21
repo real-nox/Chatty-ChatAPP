@@ -1,4 +1,6 @@
-export const getUser = catchAsync(async () => {
+import { apiCall } from "../Utils/Utils";
+
+export const getUser = apiCall(async () => {
   const result = await fetch(`${import.meta.env.VITE_PATH_SERVER}/auth/`, {
     method: "GET",
     credentials: "include",
@@ -10,7 +12,7 @@ export const getUser = catchAsync(async () => {
   else return false;
 });
 
-export const getFullUser = catchAsync(async () => {
+export const getFullUser = apiCall(async () => {
   const result = await fetch(`${import.meta.env.VITE_PATH_SERVER}/user/me`, {
     method: "GET",
     credentials: "include",
@@ -22,7 +24,7 @@ export const getFullUser = catchAsync(async () => {
   else return false;
 });
 
-export const login = catchAsync(async (email, password, remember_me) => {
+export const login = apiCall(async (email, password, remember_me) => {
   const result = await fetch(`${import.meta.env.VITE_PATH_SERVER}/auth/login`, {
     method: "POST",
     credentials: "include",
@@ -36,11 +38,13 @@ export const login = catchAsync(async (email, password, remember_me) => {
 
   const response = await result.json();
 
-  if (response) return response;
-  else return false;
+  if (response) {
+    console.log(response);
+    return response;
+  } else return false;
 });
 
-export const logout = catchAsync(async () => {
+export const logout = apiCall(async () => {
   const response = await fetch(
     `${import.meta.env.VITE_PATH_SERVER}/auth/logout`,
     {
@@ -50,11 +54,11 @@ export const logout = catchAsync(async () => {
   );
 
   const data = await response.json();
-  if (response) return response;
+  if (data) return data;
   else return false;
 });
 
-export const getTheme = catchAsync(async () => {
+export const getTheme = apiCall(async () => {
   const response = await fetch(
     `${import.meta.env.VITE_PATH_SERVER}/user/theme`,
     {
@@ -71,7 +75,7 @@ export const getTheme = catchAsync(async () => {
   }
 });
 
-export const setTheme = catchAsync(async (theme) => {
+export const setTheme = apiCall(async (theme) => {
   const response = await fetch(
     `${import.meta.env.VITE_PATH_SERVER}/user/theme`,
     {

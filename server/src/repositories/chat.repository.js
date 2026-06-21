@@ -1,7 +1,8 @@
 import { pool } from "../db/index.db.js"
+import { catchFctAsync } from "../utils/functions.js"
 import { getUserById } from "./user.repository.js"
 
-export const CreateConversation_Get_id = catchDBAsync(async () => {
+export const CreateConversation_Get_id = catchFctAsync(async () => {
     const result = await pool.query(
         `insert into conversations (created_at) values (NOW()) returning id`)
 
@@ -10,7 +11,7 @@ export const CreateConversation_Get_id = catchDBAsync(async () => {
     return false
 })
 
-export const SetConversation_Member = catchDBAsync(async (user_id, conv_id) => {
+export const SetConversation_Member = catchFctAsync(async (user_id, conv_id) => {
     const result = await pool.query(
         `insert into conversation_members (user_id, conversation_id) values ($1, $2)`, [user_id, conv_id])
 
@@ -19,7 +20,7 @@ export const SetConversation_Member = catchDBAsync(async (user_id, conv_id) => {
     return false
 })
 
-export const getConversation = catchDBAsync(async (user1_id, user2_id) => {
+export const getConversation = catchFctAsync(async (user1_id, user2_id) => {
     let foundUser_id1 = await getUserById(user1_id)
     let foundUser_id2 = await getUserById(user2_id)
 
@@ -43,7 +44,7 @@ export const getConversation = catchDBAsync(async (user1_id, user2_id) => {
     return await getConversation(user1_id, user2_id)
 })
 
-export const saveMessage = catchDBAsync(async (conv_id, sender_id, content) => {
+export const saveMessage = catchFctAsync(async (conv_id, sender_id, content) => {
     const result = await pool.query("insert into messages (sender_id, conversation_id, content) values ($1, $2, $3) returning id, created_at", [sender_id, conv_id, content])
 
     if (result.rowCount > 0)
@@ -51,7 +52,7 @@ export const saveMessage = catchDBAsync(async (conv_id, sender_id, content) => {
     return false
 })
 
-export const getMessages = catchDBAsync(async (conv_id) => {
+export const getMessages = catchFctAsync(async (conv_id) => {
     const result = await pool.query("select m.id, m.sender_id, u.username, m.content, m.created_at, m.seen from messages m join users u on (m.sender_id = u.id) where m.conversation_id = $1 order by m.created_at desc limit 50 ", [conv_id])
 
     if (result.rowCount > 0) {
@@ -60,7 +61,7 @@ export const getMessages = catchDBAsync(async (conv_id) => {
     return false
 })
 
-export const setSeenMsg = catchDBAsync(async (message_id) => {
+export const setSeenMsg = catchFctAsync(async (message_id) => {
     const result = await pool.query("update messages set seen = 1 where id = $1", [message_id])
 
     if (result.rowCount > 0) {
@@ -69,7 +70,7 @@ export const setSeenMsg = catchDBAsync(async (message_id) => {
     return false
 })
 
-export const MarkAllMsgAsSeen = catchDBAsync(async (conversation_id, friendId) => {
+export const MarkAllMsgAsSeen = catchFctAsync(async (conversation_id, friendId) => {
     const result = await pool.query("update messages set seen = 1 where sender_id = $1 and conversation_id = $2", [friendId, conversation_id])
 
     if (result.rowCount > 0) {

@@ -1,8 +1,8 @@
 import { pool } from "../db/index.db.js"
-import { catchDBAsync } from "../utils/functions.js"
+import { catchFctAsync } from "../utils/functions.js"
 import { getUserById } from "./user.repository.js"
 
-export const sendFriendRequest = catchDBAsync(async (receiverId, senderId) => {
+export const sendFriendRequest = catchFctAsync(async (receiverId, senderId) => {
     const result = await pool.query("insert into friends_requests (sender_id, receiver_id) values ($1, $2)", [senderId, receiverId])
 
     if (result?.rowCount > 0)
@@ -10,7 +10,7 @@ export const sendFriendRequest = catchDBAsync(async (receiverId, senderId) => {
     return false
 })
 
-export const getFriendRequest = catchDBAsync(async (receiverId, senderId) => {
+export const getFriendRequest = catchFctAsync(async (receiverId, senderId) => {
     const result = await pool.query("select * from friends_requests where (sender_id = $1 and receiver_id = $2) or (sender_id = $2 and receiver_id = $1)", [senderId, receiverId])
 
     if (result?.rowCount > 0)
@@ -18,7 +18,7 @@ export const getFriendRequest = catchDBAsync(async (receiverId, senderId) => {
     return false
 })
 
-export const getSentFriendsRequest = catchDBAsync(async (receiver_id) => {
+export const getSentFriendsRequest = catchFctAsync(async (receiver_id) => {
     const result = await pool.query(`SELECT fr.sender_id as id, u.username, u.display_name
             FROM friends_requests fr JOIN users u ON u.id = fr.sender_id
             WHERE fr.receiver_id = $1 AND fr.status = 'pending'
@@ -37,7 +37,7 @@ export const getSentFriendsRequest = catchDBAsync(async (receiver_id) => {
     return false
 })
 
-export const acceptReqF = catchDBAsync(async (receiver_id, sender_id) => {
+export const acceptReqF = catchFctAsync(async (receiver_id, sender_id) => {
     const result = await pool.query("update friends_requests set status = 'accepted' where receiver_id = $1 and sender_id = $2", [receiver_id, sender_id])
 
     if (result?.rowCount > 0)
@@ -45,7 +45,7 @@ export const acceptReqF = catchDBAsync(async (receiver_id, sender_id) => {
     return false
 })
 
-export const declinetReqF = catchDBAsync(async (receiver_id, sender_id) => {
+export const declinetReqF = catchFctAsync(async (receiver_id, sender_id) => {
     const result = await pool.query("delete from friends_requests where receiver_id = $1 and sender_id = $2", [parseInt(receiver_id), parseInt(sender_id)])
 
     if (result?.rowCount > 0)
@@ -53,7 +53,7 @@ export const declinetReqF = catchDBAsync(async (receiver_id, sender_id) => {
     return false
 })
 
-export const listF = catchDBAsync(async (user_id) => {
+export const listF = catchFctAsync(async (user_id) => {
     const result = await pool.query(
         `select 
                 u.id, u.username, u.display_name,
@@ -101,7 +101,7 @@ export const listF = catchDBAsync(async (user_id) => {
     return []
 })
 
-export const isFriend = catchDBAsync(async (friend_id, user_id) => {
+export const isFriend = catchFctAsync(async (friend_id, user_id) => {
     const result = await pool.query(`select * from friends_requests where ((receiver_id = $1 and sender_id = $2) or (sender_id = $1 and receiver_id = $2)) and status = 'accepted'`,
         [friend_id, user_id])
 
@@ -110,7 +110,7 @@ export const isFriend = catchDBAsync(async (friend_id, user_id) => {
     return false
 })
 
-export const userListSent = catchDBAsync(async (sender_id) => {
+export const userListSent = catchFctAsync(async (sender_id) => {
     const result = await pool.query(
         `select 
             fr.receiver_id as id, u.username, u.display_name 
@@ -120,12 +120,14 @@ export const userListSent = catchDBAsync(async (sender_id) => {
             `, [sender_id]
     )
 
+    console.log(result.rows)
+
     if (result.rowCount > 0)
         return result.rows
     return []
 })
 
-export const getFriendRequestNotification = catchDBAsync(async (receiver_id, sender_id) => {
+export const getFriendRequestNotification = catchFctAsync(async (receiver_id, sender_id) => {
     const result = await pool.query(`select notified from friends_requests where receiver_id = $1 and sender_id = $2 and status = 'pending'`, [receiver_id, sender_id])
 
     if (result.rowCount > 0)
@@ -133,7 +135,7 @@ export const getFriendRequestNotification = catchDBAsync(async (receiver_id, sen
     return false
 })
 
-export const setFriendRequestNotification = catchDBAsync(async (receiver_id, sender_id) => {
+export const setFriendRequestNotification = catchFctAsync(async (receiver_id, sender_id) => {
     const result = await pool.query(`update friends_requests set notified = 1 where receiver_id = $1 and sender_id = $2 and status = 'pending' and notified = 0`, [receiver_id, sender_id])
 
     return true

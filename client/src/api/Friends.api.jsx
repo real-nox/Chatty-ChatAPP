@@ -1,4 +1,6 @@
-export const accept_request = catchAsync(async (user_id) => {
+import { apiCall } from "../Utils/Utils";
+
+export const accept_request = apiCall(async (user_id) => {
   const response = await fetch(
     `${import.meta.env.VITE_PATH_SERVER}/friends/requests/${user_id}/accept`,
     {
@@ -13,7 +15,7 @@ export const accept_request = catchAsync(async (user_id) => {
   return data;
 });
 
-export const reject_sent = catchAsync(async (user_id) => {
+export const reject_sent = apiCall(async (user_id) => {
   const response = await fetch(
     `${import.meta.env.VITE_PATH_SERVER}/friends/requests/${user_id}/decline/request`,
     {
@@ -28,7 +30,7 @@ export const reject_sent = catchAsync(async (user_id) => {
   return data;
 });
 
-export const reject_request = catchAsync(async (user_id) => {
+export const reject_request = apiCall(async (user_id) => {
   const response = await fetch(
     `${import.meta.env.VITE_PATH_SERVER}/friends/requests/${user_id}/decline/sent`,
     {
@@ -43,7 +45,7 @@ export const reject_request = catchAsync(async (user_id) => {
   return data;
 });
 
-export const send_friend_request = catchAsync(async (user_id) => {
+export const send_friend_request = apiCall(async (user_id) => {
   const response = await fetch(
     `${import.meta.env.VITE_PATH_SERVER}/friends/requests/send`,
     {
@@ -58,7 +60,7 @@ export const send_friend_request = catchAsync(async (user_id) => {
   return data;
 });
 
-export const fetch_friend = catchAsync(async (searchInput) => {
+export const fetch_friend = apiCall(async (searchInput) => {
   const response = await fetch(
     `${import.meta.env.VITE_PATH_SERVER}/friends/fetch?search=${searchInput}`,
     {
@@ -70,7 +72,7 @@ export const fetch_friend = catchAsync(async (searchInput) => {
   return data;
 });
 
-export const get_sent_requests = catchAsync(async () => {
+export const get_sent_requests = apiCall(async () => {
   const response = await fetch(
     `${import.meta.env.VITE_PATH_SERVER}/friends/requests/sent`,
     {
@@ -82,20 +84,20 @@ export const get_sent_requests = catchAsync(async () => {
   return data;
 });
 
-export const getFriendRequests = catchAsync(async () => {
+export const getFriendRequests = apiCall(async () => {
   const response = await fetch(
-    `import.meta.env.VITE_PATH_SERVER}/friends/requests/requests`,
+    `${import.meta.env.VITE_PATH_SERVER}/friends/requests/requests`,
     {
       method: "GET",
       credentials: "include",
     },
   );
 
-  const response = await result.json();
-  return response;
+  const data = await response.json();
+  return data;
 });
 
-export const getFriendsList = catchAsync(async () => {
+export const getFriendsList = apiCall(async () => {
   const result = await fetch(
     `${import.meta.env.VITE_PATH_SERVER}/friends/list`,
     {
@@ -106,11 +108,13 @@ export const getFriendsList = catchAsync(async () => {
 
   if (!result.ok) throw new Error(`HTTP error: ${result.status}`);
 
-  const response = await result.json();
-  return response.friends;
+  const data = await result.json();
+
+  console.log(data)
+  if (data.success) return data.friends;
 });
 
-export const getNoti = catchAsync(async (sender_id) => {
+export const getNoti = apiCall(async (sender_id) => {
   const response = await fetch(
     `${import.meta.env.VITE_PATH_SERVER}/friends/requests/notification`,
     {
@@ -126,7 +130,7 @@ export const getNoti = catchAsync(async (sender_id) => {
   if (data) return data;
 });
 
-export const setNoti = catchAsync(async (sender_id) => {
+export const setNoti = apiCall(async (sender_id) => {
   const response = await fetch(
     `${import.meta.env.VITE_PATH_SERVER}/friends/requests/notification/edit`,
     {

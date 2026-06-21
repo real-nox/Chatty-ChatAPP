@@ -1,5 +1,5 @@
 import { Check, Search, UserPlus, UsersRound, X } from "lucide-react";
-import { getFriendsList, SanitizeInput } from "../Utils/Utils.jsx";
+import { SanitizeInput } from "../Utils/Utils.jsx";
 import { useEffect, useRef, useState } from "react";
 import socket from "../Utils/Socket.jsx";
 
@@ -8,6 +8,7 @@ import {
   accept_request,
   fetch_friend,
   get_sent_requests,
+  getFriendsList,
   reject_request,
   reject_sent,
   send_friend_request,

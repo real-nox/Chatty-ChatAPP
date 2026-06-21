@@ -11,7 +11,7 @@ export function initSocket(io) {
         if (!user_id) return socket.disconnect()
 
         const user = await getUserById(user_id)
-        const username = user.username
+        const username = user?.username
         const friends = await listF(user_id)
 
         onlineUsers[user_id] = socket.id

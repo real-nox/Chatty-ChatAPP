@@ -1,4 +1,5 @@
 import * as friends_service from "../services/friends.service.js"
+import { catchAsync } from "../utils/functions.js"
 
 export const send_request_c = catchAsync(async (req, res, next) => {
     const user_id = req?.body?.user_id

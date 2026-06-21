@@ -1,7 +1,8 @@
 import bcrypt from "bcrypt"
 import * as auth_repository from "../repositories/user.repository.js"
+import { catchFctAsync } from "../utils/functions.js"
 
-export const register_s = async (newUserInfo) => {
+export const register_s = catchFctAsync(async (newUserInfo) => {
     let { display_name, username, email, pwd } = newUserInfo
 
     const FoundUsername = await auth_repository.getUsernames(username)
@@ -24,9 +25,9 @@ export const register_s = async (newUserInfo) => {
     else
         return { success: false, error: "Database error, could not add user!" }
 
-}
+})
 
-export const login_s = async (userInfo) => {
+export const login_s = catchFctAsync(async (userInfo) => {
     let { email, pwd } = userInfo
 
     const FoundUser = await auth_repository.getUserByEmail(email)
@@ -40,8 +41,8 @@ export const login_s = async (userInfo) => {
         return { success: false, error: "Email or Password is incorrect." }
 
     return { success: true, error: "", user: FoundUser }
-}
+})
 
-export const forgot_password_s = async() => {
+export const forgot_password_s = catchFctAsync(async() => {
     
-}
+})

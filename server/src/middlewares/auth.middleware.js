@@ -1,4 +1,4 @@
-import * as auth_service from "../services/auth.service.js"
+import * as user_service from "../services/user.service.js"
 
 export const attachUser = async (req, res, next) => {
     if (!req.session.userId) {
@@ -7,7 +7,7 @@ export const attachUser = async (req, res, next) => {
     }
 
     try {
-        const { success, error, user = null } = await auth_service.fetchUser(req?.session?.userId)
+        const { success, error, user = null } = await user_service.fetchUser(req?.session?.userId)
         req.user = success ? user : null
         next()
     } catch (error) {
