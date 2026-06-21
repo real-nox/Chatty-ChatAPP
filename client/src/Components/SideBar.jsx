@@ -1,5 +1,6 @@
 import { LogOut, Search, Settings, UserPlus } from "lucide-react";
 import { formatedDate, SanitizeInput } from "../Utils/Utils.jsx";
+import { logout } from "../api/User.api.jsx";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Avatar from "../assets/avatar.png";
@@ -39,23 +40,10 @@ export default function SideBar({
     return filtered;
   }, [searchInput, friendList]);
 
-  const logout = async () => {
-    const link = `${import.meta.env.VITE_PATH_SERVER}/auth/logout`;
-
-    try {
-      const response = await fetch(link, {
-        method: "GET",
-        credentials: "include",
-      });
-
-      console.log(response);
-      const data = await response.json();
-
-      if (data) {
-        navigate("/login");
-      }
-    } catch (err) {
-      console.error(err);
+  const Logout = async () => {
+    const data = await logout();
+    if (data) {
+      navigate("/login");
     }
   };
 
@@ -155,7 +143,7 @@ export default function SideBar({
             <button onClick={settings}>
               <Settings /> Settings
             </button>
-            <button className="logout" onClick={logout}>
+            <button className="logout" onClick={Logout}>
               <LogOut /> Logout
             </button>
           </div>

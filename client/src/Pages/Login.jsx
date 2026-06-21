@@ -1,8 +1,9 @@
-import { getUser, SanitizeInput } from "../Utils/Utils.jsx";
+import { SanitizeInput } from "../Utils/Utils.jsx";
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import Avatar from '../assets/icon.png'
+import Avatar from "../assets/icon.png";
 import "../css/Auth.css";
+import { getUser, login } from "../api/User.api.jsx";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -27,28 +28,10 @@ export default function Login() {
 
   const submitLogin = async (ev) => {
     ev.preventDefault();
-    try {
-      const result = await fetch(
-        `${import.meta.env.VITE_PATH_SERVER}/auth/login`,
-        {
-          method: "POST",
-          credentials: "include",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            email: email,
-            pwd: password,
-            remember_me: remember_me,
-          }),
-        },
-      );
+    const response = await login(email, password, remember_me);
 
-      const response = await result.json();
-
-      if (response.error) setError(response.error);
-      else navigate("/home");
-    } catch (err) {
-      console.error(err);
-    }
+    if (response.error) setError(response.error);
+    else navigate("/home");
   };
 
   return (

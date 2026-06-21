@@ -4,6 +4,14 @@ import { useEffect, useRef, useState } from "react";
 import socket from "../Utils/Socket.jsx";
 
 import Avatar from "../assets/avatar.png";
+import {
+  accept_request,
+  fetch_friend,
+  get_sent_requests,
+  reject_request,
+  reject_sent,
+  send_friend_request,
+} from "../api/Friends.api.jsx";
 
 export default function FriendsComponent({
   isFriendCard,
@@ -38,107 +46,52 @@ export default function FriendsComponent({
   };
 
   const accept = async (user_id) => {
-    try {
-      const link = `${import.meta.env.VITE_PATH_SERVER}/friends/requests/${user_id}/accept`;
+    const data = await accept_request(user_id);
 
-      const response = await fetch(link, {
-        method: "PATCH",
-        credentials: "include",
-        body: JSON.stringify({ user_id: user_id }),
-        headers: { "Content-Type": "application/json" },
-      });
+    if (data.success) {
+      setRequestUsers((prev) => prev.filter((u) => u.id !== user_id));
 
-      const data = await response.json();
+      socket.emit("friendRequestAccepted", { sender_id: user_id });
 
-      if (data.success) {
-        setRequestUsers((prev) => prev.filter((u) => u.id !== user_id));
+      const updatedList = await getFriendsList();
+      setFriendList((prev) => ({
+        ...updatedList,
+        ...Object.keys(updatedList).reduce((acc, id) => {
+          acc[id] = {
+            ...updatedList[id],
+            presence: id == user_id ? true : prev[id]?.presence,
+          };
+          return acc;
+        }, {}),
+      }));
 
-        socket.emit("friendRequestAccepted", { sender_id: user_id });
-
-        const updatedList = await getFriendsList();
-        setFriendList((prev) => ({
-          ...updatedList,
-          ...Object.keys(updatedList).reduce((acc, id) => {
-            acc[id] = {
-              ...updatedList[id],
-              presence: id == user_id ? true : (prev[id]?.presence),
-            };
-            return acc;
-          }, {}),
-        }));
-
-        setReqNumb((prev) => prev - 1);
-      }
-    } catch (err) {
-      console.error(err);
+      setReqNumb((prev) => prev - 1);
     }
   };
 
   const refuseSent = async (user_id) => {
-    try {
-      const link = `${import.meta.env.VITE_PATH_SERVER}/friends/requests/${user_id}/decline/sent`;
+    const data = await reject_sent(user_id);
 
-      const response = await fetch(link, {
-        method: "PATCH",
-        credentials: "include",
-        body: JSON.stringify({ user_id: user_id }),
-        headers: { "Content-Type": "application/json" },
-      });
-
-      const data = await response.json();
-
-      if (data.success) {
-        setSentUsers((prev) => prev.filter((u) => u.id !== user_id));
-      }
-    } catch (err) {
-      console.error(err);
+    if (data.success) {
+      setSentUsers((prev) => prev.filter((u) => u.id !== user_id));
     }
   };
 
   const refuseReq = async (user_id, type = "req") => {
-    try {
-      const link = `${import.meta.env.VITE_PATH_SERVER}/friends/requests/${user_id}/decline/request`;
+    const data = await reject_request(user_id);
 
-      const response = await fetch(link, {
-        method: "PATCH",
-        credentials: "include",
-        body: JSON.stringify({ user_id: user_id }),
-        headers: { "Content-Type": "application/json" },
-      });
-
-      const data = await response.json();
-
-      console.log(data);
-      if (data.success) {
-        setRequestUsers((prev) => prev.filter((u) => u.id !== user_id));
-        setReqNumb(sentUsers.length);
-      }
-    } catch (err) {
-      console.error(err);
+    if (data.success) {
+      setRequestUsers((prev) => prev.filter((u) => u.id !== user_id));
+      setReqNumb(sentUsers.length);
     }
   };
 
   const sendFriendReq = async (user_id) => {
-    try {
-      const link = `${import.meta.env.VITE_PATH_SERVER}/friends/requests/send`;
-
-      const response = await fetch(link, {
-        method: "POST",
-        credentials: "include",
-        body: JSON.stringify({ user_id: user_id }),
-        headers: { "Content-Type": "application/json" },
-      });
-
-      const data = await response.json();
-
-      console.log(data, users);
-      if (data.success) {
-        setUsers((prev) =>
-          prev.map((u) => (u.id === user_id ? { ...u, pending: user_id } : u)),
-        );
-      }
-    } catch (err) {
-      console.error(err);
+    const data = await send_friend_request(user_id);
+    if (data.success) {
+      setUsers((prev) =>
+        prev.map((u) => (u.id === user_id ? { ...u, pending: user_id } : u)),
+      );
     }
   };
 
@@ -146,19 +99,8 @@ export default function FriendsComponent({
     if (type == 0) {
       const timeout = setTimeout(async () => {
         if (searchInput.length == 0) return setUsers([]);
-        const link = `${import.meta.env.VITE_PATH_SERVER}/friends/fetch`;
-
-        try {
-          const response = await fetch(`${link}?search=${searchInput}`, {
-            method: "POST",
-            credentials: "include",
-          });
-          const data = await response.json();
-
-          if (data.success) return setUsers(data.users);
-        } catch (err) {
-          console.error(err);
-        }
+        const data = await fetch_friend(searchInput)
+        if (data.success) return setUsers(data.users);
       }, 300);
 
       return () => clearTimeout(timeout);
@@ -168,19 +110,8 @@ export default function FriendsComponent({
   useEffect(() => {
     if (type == 2) {
       const timeout = setTimeout(async () => {
-        const link = `${import.meta.env.VITE_PATH_SERVER}/friends/requests/sent`;
-
-        try {
-          const response = await fetch(link, {
-            method: "GET",
-            credentials: "include",
-          });
-          const data = await response.json();
-
-          if (data) setSentUsers(data.users);
-        } catch (err) {
-          console.error(err);
-        }
+        const data = await get_sent_requests()
+        if (data) setSentUsers(data.users);
       }, 300);
 
       return () => clearTimeout(timeout);

@@ -5,20 +5,23 @@ import "../css/Home.css";
 import {
   formatedDate,
   formatedDateMsg,
-  getFriendsList,
-  getFullUser,
-  getNoti,
-  getTheme,
-  getUser,
   SanitizeInput,
-  setNoti,
 } from "../Utils/Utils.jsx";
+import {
+  setNoti,
+  getUser,
+  getTheme,
+  getNoti,
+  getFullUser,
+  getFriendsList,
+} from "../api/User.api.jsx";
 
 import socket from "../Utils/Socket.jsx";
 import SideBar from "../Components/SideBar.jsx";
 import ChatChannel from "../Components/ChatChannel.jsx";
 import FriendsComponent from "../Components/Friends.jsx";
 import Settings from "../Components/Settings.jsx";
+import { getFriendRequests } from "../api/Friends.api.jsx";
 
 export default function Home() {
   const [userId, setUserId] = useState("");
@@ -469,21 +472,11 @@ export default function Home() {
 
   useEffect(() => {
     const interval = setInterval(async () => {
-      const link = `${import.meta.env.VITE_PATH_SERVER}/friends/requests/requests`;
+      const data = await getFriendRequests();
 
-      try {
-        const response = await fetch(link, {
-          method: "GET",
-          credentials: "include",
-        });
-        const data = await response.json();
-
-        if (data) {
-          setRequestUsers(data);
-          setReqNumb(data.length);
-        }
-      } catch (err) {
-        console.error(err);
+      if (data) {
+        setRequestUsers(data);
+        setReqNumb(data.length);
       }
     }, 1000);
 
