@@ -110,8 +110,8 @@ export const getFriendsList = apiCall(async () => {
 
   const data = await result.json();
 
-  console.log(data)
-  if (data.success) return data.friends;
+    if (data.success) return data.friends;
+  return false
 });
 
 export const getNoti = apiCall(async (sender_id) => {

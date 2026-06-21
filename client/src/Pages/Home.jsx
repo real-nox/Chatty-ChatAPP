@@ -114,7 +114,6 @@ export default function Home() {
 
     const getList = async () => {
       const data = await getFriendsList();
-      console.log(data)
       setFriendList(data);
     };
 
@@ -134,7 +133,6 @@ export default function Home() {
       setFriendList((prev) => ({
         ...updatedList,
         ...Object.keys(updatedList).reduce((acc, id) => {
-          console.log(id);
           acc[id] = {
             ...updatedList[id],
             presence: receiver_id == id ? true : prev[id]?.presence && false,
@@ -490,7 +488,7 @@ export default function Home() {
     prevLen.current = requestUsers.length;
     const notify = async () => {
       const latest_user = requestUsers[requestUsers.length - 1];
-      const isNotified = await getNoti(last_id);
+      const isNotified = await getNoti(latest_user.id);
 
       if (!isNotified) {
         await setNoti(latest_user.id);
