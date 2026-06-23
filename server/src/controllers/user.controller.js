@@ -29,7 +29,7 @@ export const set_user_theme_c = catchAsync(async (req, res, next) => {
     let user_id = req?.session?.userId
     let theme = req?.body?.theme
 
-    let result = await user_service.setUserTheme_s(user_id, theme)
+    let result = await user_service.set_user_theme_s(user_id, theme)
 
     return res.json(result)
 })

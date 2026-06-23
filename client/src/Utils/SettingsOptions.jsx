@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { setTheme as applyTheme } from "../api/User.api";
 
 export function Appearance({ theme, setTheme }) {
   const [currentTheme, setCurrentTheme] = useState(1);
